@@ -791,6 +791,94 @@ small.note {
 hr.rule { border: none; border-top: 1px solid var(--rule); margin: 18px 0; }
 hr.rule.dotted { border-top-style: dotted; }
 
+/* ====================== MODAL ====================== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(31, 27, 22, 0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  padding-top: calc(var(--safe-top) + 16px);
+  padding-bottom: calc(var(--safe-bottom) + 16px);
+  animation: fade .2s ease both;
+}
+.modal-box {
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 22px 22px 18px;
+  width: 100%; max-width: 540px;
+  max-height: 100%; overflow-y: auto;
+  box-shadow: 5px 5px 0 var(--ink);
+  position: relative;
+}
+.modal-box h3 {
+  margin-top: 0;
+  font-family: var(--serif); font-size: 18px; font-weight: 500;
+  color: var(--ink);
+}
+.modal-textarea {
+  width: 100%;
+  min-height: 200px;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 10px;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  color: var(--ink);
+  resize: vertical;
+  margin-top: 10px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* ====================== CONCEPT LIST (Q&A scoring) ====================== */
+.concept-list {
+  list-style: none;
+  padding: 0; margin: 0 0 12px;
+}
+.concept-list li {
+  padding: 6px 0 6px 24px;
+  position: relative;
+  font-size: 14px;
+  border-bottom: 1px dotted var(--rule-soft);
+  line-height: 1.4;
+}
+.concept-list li:last-child { border-bottom: none; }
+.concept-list .concept-icon {
+  position: absolute; left: 0; top: 6px;
+  font-family: var(--mono); font-size: 13px;
+  width: 20px; text-align: center;
+}
+.concept-list li.concept-hit { color: var(--forest-deep); }
+.concept-list li.concept-hit .concept-icon { color: var(--forest); }
+.concept-list li.concept-partial { color: var(--ochre-deep); }
+.concept-list li.concept-partial .concept-icon { color: var(--ochre-deep); }
+.concept-list li.concept-miss { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: var(--ink-faint); }
+.concept-list li.concept-miss .concept-icon { color: var(--crimson); text-decoration: none; }
+
+.score-bar {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  margin: 10px 0;
+}
+.score-pip {
+  text-align: center; padding: 8px 6px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  font-family: var(--mono);
+}
+.score-pip .pip-key { font-size: 9px; letter-spacing: 0.15em; color: var(--ink-faint); text-transform: uppercase; }
+.score-pip .pip-val { font-size: 16px; color: var(--ink); margin-top: 2px; }
+
+.backup-warn {
+  background: rgba(166, 68, 58, 0.08);
+  border-left: 3px solid var(--crimson);
+  padding: 10px 12px;
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.backup-warn strong { color: var(--crimson); }
+
 /* hide scrollbar in webkit */
 *::-webkit-scrollbar { display: none; }
 </style>
@@ -1448,6 +1536,7 @@ const State = {
       qaSeen: {},                  // q index -> count
       phrasePlayed: {},            // phrase key -> count
       recScores: {},               // key -> { score, attempt } for speech scoring
+      lastBackupAt: 0,             // unix ms of last export (for reminders)
       lastVisit: Date.now(),
       ttsRate: 1.0
     };
@@ -1583,6 +1672,120 @@ function renderScoreHtml(result, attempt) {
     </div>`;
 }
 
+/* ===== Q&A SEMANTIC SCORING =====
+   Three-axis evaluation:
+   1. Concepts: % of required key concepts (from qData.keys) present in attempt
+   2. Length: appropriate fullness vs model answer
+   3. Structure: presence of subject + verb (basic grammar sanity)
+   This is heuristic, not a true LLM grader, but reflects what a human listener checks:
+   "Did they mention the key ideas? Was it long enough? Did they speak in sentences?"
+*/
+function scoreQAAnswer(attempt, qData) {
+  if (!attempt || !attempt.trim()) return null;
+  const target = applyName(qData.a);
+  const keys = qData.keys || [];
+
+  const attemptTokens = tokenize(attempt);
+  const attemptStems = attemptTokens.map(stem);
+  // expand attempt stems with synonyms for matching
+  const attemptStemSet = new Set();
+  attemptStems.forEach(s => {
+    attemptStemSet.add(s);
+    if (SYN_MAP[s]) SYN_MAP[s].forEach(x => attemptStemSet.add(x));
+  });
+
+  // 1. KEY CONCEPT COVERAGE
+  const keyHits = keys.map(key => {
+    const keyTokens = tokenize(key).filter(t => !["the","a","an","of","to","in","on","at","for","with","and","or","but","is","are"].includes(t));
+    const keyStems = keyTokens.map(stem);
+    if (keyStems.length === 0) return { key, ratio: 0, hit: false, matched: 0, total: 0 };
+    const matched = keyStems.filter(s => attemptStemSet.has(s)).length;
+    const ratio = matched / keyStems.length;
+    return {
+      key,
+      ratio,
+      hit: ratio >= 0.6,                      // ≥60% of key's content words → hit
+      partial: ratio >= 0.3 && ratio < 0.6,
+      matched, total: keyStems.length
+    };
+  });
+  const conceptScore = keys.length > 0
+    ? keyHits.reduce((sum, k) => sum + (k.hit ? 1 : k.partial ? 0.5 : 0), 0) / keys.length
+    : 0;
+
+  // 2. LENGTH
+  const targetLen = tokenize(target).length;
+  const attemptLen = attemptTokens.length;
+  const ratio = attemptLen / Math.max(1, targetLen);
+  let lenScore;
+  if (ratio < 0.25)      lenScore = ratio / 0.25 * 0.4;
+  else if (ratio < 0.6)  lenScore = 0.4 + (ratio - 0.25) / 0.35 * 0.4;
+  else if (ratio <= 1.5) lenScore = 0.8 + (1 - Math.abs(1 - ratio) / 0.5) * 0.2;
+  else                   lenScore = 0.85;
+  lenScore = Math.max(0, Math.min(1, lenScore));
+
+  // 3. STRUCTURE — basic sentence sanity
+  const lower = attempt.toLowerCase();
+  const hasSubject = /\b(i|we|my|our|this|that|it|the|there|they|he|she)\b/.test(lower);
+  const hasVerb = /\b(am|is|are|was|were|have|has|had|do|does|did|use|uses|used|using|make|makes|made|making|work|works|worked|working|think|thinks|feel|feels|find|finds|see|saw|like|likes|interested|focus|focuses|focused|observe|observed|want|wanted|hope|create|creates|created)\b/.test(lower);
+  const sentenceCount = (attempt.match(/[.!?]+/g) || []).length;
+  const structScore = (hasSubject ? 0.45 : 0) + (hasVerb ? 0.45 : 0) + (sentenceCount >= 1 ? 0.10 : 0);
+
+  // OVERALL — weight concepts heaviest (intent matters most)
+  const overall = Math.round((conceptScore * 0.65 + lenScore * 0.20 + structScore * 0.15) * 100);
+
+  return {
+    score: overall,
+    concepts: { score: conceptScore, breakdown: keyHits },
+    length:   { ratio, score: lenScore, attempt: attemptLen, target: targetLen },
+    structure:{ hasSubject, hasVerb, sentences: sentenceCount, score: structScore }
+  };
+}
+
+function renderQAScoreHtml(result, attempt) {
+  if (!result) return "";
+  const score = result.score;
+  const color = score >= 75 ? "var(--forest)" : score >= 55 ? "var(--ochre-deep)" : "var(--crimson)";
+  const label = score >= 80 ? "Strong — concepts conveyed."
+              : score >= 65 ? "Mostly there — minor gaps."
+              : score >= 45 ? "Partial — add the missing concepts."
+              : "Try again — mention the key ideas.";
+
+  const conceptList = result.concepts.breakdown.map(c => {
+    const icon = c.hit ? "✓" : (c.partial ? "◐" : "✗");
+    const cls = c.hit ? "concept-hit" : (c.partial ? "concept-partial" : "concept-miss");
+    return `<li class="${cls}"><span class="concept-icon">${icon}</span>${escapeHtml(c.key)}</li>`;
+  }).join("");
+
+  const warns = [];
+  if (!result.structure.hasSubject) warns.push("主語が見つかりません（I, we, this 等）");
+  if (!result.structure.hasVerb) warns.push("動詞が見つかりません（am, is, work, use 等）");
+  if (result.length.ratio < 0.4) warns.push(`短すぎ（${result.length.attempt}語、目安 ${Math.round(result.length.target * 0.6)}語以上）`);
+  const warnHtml = warns.length
+    ? `<div class="diff-summary" style="color:var(--crimson);">⚠ ${warns.join(" / ")}</div>`
+    : "";
+
+  return `
+    <div class="diff-out">
+      <div style="font-family:var(--mono);font-size:14px;color:${color};margin-bottom:6px;letter-spacing:0.05em;">
+        <strong>${score}%</strong> &nbsp; ${label}
+      </div>
+
+      <div class="score-bar">
+        <div class="score-pip"><div class="pip-key">Concepts</div><div class="pip-val">${Math.round(result.concepts.score*100)}%</div></div>
+        <div class="score-pip"><div class="pip-key">Length</div><div class="pip-val">${Math.round(result.length.score*100)}%</div></div>
+        <div class="score-pip"><div class="pip-key">Structure</div><div class="pip-val">${Math.round(result.structure.score*100)}%</div></div>
+      </div>
+
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-faint);text-transform:uppercase;margin:14px 0 4px;">Key concepts</div>
+      <ul class="concept-list">${conceptList}</ul>
+
+      ${warnHtml}
+      <div class="diff-summary">You said: &ldquo;${escapeHtml(attempt.trim())}&rdquo;</div>
+      <div class="diff-summary">✓=言及あり / ◐=部分的 / ✗=言及なし。語形違い（observed/observing）と類義語は正解扱い。</div>
+    </div>`;
+}
+
 function speakForQA(idx, targetRaw) {
   const btn = document.querySelector(`#qa-mic-${idx}`);
   const out = document.querySelector(`#qa-score-${idx}`);
@@ -1597,18 +1800,23 @@ function speakForQA(idx, targetRaw) {
   SpeechRec.start({
     onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
     onResult: t => {
-      const r = scoreAgainst(t, targetRaw);
-      out.innerHTML = renderScoreHtml(r, t);
+      const qData = DATA.qa[idx];
+      const r = scoreQAAnswer(t, qData);
+      out.innerHTML = renderQAScoreHtml(r, t);
       State.data.recScores = State.data.recScores || {};
-      State.data.recScores["qa_" + idx] = { score: r?.score, attempt: t };
+      // keep best score
+      const prev = State.data.recScores["qa_" + idx];
+      if (!prev || (r && r.score > (prev.score || 0))) {
+        State.data.recScores["qa_" + idx] = { score: r?.score, attempt: t, ts: Date.now() };
+      }
       State.save();
     },
     onError: err => {
-      out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})。<br>iOSのキーボードマイク（🎤ボタン）でテキスト入力してください。</div>`;
+      out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})。<br>もう一度お試しください。または iOSキーボードのマイクボタンで入力してテキスト比較も可能です。</div>`;
     },
     onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤 Speak"; },
     onFallback: () => {
-      out.innerHTML = `<div class="diff-summary">このブラウザは音声認識に対応していません。<br>iOSキーボードのマイクボタンで入力 → テキスト比較をお試しください。</div>`;
+      out.innerHTML = `<div class="diff-summary">このブラウザは音声認識に対応していません。<br>iOSキーボードのマイクボタンでテキスト入力してください。</div>`;
       btn.dataset.state = ""; btn.textContent = "🎤 Speak";
     }
   });
@@ -1643,6 +1851,93 @@ function speakForPhrase(phraseEn, pid) {
       btn.dataset.state = ""; btn.textContent = "🎤";
     }
   });
+}
+
+/* ===== MODAL HELPER ===== */
+function openModal(htmlContent) {
+  document.querySelectorAll(".modal-overlay").forEach(x => x.remove());
+  const m = document.createElement("div");
+  m.className = "modal-overlay";
+  m.innerHTML = `<div class="modal-box">${htmlContent}</div>`;
+  m.addEventListener("click", e => { if (e.target === m) m.remove(); });
+  document.body.appendChild(m);
+  return m;
+}
+function closeModal() {
+  document.querySelectorAll(".modal-overlay").forEach(x => x.remove());
+}
+
+/* ===== EXPORT / IMPORT (data backup) ===== */
+function exportData() {
+  const data = JSON.stringify(State.data, null, 2);
+  openModal(`
+    <h3>Export · Backup</h3>
+    <p class="dim tiny">下のテキストを<strong>コピー</strong>して、メモやメール下書き等に保存してください。<br>アプリ更新でデータが消えた場合、このテキストで復元できます。</p>
+    <textarea class="modal-textarea" id="exportText" readonly>${escapeHtml(data)}</textarea>
+    <div class="btn-grid mt12">
+      <button class="btn primary small" onclick="copyExport()">📋 Copy to clipboard</button>
+      <button class="btn ghost small" onclick="closeModal()">Close</button>
+    </div>
+    <small class="note mt8">📎 推奨：<strong>iCloudメモ</strong>に「Field Notes Backup」というメモを作って毎日上書き保存。</small>
+  `);
+  setTimeout(() => {
+    const ta = document.querySelector("#exportText");
+    if (ta) { ta.focus(); ta.select(); }
+  }, 100);
+  // mark as backed up
+  State.data.lastBackupAt = Date.now();
+  State.save();
+}
+
+function copyExport() {
+  const ta = document.querySelector("#exportText");
+  if (!ta) return;
+  ta.select(); ta.setSelectionRange(0, 999999);
+  let ok = false;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(() => {
+      toast("Copied to clipboard ✓");
+    }).catch(() => {
+      try { document.execCommand("copy"); toast("Copied"); }
+      catch(e) { toast("長押しでコピーしてください"); }
+    });
+    ok = true;
+  } else {
+    try { document.execCommand("copy"); toast("Copied"); ok = true; }
+    catch(e) { toast("長押しでコピーしてください"); }
+  }
+}
+
+function importData() {
+  openModal(`
+    <h3>Import · Restore</h3>
+    <p class="dim tiny">バックアップのJSONを下に貼り付けて「Restore」をタップ。<br>現在の進捗は完全に上書きされます（注意）。</p>
+    <textarea class="modal-textarea" id="importText" placeholder='{"userName":"...","cards":{...},"doneTasks":{...},...}'></textarea>
+    <div class="btn-grid mt12">
+      <button class="btn primary small" onclick="applyImport()">Restore</button>
+      <button class="btn ghost small" onclick="closeModal()">Cancel</button>
+    </div>
+  `);
+}
+
+function applyImport() {
+  const ta = document.querySelector("#importText");
+  if (!ta) return;
+  const text = ta.value.trim();
+  if (!text) { toast("テキストを貼り付けてください"); return; }
+  try {
+    const data = JSON.parse(text);
+    if (!data || typeof data !== "object") throw new Error("Invalid JSON object");
+    if (typeof data.cards !== "object") throw new Error("'cards' field missing");
+    // write to localStorage and reload
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    State.load();
+    closeModal();
+    toast("Restored ✓");
+    Router.render();
+  } catch (e) {
+    toast("Error: " + e.message);
+  }
 }
 
 
@@ -1798,6 +2093,26 @@ const Views = {
           </div>
           <small class="note mt12">あなたの名前を設定すると、自己紹介とQ&amp;Aに自動反映されます。</small>
           <button class="btn small ghost mt12" onclick="setNamePrompt()">名前を設定 / 変更</button>
+        </div>
+
+        <div class="panel flat">
+          <div class="kicker">Backup &amp; Restore</div>
+          ${(() => {
+            const last = State.data.lastBackupAt || 0;
+            if (!last) {
+              return `<div class="backup-warn"><strong>未バックアップ。</strong> アプリ更新時にiOS Safariのストレージ分離が原因でデータが消える場合があります。<br>1日1回、Exportでテキストをコピーしてメモ等に保管してください。</div>`;
+            }
+            const days = Math.floor((Date.now() - last) / 86400000);
+            const hours = Math.floor((Date.now() - last) / 3600000);
+            const since = days >= 1 ? `${days}日前` : `${hours}時間前`;
+            const warn = days >= 2;
+            return `<small class="note">最後のバックアップ：${since}${warn ? "  <span style='color:var(--crimson)'>⚠ 古いです</span>" : ""}</small>`;
+          })()}
+          <div class="btn-grid mt12">
+            <button class="btn ${State.data.lastBackupAt ? 'ghost' : 'primary'} small" onclick="exportData()">📤 Export</button>
+            <button class="btn ghost small" onclick="importData()">📥 Import</button>
+          </div>
+          <small class="note mt8">📎 アプリ更新前後・1日の終わりに必ずExportしておくのが安全です。</small>
         </div>
 
         <div class="ornament">— end of plan —</div>
@@ -2236,17 +2551,76 @@ function diffIntro() {
 function tokenize(s) {
   return s.toLowerCase().replace(/[.,;:!?"'\u2014\u2013\-]/g," ").split(/\s+/).filter(Boolean);
 }
+/* Light stemmer: handle common English suffixes for matching purposes.
+   Not Porter-quality but sufficient for matching observe/observed/observing,
+   work/works/worked, interest/interested/interesting, etc. */
+function stem(w) {
+  if (typeof w !== "string" || w.length < 4) return w;
+  const stops = new Set(["the","a","an","is","are","was","were","be","been","being","of","to","in","on","at","for","with","and","or","but","i","you","my","your","we","our","this","that","it","its","as","by","not"]);
+  if (stops.has(w)) return w;
+  const suffixes = [
+    "ization","ational","fulness","ousness","iveness","tional","ation","iness",
+    "ness","ment","tion","sion","ings","ies","ied","ing","ly","es","ed","er","est","s"
+  ];
+  for (const sf of suffixes) {
+    if (w.length > sf.length + 2 && w.endsWith(sf)) {
+      let stem = w.slice(0, -sf.length);
+      // restore "e" for words like "make"→"making"→"mak" but "make" should be "mak" too, both match
+      return stem;
+    }
+  }
+  return w;
+}
+/* Synonym groups for partial-credit matching of close meanings.
+   Each line: canonical first, then variants. */
+const SYN_GROUPS = [
+  ["observe","watch","notice","look"],
+  ["make","create","build","produce"],
+  ["work","piece","art","artwork"],
+  ["interest","interested","curious","drawn"],
+  ["use","using","employ","work-with"],
+  ["change","shift","transform","alter"],
+  ["place","site","location","spot"],
+  ["thing","object","item"],
+  ["everyday","daily","mundane","ordinary","familiar"],
+  ["focus","attention","concentrate"],
+  ["world","environment","surrounding"],
+  ["learn","study","explore"],
+  ["want","hope","wish","like"],
+  ["different","various","diverse"],
+  ["start","begin","initiate"],
+  ["see","view","perceive"],
+  ["live","exist","dwell","inhabit"]
+];
+const SYN_MAP = (() => {
+  const m = {};
+  SYN_GROUPS.forEach(g => {
+    const stems = g.map(w => stem(w.toLowerCase()));
+    stems.forEach(s => { m[s] = stems; });
+  });
+  return m;
+})();
+function stemsEquivalent(a, b) {
+  if (a === b) return true;
+  const sa = SYN_MAP[a];
+  if (sa && sa.includes(b)) return true;
+  return false;
+}
 function lcs(a, b) {
+  // a, b: arrays of original tokens (lowercased)
+  // matches use stem + synonym equivalence; output preserves original surface forms
+  const sA = a.map(stem);
+  const sB = b.map(stem);
   const n=a.length, m=b.length;
   const dp = Array.from({length:n+1}, ()=>new Array(m+1).fill(0));
   for (let i=1;i<=n;i++) for (let j=1;j<=m;j++) {
-    if (a[i-1]===b[j-1]) dp[i][j]=dp[i-1][j-1]+1;
+    if (stemsEquivalent(sA[i-1], sB[j-1])) dp[i][j]=dp[i-1][j-1]+1;
     else dp[i][j]=Math.max(dp[i-1][j], dp[i][j-1]);
   }
   // backtrace
   const out=[]; let i=n, j=m;
   while (i>0 && j>0) {
-    if (a[i-1]===b[j-1]) { out.unshift(["match", a[i-1]]); i--; j--; }
+    if (stemsEquivalent(sA[i-1], sB[j-1])) { out.unshift(["match", a[i-1]]); i--; j--; }
     else if (dp[i-1][j] >= dp[i][j-1]) { out.unshift(["missing", a[i-1]]); i--; }
     else { out.unshift(["extra", b[j-1]]); j--; }
   }
