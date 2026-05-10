@@ -1611,32 +1611,92 @@ const SpeechRec = {
   SRClass: null,
   rec: null,
   available: false,
+  _stopped: false,
+  _delivered: false,
+  _accumulated: "",   // text confirmed across sessions
+  _opts: null,
+  _restartTimer: null,
+
   init() {
     this.SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
     this.available = !!this.SRClass;
   },
+
   start(opts = {}) {
-    // opts: { onInterim, onResult, onError, onEnd, onFallback }
-    if (!this.available) { opts.onFallback?.(); return null; }
+    if (!this.available) { opts.onFallback?.(); return; }
+    this._opts = opts;
+    this._stopped = false;
+    this._delivered = false;
+    this._accumulated = "";
+    this._session();
+  },
+
+  _session() {
     try { if (this.rec) this.rec.abort(); } catch(e) {}
+    clearTimeout(this._restartTimer);
+
     const rec = new this.SRClass();
     rec.lang = "en-US";
-    rec.continuous = false;
+    rec.continuous = true;   // iOS ignores this, but set it anyway
     rec.interimResults = true;
     rec.maxAlternatives = 1;
+
     rec.onresult = e => {
-      const t = Array.from(e.results).map(r => r[0].transcript).join("");
-      const final = e.results[e.results.length - 1].isFinal;
-      opts.onInterim?.(t);
-      if (final) opts.onResult?.(t);
+      // Accumulate finals; collect interim separately
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) {
+          this._accumulated += e.results[i][0].transcript + " ";
+        }
+      }
+      // interim = last non-final result if present
+      let interim = "";
+      const last = e.results[e.results.length - 1];
+      if (!last.isFinal) interim = last[0].transcript;
+
+      const display = (this._accumulated + interim).trim();
+      this._opts?.onInterim?.(display);
     };
-    rec.onerror = e => opts.onError?.(e.error);
-    rec.onend = () => opts.onEnd?.();
-    rec.start();
-    this.rec = rec;
-    return rec;
+
+    rec.onerror = e => {
+      if (e.error === "aborted" || e.error === "no-speech") return; // expected; onend will fire
+      this._opts?.onError?.(e.error);
+    };
+
+    rec.onend = () => {
+      if (this._stopped) {
+        // Manual stop: deliver result
+        this._deliver();
+        return;
+      }
+      // Auto-cutoff (iOS silence timeout) — restart silently after brief pause
+      this._restartTimer = setTimeout(() => {
+        if (!this._stopped) this._session();
+      }, 150);
+    };
+
+    try {
+      rec.start();
+      this.rec = rec;
+    } catch(e) {
+      this._opts?.onError?.(e.message);
+    }
   },
-  stop() { try { this.rec?.stop(); } catch(e) {} }
+
+  _deliver() {
+    if (this._delivered) return;
+    this._delivered = true;
+    const final = this._accumulated.trim();
+    if (final) this._opts?.onResult?.(final);
+    this._opts?.onEnd?.();
+  },
+
+  stop() {
+    this._stopped = true;
+    clearTimeout(this._restartTimer);
+    try { this.rec?.abort(); } catch(e) {}
+    // deliver immediately in case onend is delayed
+    setTimeout(() => this._deliver(), 100);
+  }
 };
 
 /* ===== SPEECH SCORING ===== */
@@ -1794,40 +1854,47 @@ function speakForQA(idx, targetRaw) {
     SpeechRec.stop(); return;
   }
   btn.dataset.state = "rec";
-  btn.textContent = "■ Stop";
+  btn.textContent = "■ Stop & score";
   out.style.display = "block";
   out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">…準備中</div>`;
 
-  // Cancel any active TTS and wait for audio subsystem to release
-  // (iOS Safari: speechSynthesis and speechRecognition share the mic; conflict causes silent failure)
   TTS.cancel();
   setTimeout(() => {
-    if (btn.dataset.state !== "rec") return; // user cancelled while waiting
-    out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
+    if (btn.dataset.state !== "rec") return;
+    out.innerHTML = `
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ochre-deep);letter-spacing:0.1em;">
+        🎤 RECORDING — 話し終えたら <strong>■ Stop &amp; score</strong> を押す
+      </div>
+      <div id="qa-live-${idx}" style="font-size:15px;font-family:var(--serif);color:var(--ink-soft);margin-top:8px;min-height:20px;line-height:1.6;">
+        &nbsp;
+      </div>`;
     SpeechRec.start({
-    onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
-    onResult: t => {
-      const qData = DATA.qa[idx];
-      const r = scoreQAAnswer(t, qData);
-      out.innerHTML = renderQAScoreHtml(r, t);
-      State.data.recScores = State.data.recScores || {};
-      // keep best score
-      const prev = State.data.recScores["qa_" + idx];
-      if (!prev || (r && r.score > (prev.score || 0))) {
-        State.data.recScores["qa_" + idx] = { score: r?.score, attempt: t, ts: Date.now() };
+      onInterim: t => {
+        const el = document.querySelector(`#qa-live-${idx}`);
+        if (el) el.textContent = t || "\u00a0";
+      },
+      onResult: t => {
+        const qData = DATA.qa[idx];
+        const r = scoreQAAnswer(t, qData);
+        out.innerHTML = renderQAScoreHtml(r, t);
+        State.data.recScores = State.data.recScores || {};
+        const prev = State.data.recScores["qa_" + idx];
+        if (!prev || (r && r.score > (prev.score || 0))) {
+          State.data.recScores["qa_" + idx] = { score: r?.score, attempt: t, ts: Date.now() };
+        }
+        State.save();
+      },
+      onError: err => {
+        const el = document.querySelector(`#qa-live-${idx}`);
+        if (el) el.innerHTML = `<span style="color:var(--crimson);">認識エラー (${err})。もう一度お試しください。</span>`;
+      },
+      onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤 Speak"; },
+      onFallback: () => {
+        out.innerHTML = `<div class="diff-summary">このブラウザは音声認識に対応していません。<br>iOSキーボードのマイクボタンでテキスト入力してください。</div>`;
+        btn.dataset.state = ""; btn.textContent = "🎤 Speak";
       }
-      State.save();
-    },
-    onError: err => {
-      out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})。<br>もう一度お試しください。または iOSキーボードのマイクボタンで入力してテキスト比較も可能です。</div>`;
-    },
-    onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤 Speak"; },
-    onFallback: () => {
-      out.innerHTML = `<div class="diff-summary">このブラウザは音声認識に対応していません。<br>iOSキーボードのマイクボタンでテキスト入力してください。</div>`;
-      btn.dataset.state = ""; btn.textContent = "🎤 Speak";
-    }
-  });
-  }, 320); // wait for TTS audio release
+    });
+  }, 320);
 }
 
 function speakForPhrase(phraseEn, pid) {
@@ -1844,9 +1911,16 @@ function speakForPhrase(phraseEn, pid) {
   TTS.cancel();
   setTimeout(() => {
     if (btn.dataset.state !== "rec") return;
-    out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
+    out.innerHTML = `
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ochre-deep);letter-spacing:0.1em;">
+        🎤 RECORDING — 言い終えたら <strong>■</strong> を押す
+      </div>
+      <div id="ph-live-${pid}" style="font-size:14px;font-family:var(--serif);color:var(--ink-soft);margin-top:6px;min-height:18px;">&nbsp;</div>`;
     SpeechRec.start({
-      onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
+      onInterim: t => {
+        const el = document.querySelector(`#ph-live-${pid}`);
+        if (el) el.textContent = t || "\u00a0";
+      },
       onResult: t => {
         const r = scoreAgainst(t, phraseEn);
         out.innerHTML = renderScoreHtml(r, t);
@@ -1855,7 +1929,8 @@ function speakForPhrase(phraseEn, pid) {
         State.save();
       },
       onError: err => {
-        out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})。もう一度お試しください。</div>`;
+        const el = document.querySelector(`#ph-live-${pid}`);
+        if (el) el.innerHTML = `<span style="color:var(--crimson);">認識エラー (${err})。もう一度お試しください。</span>`;
       },
       onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤"; },
       onFallback: () => {
