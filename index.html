@@ -1506,6 +1506,7 @@ const DATA = {
 <script>
 /* ===== STATE / PERSISTENCE ===== */
 const STORAGE_KEY = "fieldnotes_v1";
+const APP_VERSION = "0511-d"; // ← デプロイごとに変える（例: 0511-e, 0512-a, ...）
 
 const State = {
   data: null,
@@ -2060,7 +2061,7 @@ function updateDayChip() {
   const d = getCurrentDay();
   const sched = DATA.schedule[d];
   const chip = $("#dayChip");
-  if (sched) chip.textContent = "DAY " + d + " · " + sched.date.toUpperCase();
+  if (sched) chip.textContent = "DAY " + d + " · " + sched.date.toUpperCase() + " · v" + APP_VERSION;
 }
 
 /* ===== SRS — Leitner-box ===== */
@@ -2184,23 +2185,25 @@ const Views = {
         </div>
 
         <div class="panel flat">
-          <div class="kicker">Backup &amp; Restore</div>
+          <div class="kicker">Backup &amp; Restore · Update</div>
           ${(() => {
             const last = State.data.lastBackupAt || 0;
             if (!last) {
-              return `<div class="backup-warn"><strong>未バックアップ。</strong> アプリ更新時にiOS Safariのストレージ分離が原因でデータが消える場合があります。<br>1日1回、Exportでテキストをコピーしてメモ等に保管してください。</div>`;
+              return `<div class="backup-warn"><strong>未バックアップ。</strong> アプリ更新前後・1日の終わりに必ずExportしてください。</div>`;
             }
             const days = Math.floor((Date.now() - last) / 86400000);
             const hours = Math.floor((Date.now() - last) / 3600000);
             const since = days >= 1 ? `${days}日前` : `${hours}時間前`;
-            const warn = days >= 2;
-            return `<small class="note">最後のバックアップ：${since}${warn ? "  <span style='color:var(--crimson)'>⚠ 古いです</span>" : ""}</small>`;
+            return `<small class="note">最後のバックアップ：${since}${days >= 2 ? " <span style='color:var(--crimson)'>⚠ 古いです</span>" : ""}</small>`;
           })()}
           <div class="btn-grid mt12">
             <button class="btn ${State.data.lastBackupAt ? 'ghost' : 'primary'} small" onclick="exportData()">📤 Export</button>
             <button class="btn ghost small" onclick="importData()">📥 Import</button>
           </div>
-          <small class="note mt8">📎 アプリ更新前後・1日の終わりに必ずExportしておくのが安全です。</small>
+          <hr class="rule dotted mt12 mb12">
+          <div class="kicker" style="margin-bottom:6px;">バージョン: v${APP_VERSION}</div>
+          <small class="note mb8">GitHubにアップロード後、このボタンで最新版を取得。学習データは消えません。</small>
+          <button class="btn ghost small full mt8" onclick="checkUpdate()">🔄 最新版に更新</button>
         </div>
 
         <div class="ornament">— end of plan —</div>
@@ -2844,11 +2847,28 @@ function setNamePrompt() {
 }
 
 /* ===== Init ===== */
+/* ===== FORCE UPDATE (cache-busting reload) =====
+   Appending a unique query param forces Safari to fetch fresh from server
+   (cache is keyed by full URL including query string).
+   After reload, we detect the param, show a toast, then clean the URL.
+*/
+function checkUpdate() {
+  const ts = Date.now();
+  // preserve hash routing; replace so Back button doesn't loop
+  location.replace(location.pathname + "?nocache=" + ts + location.hash);
+}
+
 function init() {
   State.load();
   TTS.init();
   SpeechRec.init();
   updateDayChip();
+
+  // Detect cache-busting reload: clean URL, show confirmation
+  if (location.search.includes("nocache=")) {
+    history.replaceState(null, "", location.pathname + location.hash);
+    setTimeout(() => toast("✓ 最新版 v" + APP_VERSION + " を読み込みました"), 400);
+  }
 
   // navigation handlers
   $$(".nav-item").forEach(n => {
@@ -2865,9 +2885,6 @@ function init() {
       if (!State.data.userName) setNamePrompt();
     }, 700);
   }
-
-  // intercept hash route for day:N pattern
-  // (handled in Router.render via prefix check below)
 }
 
 /* override Router.render to handle day:N */
