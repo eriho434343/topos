@@ -1796,8 +1796,15 @@ function speakForQA(idx, targetRaw) {
   btn.dataset.state = "rec";
   btn.textContent = "■ Stop";
   out.style.display = "block";
-  out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
-  SpeechRec.start({
+  out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">…準備中</div>`;
+
+  // Cancel any active TTS and wait for audio subsystem to release
+  // (iOS Safari: speechSynthesis and speechRecognition share the mic; conflict causes silent failure)
+  TTS.cancel();
+  setTimeout(() => {
+    if (btn.dataset.state !== "rec") return; // user cancelled while waiting
+    out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
+    SpeechRec.start({
     onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
     onResult: t => {
       const qData = DATA.qa[idx];
@@ -1820,6 +1827,7 @@ function speakForQA(idx, targetRaw) {
       btn.dataset.state = ""; btn.textContent = "🎤 Speak";
     }
   });
+  }, 320); // wait for TTS audio release
 }
 
 function speakForPhrase(phraseEn, pid) {
@@ -1832,25 +1840,30 @@ function speakForPhrase(phraseEn, pid) {
   btn.dataset.state = "rec";
   btn.textContent = "■";
   out.style.display = "block";
-  out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
-  SpeechRec.start({
-    onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
-    onResult: t => {
-      const r = scoreAgainst(t, phraseEn);
-      out.innerHTML = renderScoreHtml(r, t);
-      State.data.recScores = State.data.recScores || {};
-      State.data.recScores["ph_" + pid] = { score: r?.score, attempt: t };
-      State.save();
-    },
-    onError: err => {
-      out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})</div>`;
-    },
-    onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤"; },
-    onFallback: () => {
-      out.innerHTML = `<div class="diff-summary">音声認識非対応。キーボードマイク🎤でお試しください。</div>`;
-      btn.dataset.state = ""; btn.textContent = "🎤";
-    }
-  });
+  out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">…準備中</div>`;
+  TTS.cancel();
+  setTimeout(() => {
+    if (btn.dataset.state !== "rec") return;
+    out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
+    SpeechRec.start({
+      onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
+      onResult: t => {
+        const r = scoreAgainst(t, phraseEn);
+        out.innerHTML = renderScoreHtml(r, t);
+        State.data.recScores = State.data.recScores || {};
+        State.data.recScores["ph_" + pid] = { score: r?.score, attempt: t };
+        State.save();
+      },
+      onError: err => {
+        out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})。もう一度お試しください。</div>`;
+      },
+      onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤"; },
+      onFallback: () => {
+        out.innerHTML = `<div class="diff-summary">音声認識非対応。キーボードマイク🎤でお試しください。</div>`;
+        btn.dataset.state = ""; btn.textContent = "🎤";
+      }
+    });
+  }, 320);
 }
 
 /* ===== MODAL HELPER ===== */
