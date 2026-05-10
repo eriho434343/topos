@@ -1447,6 +1447,7 @@ const State = {
       doneTasks: {},               // task id -> true
       qaSeen: {},                  // q index -> count
       phrasePlayed: {},            // phrase key -> count
+      recScores: {},               // key -> { score, attempt } for speech scoring
       lastVisit: Date.now(),
       ttsRate: 1.0
     };
@@ -1516,7 +1517,135 @@ const TTS = {
   cancel() { speechSynthesis.cancel(); }
 };
 
-/* ===== ROUTING ===== */
+/* ===== SPEECH RECOGNITION ===== */
+const SpeechRec = {
+  SRClass: null,
+  rec: null,
+  available: false,
+  init() {
+    this.SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.available = !!this.SRClass;
+  },
+  start(opts = {}) {
+    // opts: { onInterim, onResult, onError, onEnd, onFallback }
+    if (!this.available) { opts.onFallback?.(); return null; }
+    try { if (this.rec) this.rec.abort(); } catch(e) {}
+    const rec = new this.SRClass();
+    rec.lang = "en-US";
+    rec.continuous = false;
+    rec.interimResults = true;
+    rec.maxAlternatives = 1;
+    rec.onresult = e => {
+      const t = Array.from(e.results).map(r => r[0].transcript).join("");
+      const final = e.results[e.results.length - 1].isFinal;
+      opts.onInterim?.(t);
+      if (final) opts.onResult?.(t);
+    };
+    rec.onerror = e => opts.onError?.(e.error);
+    rec.onend = () => opts.onEnd?.();
+    rec.start();
+    this.rec = rec;
+    return rec;
+  },
+  stop() { try { this.rec?.stop(); } catch(e) {} }
+};
+
+/* ===== SPEECH SCORING ===== */
+function scoreAgainst(attempt, target) {
+  if (!attempt || !attempt.trim()) return null;
+  const tT = tokenize(target);
+  const tA = tokenize(attempt);
+  if (!tT.length) return null;
+  const diff = lcs(tT, tA);
+  const matched = diff.filter(d => d[0] === "match").length;
+  const score = Math.round((matched / tT.length) * 100);
+  return { score, diff, matched, total: tT.length };
+}
+
+function renderScoreHtml(result, attempt) {
+  if (!result) return "";
+  const color = result.score >= 80 ? "var(--forest)" : result.score >= 50 ? "var(--ochre-deep)" : "var(--crimson)";
+  const label = result.score >= 80 ? "Excellent!" : result.score >= 50 ? "Getting there." : "Once more.";
+  const diffHtml = result.diff.map(([type, tok]) => {
+    if (type === "match")   return `<span class="diff-match">${escapeHtml(tok)}</span>`;
+    if (type === "missing") return `<span class="diff-missing">${escapeHtml(tok)}</span>`;
+    return ""; // extra words: not penalised in display
+  }).join(" ");
+  return `
+    <div class="diff-out">
+      <div style="font-family:var(--mono);font-size:13px;color:${color};margin-bottom:8px;letter-spacing:0.05em;">
+        ${result.score}% · ${label}
+        <span style="color:var(--ink-faint);margin-left:8px;">${result.matched}/${result.total} words</span>
+      </div>
+      <div style="line-height:1.6;">${diffHtml}</div>
+      <div class="diff-summary">You said: &ldquo;${escapeHtml(attempt.trim())}&rdquo;</div>
+      <div class="diff-summary" style="margin-top:4px;">緑=合ってる / 黄=抜けてる（余分な語は採点外）</div>
+    </div>`;
+}
+
+function speakForQA(idx, targetRaw) {
+  const btn = document.querySelector(`#qa-mic-${idx}`);
+  const out = document.querySelector(`#qa-score-${idx}`);
+  if (!btn || !out) return;
+  if (btn.dataset.state === "rec") {
+    SpeechRec.stop(); return;
+  }
+  btn.dataset.state = "rec";
+  btn.textContent = "■ Stop";
+  out.style.display = "block";
+  out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
+  SpeechRec.start({
+    onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
+    onResult: t => {
+      const r = scoreAgainst(t, targetRaw);
+      out.innerHTML = renderScoreHtml(r, t);
+      State.data.recScores = State.data.recScores || {};
+      State.data.recScores["qa_" + idx] = { score: r?.score, attempt: t };
+      State.save();
+    },
+    onError: err => {
+      out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})。<br>iOSのキーボードマイク（🎤ボタン）でテキスト入力してください。</div>`;
+    },
+    onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤 Speak"; },
+    onFallback: () => {
+      out.innerHTML = `<div class="diff-summary">このブラウザは音声認識に対応していません。<br>iOSキーボードのマイクボタンで入力 → テキスト比較をお試しください。</div>`;
+      btn.dataset.state = ""; btn.textContent = "🎤 Speak";
+    }
+  });
+}
+
+function speakForPhrase(phraseEn, pid) {
+  const btn = document.querySelector(`#pmicbtn-${pid}`);
+  const out = document.querySelector(`#pscore-${pid}`);
+  if (!btn || !out) return;
+  if (btn.dataset.state === "rec") {
+    SpeechRec.stop(); return;
+  }
+  btn.dataset.state = "rec";
+  btn.textContent = "■";
+  out.style.display = "block";
+  out.innerHTML = `<div class="diff-summary" style="color:var(--ochre-deep);">🎤 Listening...</div>`;
+  SpeechRec.start({
+    onInterim: t => { out.innerHTML = `<div class="diff-summary">&ldquo;${escapeHtml(t)}&rdquo;</div>`; },
+    onResult: t => {
+      const r = scoreAgainst(t, phraseEn);
+      out.innerHTML = renderScoreHtml(r, t);
+      State.data.recScores = State.data.recScores || {};
+      State.data.recScores["ph_" + pid] = { score: r?.score, attempt: t };
+      State.save();
+    },
+    onError: err => {
+      out.innerHTML = `<div class="diff-summary" style="color:var(--crimson);">認識エラー (${err})</div>`;
+    },
+    onEnd: () => { btn.dataset.state = ""; btn.textContent = "🎤"; },
+    onFallback: () => {
+      out.innerHTML = `<div class="diff-summary">音声認識非対応。キーボードマイク🎤でお試しください。</div>`;
+      btn.dataset.state = ""; btn.textContent = "🎤";
+    }
+  });
+}
+
+
 const Router = {
   current: "home",
   go(route) {
@@ -1818,16 +1947,22 @@ const Views = {
     const cards = DATA.qa.map((q, i) => {
       const seen = State.data.qaSeen[i] || 0;
       const ans = applyName(q.a);
+      const prevScore = State.data.recScores?.["qa_" + i];
+      const scoreChip = prevScore
+        ? `<span class="kbd" style="color:${prevScore.score >= 80 ? "var(--forest)" : prevScore.score >= 50 ? "var(--ochre-deep)" : "var(--crimson)"}">best ${prevScore.score}%</span>`
+        : "";
       return `
         <div class="qa-card" id="qa-${i}">
           <div class="qa-q">${escapeHtml(q.q)}</div>
           <div class="qa-q-ja">${escapeHtml(q.qja)}</div>
           <div class="qa-actions">
             <button class="btn ghost small" onclick="TTS.speak(${JSON.stringify(q.q).replace(/"/g,'&quot;')})">♪ Listen</button>
+            <button class="btn ghost small" id="qa-mic-${i}" onclick="speakForQA(${i}, ${JSON.stringify(applyName(q.a)).replace(/"/g,'&quot;')})">🎤 Speak</button>
             <button class="btn ghost small" onclick="toggleAnswer(${i})">Show answer</button>
-            <button class="btn ghost small" onclick="recallMode(${i})">Recall mode</button>
-            <span class="kbd">seen ${seen}×</span>
+            <button class="btn ghost small" onclick="recallMode(${i})">Recall</button>
+            <span class="kbd">seen ${seen}×</span>${scoreChip}
           </div>
+          <div id="qa-score-${i}" class="diff-out" style="display:none;margin-top:10px;"></div>
           <div class="qa-answer" id="qa-ans-${i}">
             <div class="a-label">Model answer</div>
             <div>${escapeHtml(ans).replace(/\n/g,"<br>")}</div>
@@ -1846,26 +1981,37 @@ const Views = {
       <div class="view">
         <div class="kicker">Mock interview · Q&A bank</div>
         <h1 class="title">Twelve questions.</h1>
-        <div class="title-rule">listen → recall → speak → reveal</div>
-        <p class="lead">面談・対話の頻出12問。答えは短くてOK、ただし<strong>毎回同じ言葉</strong>で返せるよう「結晶化」させます。</p>
+        <div class="title-rule">listen → speak → score → reveal</div>
+        <p class="lead">面談・対話の頻出12問。<strong>🎤 Speak</strong>で答えを吹き込むと、モデル解答との一致率をスコアで表示します。</p>
         ${cards}
       </div>`;
   },
 
   /* ----- PHRASES ----- */
   phrases() {
+    let pCount = 0;
     const groups = DATA.phrases.map(g => `
       <div class="phrase-group">
         <h3>${g.group}</h3>
-        ${g.items.map(p => `
-          <div class="phrase-row">
-            <div class="phrase-text">
-              <div class="phrase-en">${escapeHtml(p.en)}</div>
-              <div class="phrase-ja">${escapeHtml(p.ja)}</div>
-            </div>
-            <button class="phrase-play" onclick="TTS.speak(${JSON.stringify(p.en).replace(/"/g,'&quot;')})">♪</button>
-          </div>
-        `).join("")}
+        ${g.items.map(p => {
+          const pid = pCount++;
+          const prevScore = State.data.recScores?.["ph_" + pid];
+          const scoreDot = prevScore
+            ? `<span style="font-family:var(--mono);font-size:10px;color:${prevScore.score >= 80 ? "var(--forest)" : "var(--ochre-deep)"};">${prevScore.score}%</span>`
+            : "";
+          return `
+            <div class="phrase-row">
+              <div class="phrase-text" style="flex:1;">
+                <div class="phrase-en">${escapeHtml(p.en)} ${scoreDot}</div>
+                <div class="phrase-ja">${escapeHtml(p.ja)}</div>
+                <div id="pscore-${pid}" class="diff-out" style="display:none;margin-top:8px;font-size:13px;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
+                <button class="phrase-play" onclick="TTS.speak(${JSON.stringify(p.en).replace(/"/g,'&quot;')})">♪</button>
+                <button class="phrase-play" id="pmicbtn-${pid}" onclick="speakForPhrase(${JSON.stringify(p.en).replace(/"/g,'&quot;')}, ${pid})">🎤</button>
+              </div>
+            </div>`;
+        }).join("")}
       </div>
     `).join("");
 
@@ -1873,8 +2019,8 @@ const Views = {
       <div class="view">
         <div class="kicker">Phrase library</div>
         <h1 class="title">Field phrases.</h1>
-        <div class="title-rule">tap ♪ to hear · drill aloud</div>
-        <p class="lead">場面ごとの定型句。<strong>修復フレーズ</strong>（聞き返し・確認）は最優先。出てくる必要があるときに考えていては遅いので、反射で出るまで反復してください。</p>
+        <div class="title-rule">♪ to hear · 🎤 to score</div>
+        <p class="lead">場面ごとの定型句。<strong>🎤</strong>で録音すると採点されます。<strong>修復フレーズ</strong>（LISTENING / REPAIR グループ）を最優先で練習してください。</p>
         ${groups}
       </div>`;
   },
@@ -2239,6 +2385,7 @@ function setNamePrompt() {
 function init() {
   State.load();
   TTS.init();
+  SpeechRec.init();
   updateDayChip();
 
   // navigation handlers
