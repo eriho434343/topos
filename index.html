@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Field Notes">
+<meta name="theme-color" content="#F5F1E8">
+<meta name="description" content="A-1 ワークショップのための6日間英語準備ツール">
+<title>After Control · Field Notes</title>
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFmdGVyIENvbnRyb2wg6Iux6Kqe5rqW5YKZ44OO44O844OIIiwKICAic2hvcnRfbmFtZSI6ICJGaWVsZCBOb3RlcyIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI0Y1RjFFOCIsCiAgInRoZW1lX2NvbG9yIjogIiNGNUYxRTgiCn0=">
+<style>
+/* ============================================================
+   FIELD NOTES — A-1 Workshop English Prep
+   Aesthetic: warm paper, ink, forest, ochre. Botanical journal.
+   ============================================================ */
+
+:root {
+  --paper: #F5F1E8;
+  --paper-2: #EDE7D8;
+  --paper-shadow: rgba(31, 27, 22, 0.06);
+  --ink: #1F1B16;
+  --ink-soft: #4A4339;
+  --ink-faint: #8A8275;
+  --rule: #C9C0AC;
+  --rule-soft: #D9D2BF;
+  --forest: #4A6741;
+  --forest-deep: #324A2C;
+  --moss: #6B7A52;
+  --ochre: #B8895C;
+  --ochre-deep: #8E6B45;
+  --crimson: #A6443A;
+  --leaf: #768B5E;
+  --grain: 0.04;
+
+  --serif: ui-serif, "New York", "Iowan Old Style", "Apple Garamond", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --mono: ui-monospace, "IBM Plex Mono", "Courier Prime", Menlo, monospace;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: contain;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(184,137,92,0.06), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(74,103,65,0.05), transparent 40%);
+}
+/* paper grain overlay */
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  background-size: 180px 180px;
+  opacity: var(--grain);
+  mix-blend-mode: multiply;
+}
+
+button, input, textarea, select {
+  font: inherit; color: inherit; background: transparent; border: none;
+}
+button { cursor: pointer; }
+
+a { color: var(--forest-deep); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* ====================== APP SHELL ====================== */
+#app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: calc(var(--safe-top) + 56px);
+  padding-bottom: calc(var(--safe-bottom) + 76px);
+  position: relative;
+  z-index: 2;
+}
+
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding: var(--safe-top) 18px 0;
+  height: calc(var(--safe-top) + 56px);
+  display: flex; align-items: flex-end;
+  background: linear-gradient(to bottom, var(--paper) 70%, rgba(245,241,232,0));
+  pointer-events: none;
+}
+.topbar-inner {
+  width: 100%;
+  height: 56px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--rule);
+  pointer-events: auto;
+}
+.brand {
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.brand-mark {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--crimson);
+  margin-right: 8px;
+  vertical-align: 2px;
+}
+.day-chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+}
+
+/* ====================== BOTTOM NAV ====================== */
+.bottomnav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  padding-bottom: var(--safe-bottom);
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+.bottomnav-inner {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: 76px;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
+  color: var(--ink-faint);
+  font-family: var(--serif);
+  position: relative;
+  padding: 8px 0;
+  transition: color 0.15s ease;
+}
+.nav-item.active { color: var(--ink); }
+.nav-item.active::before {
+  content: "";
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 24px; height: 2px;
+  background: var(--crimson);
+}
+.nav-glyph {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Hiragino Mincho ProN", "YuMincho", "Yu Mincho", serif;
+  letter-spacing: 0;
+}
+.nav-label {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: var(--mono);
+}
+
+/* ====================== PAGE / VIEW ====================== */
+.view {
+  padding: 20px 22px 32px;
+  max-width: 720px;
+  margin: 0 auto;
+  animation: fade .25s ease both;
+}
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.title-rule {
+  display: flex; align-items: center; gap: 10px;
+  margin: 8px 0 22px;
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.title-rule::after {
+  content: ""; flex: 1; height: 1px; background: var(--rule);
+}
+.kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin-bottom: 8px;
+}
+h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.005em;
+  margin: 28px 0 10px;
+}
+h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 16px;
+  margin: 18px 0 6px;
+  color: var(--ink-soft);
+}
+p { margin-bottom: 12px; color: var(--ink); }
+p.lead {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.6;
+}
+small.note {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+/* ====================== CARDS / PAPER PANELS ====================== */
+.panel {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  padding: 18px 18px 16px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.panel::before {
+  content: ""; position: absolute; top: 8px; right: 8px; bottom: 8px; left: 8px;
+  border: 1px dashed var(--rule-soft);
+  pointer-events: none;
+  opacity: 0.55;
+}
+.panel.flat { background: transparent; border: 1px solid var(--rule); }
+.panel.flat::before { display: none; }
+
+/* ====================== HOME / DASHBOARD ====================== */
+.hero {
+  margin: 12px 0 18px;
+}
+.hero-line {
+  font-family: var(--serif);
+  font-size: 28px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.hero-line .accent { color: var(--forest); font-style: italic; }
+
+.day-card {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+.day-card:hover { background: var(--paper-2); }
+.day-card.today {
+  background: var(--paper-2);
+  border-color: var(--ink);
+  border-width: 1px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+.day-card.done { opacity: 0.55; }
+.day-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 6px;
+}
+.day-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.day-status {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+}
+.day-status.now { color: var(--crimson); }
+.day-status.done { color: var(--moss); }
+.day-status.future { color: var(--ink-faint); }
+.day-title {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.day-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.05em; }
+
+.task-list { margin-top: 12px; padding-left: 0; list-style: none; }
+.task-list li {
+  font-size: 14px;
+  padding: 6px 0 6px 22px;
+  position: relative;
+  border-bottom: 1px dotted var(--rule-soft);
+  color: var(--ink-soft);
+}
+.task-list li:last-child { border-bottom: none; }
+.task-list li::before {
+  content: "✦"; position: absolute; left: 4px; color: var(--ochre); font-size: 11px; top: 8px;
+}
+.task-list li.done { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: var(--ink-faint); }
+.task-list li.done::before { content: "✓"; color: var(--moss); }
+.task-min {
+  font-family: var(--mono); font-size: 10px; color: var(--ink-faint);
+  margin-left: 8px; letter-spacing: 0.05em;
+}
+
+/* progress dots */
+.dots {
+  display: flex; gap: 5px; margin-top: 10px;
+}
+.dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1px solid var(--ink-faint);
+  background: transparent;
+}
+.dot.fill { background: var(--forest); border-color: var(--forest); }
+.dot.partial { background: var(--ochre); border-color: var(--ochre); }
+
+/* ====================== BUTTONS ====================== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-family: var(--serif);
+  font-size: 15px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  letter-spacing: 0.02em;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  min-height: 44px;
+}
+.btn:active { transform: translate(2px, 2px); box-shadow: none; }
+.btn.primary { box-shadow: 3px 3px 0 var(--ochre); }
+.btn.primary:active { box-shadow: 0 0 0 var(--ochre); }
+
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.btn.ghost:active { background: var(--paper-2); }
+.btn.small { padding: 8px 14px; font-size: 13px; min-height: 36px; }
+.btn.tiny { padding: 6px 10px; font-size: 11px; min-height: 28px; }
+.btn.full { width: 100%; }
+.btn.row { display: inline-flex; }
+.btn-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0;
+}
+.btn-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.btn-glyph { font-family: var(--serif); font-style: italic; }
+
+/* ====================== SRS CARD ====================== */
+.srs-stage {
+  min-height: 60vh;
+  display: flex; flex-direction: column; align-items: stretch; justify-content: space-between;
+}
+.srs-progress {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-faint);
+  letter-spacing: 0.15em; text-align: center;
+  margin-bottom: 14px;
+}
+.srs-card {
+  flex: 1;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 28px 22px;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center;
+  position: relative;
+  box-shadow: 4px 4px 0 var(--rule);
+  margin-bottom: 16px;
+}
+.srs-card .pos {
+  position: absolute; top: 12px; left: 14px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.18em; color: var(--ochre-deep);
+  text-transform: uppercase;
+}
+.srs-card .tag {
+  position: absolute; top: 12px; right: 14px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.12em; color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.srs-card .pill {
+  position: absolute; bottom: 12px; left: 14px;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-faint); letter-spacing: 0.05em;
+}
+.srs-en {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.srs-en.phrase { font-size: 26px; }
+.srs-pron {
+  font-family: var(--mono); font-size: 13px; color: var(--ink-faint);
+  margin-bottom: 16px;
+}
+.srs-ja {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink-soft);
+  margin: 8px 0 18px;
+  display: none;
+}
+.srs-ex {
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  border-top: 1px dotted var(--rule);
+  padding-top: 14px;
+  margin-top: 12px;
+  width: 100%;
+  display: none;
+}
+.srs-ex .exja {
+  display: block;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+.srs-card.flipped .srs-ja, .srs-card.flipped .srs-ex { display: block; }
+
+.srs-controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.rate-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.rate-btn {
+  padding: 12px 6px;
+  font-family: var(--serif);
+  font-size: 13px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  text-align: center;
+  min-height: 56px;
+  display: flex; flex-direction: column; gap: 2px;
+  align-items: center; justify-content: center;
+}
+.rate-btn .rate-key {
+  font-family: var(--mono); font-size: 9px; color: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+.rate-btn:active { background: var(--ink); color: var(--paper); }
+.rate-btn.again { border-color: var(--crimson); color: var(--crimson); }
+.rate-btn.hard { border-color: var(--ochre-deep); color: var(--ochre-deep); }
+.rate-btn.good { border-color: var(--moss); color: var(--moss); }
+.rate-btn.easy { border-color: var(--forest); color: var(--forest); }
+
+/* ====================== INTRO MODULE ====================== */
+.intro-text {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.7;
+}
+.intro-text .line {
+  display: block;
+  padding: 4px 0;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+.intro-text .line.playing { background: rgba(184,137,92,0.18); }
+.intro-text .line.done { color: var(--ink-faint); }
+.intro-ja {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.intro-ja .line {
+  display: block;
+  padding: 2px 0;
+  font-family: var(--serif);
+}
+
+.mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--ink);
+  margin-bottom: 18px;
+}
+.mode-tab {
+  padding: 10px 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  background: var(--paper);
+  border-right: 1px solid var(--ink);
+}
+.mode-tab:last-child { border-right: none; }
+.mode-tab.active { background: var(--ink); color: var(--paper); }
+
+.player-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  margin-bottom: 16px;
+}
+.player-bar .play-btn {
+  width: 40px; height: 40px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.player-bar .play-btn.playing { background: var(--paper); color: var(--ink); }
+.speed-row {
+  display: flex; gap: 4px; margin-left: auto;
+}
+.speed-btn {
+  padding: 4px 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+}
+.speed-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ====================== Q&A ====================== */
+.qa-card {
+  border: 1px solid var(--rule);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  background: var(--paper);
+}
+.qa-q {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.qa-q::before { content: "Q. "; color: var(--ochre-deep); font-style: italic; }
+.qa-q-ja {
+  font-size: 13px; color: var(--ink-faint); margin-bottom: 12px;
+  font-family: var(--serif);
+}
+.qa-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.qa-answer {
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--paper-2);
+  border-left: 3px solid var(--forest);
+  font-size: 15px;
+  line-height: 1.65;
+  display: none;
+}
+.qa-answer.show { display: block; }
+.qa-answer .a-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--forest);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.qa-answer .a-keys {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dotted var(--rule);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.03em;
+}
+
+/* ====================== PHRASES ====================== */
+.phrase-group {
+  margin-bottom: 24px;
+}
+.phrase-group h3 {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ochre-deep);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.phrase-row {
+  display: flex; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dotted var(--rule-soft);
+  align-items: flex-start;
+}
+.phrase-text {
+  flex: 1;
+}
+.phrase-en {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.phrase-ja {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+.phrase-play {
+  width: 32px; height: 32px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.phrase-play:active { background: var(--ink); color: var(--paper); }
+
+/* ====================== READING ====================== */
+.read-text {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+.read-text .word {
+  cursor: pointer;
+  border-bottom: 1px dashed transparent;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  padding: 0 1px;
+}
+.read-text .word.tapped {
+  background: rgba(184,137,92,0.2);
+  border-bottom-color: var(--ochre);
+}
+.gloss-popup {
+  position: fixed;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: var(--serif);
+  z-index: 100;
+  max-width: 240px;
+  box-shadow: 3px 3px 0 var(--ochre);
+}
+.gloss-popup .gloss-en {
+  font-style: italic; color: var(--ochre); font-size: 11px;
+  font-family: var(--mono); letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+/* ====================== SHADOWING ====================== */
+.shadow-item {
+  border: 1px solid var(--rule);
+  padding: 16px;
+  margin-bottom: 14px;
+  background: var(--paper);
+}
+.shadow-en {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.shadow-ja {
+  font-size: 12px; color: var(--ink-faint); margin-bottom: 10px;
+}
+.shadow-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ====================== ATTEMPT TEXTAREA ====================== */
+.attempt-area {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 14px;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 80px;
+  resize: vertical;
+  margin-top: 10px;
+}
+.diff-out {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-family: var(--serif);
+  line-height: 1.6;
+}
+.diff-match { color: var(--moss); }
+.diff-extra { color: var(--crimson); text-decoration: line-through; }
+.diff-missing { background: rgba(184,137,92,0.3); color: var(--ochre-deep); padding: 0 2px; }
+.diff-summary {
+  font-family: var(--mono); font-size: 11px;
+  margin-top: 8px; color: var(--ink-faint); letter-spacing: 0.05em;
+}
+
+/* ====================== SETTINGS / MISC ====================== */
+.kv {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px dotted var(--rule-soft);
+  align-items: center;
+}
+.kv-key { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.1em; text-transform: uppercase; }
+.kv-val { font-family: var(--serif); }
+
+.toast {
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 88px); left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--paper);
+  padding: 10px 16px;
+  font-family: var(--serif); font-size: 14px;
+  z-index: 200;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* prevent text selection ghost on iOS taps */
+.nav-item, .day-card, .btn, .rate-btn, .mode-tab, .phrase-play {
+  user-select: none; -webkit-user-select: none;
+}
+
+/* keyboard hint chip */
+.kbd {
+  font-family: var(--mono); font-size: 10px;
+  border: 1px solid var(--rule);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--ink-faint);
+}
+
+/* divider ornament */
+.ornament {
+  text-align: center; color: var(--ink-faint); margin: 24px 0;
+  font-family: var(--serif); font-style: italic; font-size: 13px;
+  letter-spacing: 0.4em;
+}
+
+/* hide scrollbar nicety */
+::-webkit-scrollbar { width: 0; }
+
+/* utility */
+.row { display: flex; align-items: center; gap: 10px; }
+.row.gap-tight { gap: 6px; }
+.right { margin-left: auto; }
+.dim { color: var(--ink-faint); }
+.tiny { font-size: 11px; }
+.mt8 { margin-top: 8px; } .mt12 { margin-top: 12px; } .mt16 { margin-top: 16px; } .mt24 { margin-top: 24px; }
+.mb8 { margin-bottom: 8px; } .mb12 { margin-bottom: 12px; } .mb16 { margin-bottom: 16px; }
+.center { text-align: center; }
+.italic { font-style: italic; }
+hr.rule { border: none; border-top: 1px solid var(--rule); margin: 18px 0; }
+hr.rule.dotted { border-top-style: dotted; }
+
+/* hide scrollbar in webkit */
+*::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark"></span>FIELD&nbsp;NOTES</div>
+    <div class="day-chip" id="dayChip">DAY 0 · MAY 10</div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<nav class="bottomnav">
+  <div class="bottomnav-inner">
+    <button class="nav-item" data-route="home"><span class="nav-glyph">始</span><span class="nav-label">Today</span></button>
+    <button class="nav-item" data-route="vocab"><span class="nav-glyph">語</span><span class="nav-label">Words</span></button>
+    <button class="nav-item" data-route="qa"><span class="nav-glyph">問</span><span class="nav-label">Q&amp;A</span></button>
+    <button class="nav-item" data-route="phrases"><span class="nav-glyph">句</span><span class="nav-label">Phrases</span></button>
+    <button class="nav-item" data-route="practice"><span class="nav-glyph">声</span><span class="nav-label">Voice</span></button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     DATA
+     ============================================================ -->
+<script>
+const DATA = {
+  // ---- USER (editable) ----
+  user: {
+    name: "",        // user fills in
+    pronouns: "",
+  },
+
+  // ---- WORKSHOP DATES (anchor for day labels) ----
+  startDate: "2026-05-10",   // Day 0
+  fieldworkDate: "2026-05-23",
+
+  // ---- SELF-INTRODUCTION (editable in-app) ----
+  selfIntro: {
+    en: [
+      "Hello, my name is __NAME__.",
+      "I work at an electric power company in Japan.",
+      "Outside of work, I make art.",
+      "I use programming, performance, and installation.",
+      "My materials are everyday things — water, paper, electronics.",
+      "",
+      "I am interested in how people see things, and how human behavior changes.",
+      "Until now, I have observed human cognition and behavior.",
+      "But I have never observed non-human life, or landscapes shaped by people, for a long time.",
+      "",
+      "Your words moved me — \"not technical skills, but sustained attention to a place.\"",
+      "That is what I need next.",
+      "",
+      "Thank you."
+    ],
+    ja: [
+      "こんにちは、__NAME__と申します。",
+      "日本の電力会社で働いています。",
+      "仕事の外では、アートを作っています。",
+      "プログラミング、パフォーマンス、インスタレーションを使います。",
+      "素材は身近なもの ― 水、紙、電子部品です。",
+      "",
+      "私は、人がものをどう捉えるか、そして人の行動がどう変化するかに関心があります。",
+      "これまで、人間の認知と行動を観察してきました。",
+      "しかし、人間以外の生命や、人の手が入った景観を、長い時間をかけて観察したことはありません。",
+      "",
+      "あなたの言葉に心を動かされました ―「技術的スキルではなく、特定の場所への持続的な関心」。",
+      "それが、今の私に必要なものです。",
+      "",
+      "ありがとうございます。"
+    ]
+  },
+
+  // ---- VOCAB CARDS ----
+  // priority 1 = critical (must produce), 2 = important (must understand), 3 = bonus
+  vocab: [
+    // === A. Self & Profession ===
+    {en:"electric power company", ja:"電力会社", pos:"noun", tag:"self", pri:1,
+      ex:"I work at an electric power company.", exJa:"電力会社で働いています。"},
+    {en:"day job", ja:"本業", pos:"noun", tag:"self", pri:1,
+      ex:"My day job is engineering.", exJa:"私の本業はエンジニアリングです。"},
+    {en:"outside of work", ja:"仕事外で", pos:"phrase", tag:"self", pri:1,
+      ex:"Outside of work, I make art.", exJa:"仕事の外では、私はアートを作ります。"},
+    {en:"engineer", ja:"技術者・エンジニア", pos:"noun", tag:"self", pri:1,
+      ex:"I work as an engineer.", exJa:"私は技術者として働いています。"},
+    {en:"practice", ja:"制作活動・実践", pos:"noun", tag:"self", pri:1,
+      ex:"My practice is process-based.", exJa:"私の制作活動はプロセス重視です。"},
+    {en:"background", ja:"経歴・背景", pos:"noun", tag:"self", pri:1,
+      ex:"My background is in engineering.", exJa:"私の背景はエンジニアリングです。"},
+    {en:"self-taught", ja:"独学の", pos:"adj", tag:"self", pri:2,
+      ex:"I am a self-taught artist.", exJa:"私は独学のアーティストです。"},
+    {en:"interdisciplinary", ja:"領域横断的な", pos:"adj", tag:"self", pri:2,
+      ex:"My work is interdisciplinary.", exJa:"私の作品は領域横断的です。"},
+    {en:"based in", ja:"〜を拠点とする", pos:"phrase", tag:"self", pri:1,
+      ex:"I am based in Japan.", exJa:"私は日本を拠点にしています。"},
+    {en:"focus on", ja:"〜に注力する", pos:"phrase", tag:"self", pri:1,
+      ex:"I focus on perception and behavior.", exJa:"知覚と行動に注力しています。"},
+
+    // === B. Your Practice & Themes ===
+    {en:"perception", ja:"知覚・物事の捉え方", pos:"noun", tag:"theme", pri:1,
+      ex:"I am interested in perception.", exJa:"私は知覚に関心があります。"},
+    {en:"cognition", ja:"認知", pos:"noun", tag:"theme", pri:1,
+      ex:"I observe human cognition.", exJa:"私は人間の認知を観察します。"},
+    {en:"behavior", ja:"行動・振る舞い", pos:"noun", tag:"theme", pri:1,
+      ex:"I look at human behavior.", exJa:"私は人間の行動を見ています。"},
+    {en:"behavior change", ja:"行動変容", pos:"noun", tag:"theme", pri:1,
+      ex:"I study behavior change.", exJa:"私は行動変容を研究しています。"},
+    {en:"internal factor", ja:"内的要因", pos:"noun", tag:"theme", pri:1,
+      ex:"Internal factors shape our actions.", exJa:"内的要因が私たちの行動を形作ります。"},
+    {en:"external factor", ja:"外的要因", pos:"noun", tag:"theme", pri:1,
+      ex:"External factors also play a role.", exJa:"外的要因も役割を果たします。"},
+    {en:"everyday things", ja:"身近なもの", pos:"phrase", tag:"theme", pri:1,
+      ex:"I use everyday things in my work.", exJa:"作品で身近なものを使います。"},
+    {en:"familiar object", ja:"見慣れた物", pos:"noun", tag:"theme", pri:2,
+      ex:"A familiar object can become strange.", exJa:"見慣れた物が奇妙になりうる。"},
+    {en:"mundane", ja:"日常的な・ありふれた", pos:"adj", tag:"theme", pri:2,
+      ex:"I find the mundane fascinating.", exJa:"日常的なものに惹かれます。"},
+    {en:"shift", ja:"ずらす・変化", pos:"v/n", tag:"theme", pri:2,
+      ex:"My work creates a small shift in perception.", exJa:"作品は知覚に小さな変化を起こす。"},
+    {en:"reveal", ja:"明らかにする", pos:"verb", tag:"theme", pri:2,
+      ex:"The work reveals hidden patterns.", exJa:"作品は隠れたパターンを明らかにする。"},
+    {en:"hack", ja:"ハックする・改変する", pos:"verb", tag:"theme", pri:2,
+      ex:"I hack the everyday.", exJa:"日常をハックする。"},
+
+    // === C. Art & Medium ===
+    {en:"installation", ja:"インスタレーション", pos:"noun", tag:"art", pri:1,
+      ex:"I make installations.", exJa:"私はインスタレーションを作ります。"},
+    {en:"performance", ja:"パフォーマンス", pos:"noun", tag:"art", pri:1,
+      ex:"Performance is one of my mediums.", exJa:"パフォーマンスは私の表現媒体の一つです。"},
+    {en:"medium", ja:"メディア・媒体", pos:"noun", tag:"art", pri:1,
+      ex:"My medium is mixed.", exJa:"私の媒体は混合的です。"},
+    {en:"material", ja:"素材", pos:"noun", tag:"art", pri:1,
+      ex:"My materials are water and paper.", exJa:"素材は水と紙です。"},
+    {en:"site-specific", ja:"場所特定的な", pos:"adj", tag:"art", pri:2,
+      ex:"This is a site-specific work.", exJa:"これは場所特定的な作品です。"},
+    {en:"interactive", ja:"インタラクティブな", pos:"adj", tag:"art", pri:2,
+      ex:"The work is interactive.", exJa:"作品はインタラクティブです。"},
+    {en:"participatory", ja:"参加型の", pos:"adj", tag:"art", pri:2,
+      ex:"It is a participatory project.", exJa:"参加型のプロジェクトです。"},
+    {en:"process-based", ja:"プロセス重視の", pos:"adj", tag:"art", pri:2,
+      ex:"My approach is process-based.", exJa:"私のアプローチはプロセス重視です。"},
+    {en:"piece", ja:"作品", pos:"noun", tag:"art", pri:1,
+      ex:"This is a recent piece of mine.", exJa:"これは私の最近の作品です。"},
+    {en:"body of work", ja:"作品群", pos:"phrase", tag:"art", pri:2,
+      ex:"My body of work explores cognition.", exJa:"私の作品群は認知を探究する。"},
+    {en:"work-in-progress", ja:"制作中の作品", pos:"noun", tag:"art", pri:2,
+      ex:"This is still a work-in-progress.", exJa:"これはまだ制作中です。"},
+    {en:"exhibition", ja:"展覧会", pos:"noun", tag:"art", pri:2,
+      ex:"The exhibition opens in May.", exJa:"展覧会は5月に開幕します。"},
+    {en:"artist talk", ja:"アーティストトーク", pos:"noun", tag:"art", pri:2,
+      ex:"There will be an artist talk.", exJa:"アーティストトークがあります。"},
+
+    // === D. Ecology / More-than-human ===
+    {en:"more-than-human", ja:"人間以上・人間中心を超えた", pos:"adj", tag:"eco", pri:1,
+      ex:"More-than-human perspectives matter.", exJa:"人間以上の視点が重要です。"},
+    {en:"non-human", ja:"人間以外の", pos:"adj", tag:"eco", pri:1,
+      ex:"I want to observe non-human life.", exJa:"人間以外の生命を観察したい。"},
+    {en:"life form", ja:"生命体", pos:"noun", tag:"eco", pri:1,
+      ex:"Many life forms share this place.", exJa:"多くの生命体がこの場所を共有しています。"},
+    {en:"biodiversity", ja:"生物多様性", pos:"noun", tag:"eco", pri:1,
+      ex:"Biodiversity is at the core.", exJa:"生物多様性が中心にあります。"},
+    {en:"ecosystem", ja:"生態系", pos:"noun", tag:"eco", pri:1,
+      ex:"Urban ecosystems fascinate me.", exJa:"都市の生態系に惹かれます。"},
+    {en:"ecology", ja:"生態学・生態", pos:"noun", tag:"eco", pri:1,
+      ex:"I am learning about urban ecology.", exJa:"都市生態学を学んでいます。"},
+    {en:"species", ja:"種", pos:"noun", tag:"eco", pri:1,
+      ex:"This species is common in Kyoto.", exJa:"この種は京都ではよく見られます。"},
+    {en:"multispecies", ja:"多種からなる", pos:"adj", tag:"eco", pri:2,
+      ex:"A multispecies world.", exJa:"多種からなる世界。"},
+    {en:"coexist", ja:"共生する・共に存在する", pos:"verb", tag:"eco", pri:1,
+      ex:"Many species coexist here.", exJa:"多くの種がここで共存しています。"},
+    {en:"coexistence", ja:"共生・共存", pos:"noun", tag:"eco", pri:1,
+      ex:"Coexistence is fragile.", exJa:"共存は壊れやすいものです。"},
+    {en:"landscape", ja:"風景・景観", pos:"noun", tag:"eco", pri:1,
+      ex:"A landscape shaped by people.", exJa:"人によって形作られた景観。"},
+    {en:"environment", ja:"環境", pos:"noun", tag:"eco", pri:1,
+      ex:"The environment changes constantly.", exJa:"環境は絶えず変化します。"},
+    {en:"habitat", ja:"生息地", pos:"noun", tag:"eco", pri:2,
+      ex:"This is a habitat for small birds.", exJa:"ここは小鳥の生息地です。"},
+    {en:"inhabit", ja:"生息する・住む", pos:"verb", tag:"eco", pri:1,
+      ex:"How animals inhabit human spaces.", exJa:"動物が人間の空間にどう生息するか。"},
+    {en:"dwell", ja:"住まう・棲息する", pos:"verb", tag:"eco", pri:2,
+      ex:"They dwell among us.", exJa:"彼らは私たちの中に住んでいます。"},
+    {en:"wildlife", ja:"野生生物", pos:"noun", tag:"eco", pri:1,
+      ex:"Urban wildlife is everywhere.", exJa:"都市の野生生物はどこにでもいます。"},
+    {en:"flora and fauna", ja:"動植物", pos:"phrase", tag:"eco", pri:2,
+      ex:"The local flora and fauna.", exJa:"地元の動植物。"},
+    {en:"organism", ja:"生物・有機体", pos:"noun", tag:"eco", pri:2,
+      ex:"Tiny organisms live in soil.", exJa:"土の中に小さな生物がいます。"},
+    {en:"secondary forest", ja:"二次林（人の手が入った後の森）", pos:"noun", tag:"eco", pri:1,
+      ex:"Secondary forests are not pristine.", exJa:"二次林は手付かずではありません。"},
+    {en:"disturbance", ja:"撹乱（生態学用語）", pos:"noun", tag:"eco", pri:1,
+      ex:"Disturbance can create new life.", exJa:"撹乱は新しい生命を生み出すことがあります。"},
+    {en:"intervention", ja:"介入", pos:"noun", tag:"eco", pri:1,
+      ex:"Human intervention shapes the land.", exJa:"人間の介入が土地を形作ります。"},
+    {en:"management", ja:"管理", pos:"noun", tag:"eco", pri:1,
+      ex:"Management is part of nature now.", exJa:"管理は今や自然の一部です。"},
+    {en:"managed landscape", ja:"管理された景観", pos:"phrase", tag:"eco", pri:1,
+      ex:"A managed landscape, like a garden.", exJa:"庭のような管理された景観。"},
+    {en:"adaptation", ja:"適応", pos:"noun", tag:"eco", pri:1,
+      ex:"Adaptation happens slowly.", exJa:"適応はゆっくり起こります。"},
+    {en:"adapt", ja:"適応する", pos:"verb", tag:"eco", pri:1,
+      ex:"They adapt to the city.", exJa:"彼らは都市に適応します。"},
+    {en:"feral", ja:"野生化した", pos:"adj", tag:"eco", pri:3,
+      ex:"Feral cats live near the river.", exJa:"野生化した猫が川沿いに暮らしています。"},
+    {en:"abandoned", ja:"放棄された", pos:"adj", tag:"eco", pri:2,
+      ex:"An abandoned lot can be rich.", exJa:"放棄された土地は豊かでありえます。"},
+    {en:"urban", ja:"都市の", pos:"adj", tag:"eco", pri:1,
+      ex:"Urban ecology is my new interest.", exJa:"都市生態学が新しい関心です。"},
+    {en:"undergrowth", ja:"下草・藪", pos:"noun", tag:"eco", pri:3,
+      ex:"Insects live in the undergrowth.", exJa:"下草に虫が住んでいます。"},
+
+    // === E. Fieldwork / Observation ===
+    {en:"fieldwork", ja:"フィールドワーク", pos:"noun", tag:"field", pri:1,
+      ex:"I am preparing for fieldwork.", exJa:"フィールドワークの準備をしています。"},
+    {en:"field note", ja:"フィールドノート", pos:"noun", tag:"field", pri:1,
+      ex:"I keep field notes every day.", exJa:"毎日フィールドノートをつけます。"},
+    {en:"observe", ja:"観察する", pos:"verb", tag:"field", pri:1,
+      ex:"I observe carefully and slowly.", exJa:"丁寧にゆっくり観察します。"},
+    {en:"observation", ja:"観察", pos:"noun", tag:"field", pri:1,
+      ex:"Observation shapes the work.", exJa:"観察が作品を形作ります。"},
+    {en:"sustained attention", ja:"持続的な注意", pos:"phrase", tag:"field", pri:1,
+      ex:"Sustained attention to a place.", exJa:"特定の場所への持続的な注意。"},
+    {en:"long-term", ja:"長期の", pos:"adj", tag:"field", pri:1,
+      ex:"This is a long-term project.", exJa:"これは長期のプロジェクトです。"},
+    {en:"over time", ja:"時間をかけて", pos:"phrase", tag:"field", pri:1,
+      ex:"Over time, the place changes.", exJa:"時間とともに、その場所は変化します。"},
+    {en:"revisit", ja:"再訪する", pos:"verb", tag:"field", pri:2,
+      ex:"I revisit the same site.", exJa:"私は同じ現場を再訪します。"},
+    {en:"document", ja:"記録する", pos:"verb", tag:"field", pri:1,
+      ex:"I document what I see.", exJa:"見たものを記録します。"},
+    {en:"trace", ja:"痕跡・追う", pos:"n/v", tag:"field", pri:1,
+      ex:"I trace small changes.", exJa:"小さな変化を追います。"},
+    {en:"notice", ja:"気づく", pos:"verb", tag:"field", pri:1,
+      ex:"I noticed something strange.", exJa:"何か奇妙なものに気づきました。"},
+    {en:"encounter", ja:"出会う・遭遇する", pos:"verb", tag:"field", pri:2,
+      ex:"I encountered a heron.", exJa:"鷺に出会いました。"},
+    {en:"presence", ja:"存在・気配", pos:"noun", tag:"field", pri:2,
+      ex:"I feel their presence.", exJa:"彼らの気配を感じます。"},
+    {en:"trace (n.)", ja:"痕跡", pos:"noun", tag:"field", pri:2,
+      ex:"There were traces of an animal.", exJa:"動物の痕跡がありました。"},
+    {en:"site", ja:"現場・場所", pos:"noun", tag:"field", pri:1,
+      ex:"This site is full of life.", exJa:"この場所は生命に満ちています。"},
+    {en:"on-site", ja:"現場で", pos:"adv", tag:"field", pri:2,
+      ex:"I work on-site.", exJa:"現場で作業します。"},
+    {en:"survey", ja:"調査・踏査", pos:"n/v", tag:"field", pri:2,
+      ex:"We surveyed the riverbank.", exJa:"川岸を踏査しました。"},
+    {en:"specimen", ja:"標本", pos:"noun", tag:"field", pri:3,
+      ex:"I collected a small specimen.", exJa:"小さな標本を集めました。"},
+
+    // === F. Discussion / Interview phrases ===
+    {en:"I am drawn to", ja:"〜に惹かれる", pos:"phrase", tag:"talk", pri:1,
+      ex:"I am drawn to small things.", exJa:"小さなものに惹かれます。"},
+    {en:"I am interested in", ja:"〜に関心がある", pos:"phrase", tag:"talk", pri:1,
+      ex:"I am interested in cognition.", exJa:"認知に関心があります。"},
+    {en:"I would like to explore", ja:"〜を探究したい", pos:"phrase", tag:"talk", pri:1,
+      ex:"I would like to explore this place.", exJa:"この場所を探究したいです。"},
+    {en:"What strikes me is", ja:"印象的なのは〜です", pos:"phrase", tag:"talk", pri:2,
+      ex:"What strikes me is the silence.", exJa:"印象的なのは静けさです。"},
+    {en:"It reminds me of", ja:"〜を思い起こさせる", pos:"phrase", tag:"talk", pri:2,
+      ex:"It reminds me of my hometown.", exJa:"故郷を思い起こさせます。"},
+    {en:"From my perspective", ja:"私の視点では", pos:"phrase", tag:"talk", pri:2,
+      ex:"From my perspective, this is key.", exJa:"私の視点では、これが鍵です。"},
+    {en:"I would say that", ja:"〜と言えると思います", pos:"phrase", tag:"talk", pri:1,
+      ex:"I would say that observation is patience.", exJa:"観察とは忍耐だと思います。"},
+    {en:"In my work", ja:"私の作品では", pos:"phrase", tag:"talk", pri:1,
+      ex:"In my work, I use everyday things.", exJa:"作品では身近なものを使います。"},
+    {en:"In other words", ja:"言い換えると", pos:"phrase", tag:"talk", pri:2,
+      ex:"In other words, observation is form.", exJa:"言い換えれば、観察は形です。"},
+    {en:"For instance", ja:"例えば", pos:"phrase", tag:"talk", pri:2,
+      ex:"For instance, water in a bowl.", exJa:"例えば、椀の中の水。"},
+    {en:"On the other hand", ja:"一方で", pos:"phrase", tag:"talk", pri:2,
+      ex:"On the other hand, control is also part of it.", exJa:"一方で、制御もその一部です。"},
+    {en:"That being said", ja:"とはいえ", pos:"phrase", tag:"talk", pri:3,
+      ex:"That being said, I am still learning.", exJa:"とはいえ、まだ学んでいます。"},
+
+    // === G. Repair / Clarification ===
+    {en:"Could you say that again?", ja:"もう一度言っていただけますか？", pos:"phrase", tag:"repair", pri:1,
+      ex:"Sorry, could you say that again?", exJa:"すみません、もう一度言っていただけますか？"},
+    {en:"Could you say it more slowly?", ja:"もう少しゆっくり言っていただけますか？", pos:"phrase", tag:"repair", pri:1,
+      ex:"Could you say it more slowly, please?", exJa:"もう少しゆっくりお願いできますか？"},
+    {en:"I didn't catch that.", ja:"聞き取れませんでした。", pos:"phrase", tag:"repair", pri:1,
+      ex:"Sorry, I didn't catch that last word.", exJa:"すみません、最後の単語が聞き取れませんでした。"},
+    {en:"Did you mean...?", ja:"つまり〜という意味ですか？", pos:"phrase", tag:"repair", pri:1,
+      ex:"Did you mean the secondary forest?", exJa:"つまり二次林のことですか？"},
+    {en:"Let me think for a moment.", ja:"少し考えさせてください。", pos:"phrase", tag:"repair", pri:1,
+      ex:"Let me think for a moment, please.", exJa:"少し考えさせてください。"},
+    {en:"How do you say [X] in English?", ja:"[X]は英語で何と言いますか？", pos:"phrase", tag:"repair", pri:1,
+      ex:"How do you say 'kanrei' in English?", exJa:"「環礼」は英語で何と言いますか？"},
+    {en:"I'm not sure how to say this.", ja:"うまく言えないのですが", pos:"phrase", tag:"repair", pri:1,
+      ex:"I'm not sure how to say this in English.", exJa:"これを英語でうまく言えません。"},
+    {en:"Let me say it differently.", ja:"別の言い方で言ってみます", pos:"phrase", tag:"repair", pri:2,
+      ex:"Let me say it differently.", exJa:"別の言い方をしてみます。"},
+    {en:"If I understand correctly", ja:"私の理解が正しければ", pos:"phrase", tag:"repair", pri:2,
+      ex:"If I understand correctly, you mean...", exJa:"私の理解が正しければ、〜という意味ですね。"},
+    {en:"Just to make sure", ja:"念のため確認ですが", pos:"phrase", tag:"repair", pri:2,
+      ex:"Just to make sure, you said two days?", exJa:"念のため、2日間ですよね？"},
+
+    // === H. Workshop common ===
+    {en:"workshop", ja:"ワークショップ", pos:"noun", tag:"misc", pri:1,
+      ex:"I'm looking forward to the workshop.", exJa:"ワークショップを楽しみにしています。"},
+    {en:"lecture", ja:"レクチャー", pos:"noun", tag:"misc", pri:1,
+      ex:"The lecture is on Tuesday.", exJa:"レクチャーは火曜日です。"},
+    {en:"critique / crit", ja:"合評・批評", pos:"noun", tag:"misc", pri:1,
+      ex:"There will be a final critique.", exJa:"最後に合評があります。"},
+    {en:"studio visit", ja:"スタジオ訪問", pos:"noun", tag:"misc", pri:1,
+      ex:"He will do a studio visit.", exJa:"彼がスタジオ訪問をします。"},
+    {en:"presentation", ja:"発表", pos:"noun", tag:"misc", pri:1,
+      ex:"The presentation is in June.", exJa:"発表は6月です。"},
+    {en:"feedback", ja:"フィードバック", pos:"noun", tag:"misc", pri:2,
+      ex:"I would love your feedback.", exJa:"フィードバックをいただきたいです。"},
+    {en:"thought", ja:"考え・思考", pos:"noun", tag:"misc", pri:2,
+      ex:"That is an interesting thought.", exJa:"それは興味深い考えです。"},
+    {en:"sketch", ja:"スケッチ", pos:"n/v", tag:"misc", pri:2,
+      ex:"I made a quick sketch.", exJa:"簡単なスケッチをしました。"}
+  ],
+
+  // ---- Q&A BANK ----
+  qa: [
+    {
+      q: "Tell me about yourself.",
+      qja: "自己紹介をお願いします。",
+      a: "Hi, I'm __NAME__. I work at an electric power company in Japan. Outside of work, I make art. My main mediums are programming, performance, and installation, with everyday materials like water, paper, and electronics.",
+      keys: ["work at", "electric power company", "outside of work", "medium", "everyday"]
+    },
+    {
+      q: "What is your art practice about?",
+      qja: "あなたの制作実践は何についてのものですか？",
+      a: "I'm interested in how people perceive things, and how human behavior changes through internal and external factors. I often use everyday objects to make these small shifts visible.",
+      keys: ["interested in", "perceive", "behavior", "internal/external factors", "shift"]
+    },
+    {
+      q: "What materials and methods do you use?",
+      qja: "どのような素材と手法を使いますか？",
+      a: "I work mainly with programming, performance, and installation. My materials are everyday things — water, paper, electronics. I prefer materials that are familiar but can become strange.",
+      keys: ["work with", "everyday things", "familiar", "strange"]
+    },
+    {
+      q: "Why did you join this workshop?",
+      qja: "なぜこのワークショップに参加しましたか？",
+      a: "Until now, I have observed human cognition and behavior. But I have never spent a long time observing non-human life or human-managed landscapes. I want to learn that here.",
+      keys: ["until now", "observed", "non-human", "managed landscape"]
+    },
+    {
+      q: "What part of the workshop description resonated with you?",
+      qja: "ワークショップ説明のどの部分があなたに響きましたか？",
+      a: "I was struck by your message — \"not technical skills, but sustained attention to a place, where repeated observation shapes the work.\" That is exactly what I feel I need next.",
+      keys: ["struck by", "sustained attention", "repeated observation", "shapes the work"]
+    },
+    {
+      q: "Have you done fieldwork before?",
+      qja: "これまでフィールドワークの経験はありますか？",
+      a: "Not in this sense. I have observed people in everyday situations, but not non-human life or landscapes. This will be my first time doing fieldwork in this way.",
+      keys: ["not in this sense", "everyday situations", "first time"]
+    },
+    {
+      q: "What kind of place are you drawn to?",
+      qja: "どのような場所に惹かれますか？",
+      a: "I am drawn to places that look ordinary, but where something surprising is happening — small ecologies inside everyday spaces. I hope to find this in Kyoto too.",
+      keys: ["drawn to", "ordinary", "small ecologies", "everyday"]
+    },
+    {
+      q: "What does \"more-than-human\" mean to you?",
+      qja: "あなたにとって「人間以上（モア・ザン・ヒューマン）」とは何ですか？",
+      a: "For me, it means stepping outside a human-centered view. It is noticing that landscapes, animals, and even materials have their own time and life, separate from us.",
+      keys: ["stepping outside", "human-centered", "their own time"]
+    },
+    {
+      q: "What do you hope to gain from this workshop?",
+      qja: "このワークショップから何を得たいですか？",
+      a: "Two things. First, the experience of sustained observation in one place. Second, conversations with you and other participants that change how I see my own work.",
+      keys: ["two things", "sustained observation", "change how I see"]
+    },
+    {
+      q: "How do you usually start a project?",
+      qja: "通常、プロジェクトはどのように始めますか？",
+      a: "I start by noticing something small — a habit, a movement, a familiar object behaving strangely. Then I keep watching it, and slowly the work takes shape.",
+      keys: ["start by noticing", "familiar object", "keep watching", "takes shape"]
+    },
+    {
+      q: "How do you balance your day job and your art?",
+      qja: "本業とアートの両立はどうしていますか？",
+      a: "It is not always easy, but my day job gives me a different way of seeing systems. I think the two feed each other.",
+      keys: ["not always easy", "different way of seeing", "feed each other"]
+    },
+    {
+      q: "What is one recent project you have made?",
+      qja: "最近作った作品を一つ教えてください。",
+      a: "[ここを編集して、最近の自分の作品について短く話せるように準備してください。題名 → 何を使ったか → 何について → 何が起こったか、の順がおすすめです]",
+      keys: ["title", "what I used", "what it's about", "what happened"]
+    }
+  ],
+
+  // ---- PHRASES ----
+  phrases: [
+    { group: "GREETING / OPENING",
+      items: [
+        {en:"Nice to meet you.", ja:"はじめまして。"},
+        {en:"Thank you for having me.", ja:"お招きいただきありがとうございます。"},
+        {en:"It's an honor to be here.", ja:"こちらに参加できて光栄です。"},
+        {en:"May I ask a question?", ja:"質問してもよろしいですか？"},
+        {en:"May I share something?", ja:"少しお話してもよろしいですか？"},
+      ]
+    },
+    { group: "LISTENING / REPAIR",
+      items: [
+        {en:"Could you say that again, please?", ja:"もう一度言っていただけますか？"},
+        {en:"Could you speak a little more slowly?", ja:"もう少しゆっくり話していただけますか？"},
+        {en:"Sorry, I didn't catch that word.", ja:"すみません、その単語が聞き取れませんでした。"},
+        {en:"Did you mean...?", ja:"つまり〜という意味ですか？"},
+        {en:"Let me make sure I understand.", ja:"私の理解を確認させてください。"},
+        {en:"Could you give me an example?", ja:"例を挙げていただけますか？"},
+        {en:"I'm not sure I follow.", ja:"ついていけていない気がします。"},
+        {en:"How do you say this in English?", ja:"これは英語でどう言いますか？"},
+      ]
+    },
+    { group: "BUYING TIME",
+      items: [
+        {en:"Let me think for a moment.", ja:"少し考えさせてください。"},
+        {en:"That's an interesting question.", ja:"それは興味深い質問ですね。"},
+        {en:"Hmm, how should I put it...", ja:"うーん、どう言えばよいか…"},
+        {en:"Give me a second to find the words.", ja:"言葉を探させてください。"},
+        {en:"Can I come back to that later?", ja:"後でそれに戻ってもいいですか？"},
+      ]
+    },
+    { group: "EXPRESSING THOUGHTS",
+      items: [
+        {en:"I think...", ja:"〜と思います。"},
+        {en:"In my view...", ja:"私の見方では…"},
+        {en:"What I find interesting is...", ja:"私が興味深いと思うのは…"},
+        {en:"It reminds me of...", ja:"〜を思い起こさせます。"},
+        {en:"From my experience...", ja:"私の経験から言うと…"},
+        {en:"I'd like to add that...", ja:"付け加えると…"},
+        {en:"I'm not sure, but maybe...", ja:"確信はありませんが、もしかしたら…"},
+        {en:"On the other hand...", ja:"一方で…"},
+      ]
+    },
+    { group: "FIELDWORK SPECIFIC",
+      items: [
+        {en:"I notice that...", ja:"〜に気づきました。"},
+        {en:"Look at this. What do you think it is?", ja:"これを見てください。何だと思いますか？"},
+        {en:"Where should we go next?", ja:"次はどこへ行きましょうか？"},
+        {en:"Could we stay here a bit longer?", ja:"もう少しここに留まってもいいですか？"},
+        {en:"I'd like to take a picture / a note.", ja:"写真／メモを取りたいのですが。"},
+        {en:"What is this called in English?", ja:"これは英語で何と言いますか？"},
+        {en:"I'm curious about that.", ja:"それについて気になります。"},
+        {en:"Do you see that over there?", ja:"あちらに見えますか？"},
+        {en:"It looks like an animal trace.", ja:"動物の痕跡のようです。"},
+      ]
+    },
+    { group: "CLOSING",
+      items: [
+        {en:"Thank you for sharing.", ja:"共有してくださりありがとうございます。"},
+        {en:"I learned a lot today.", ja:"今日はたくさん学びました。"},
+        {en:"Could we discuss this again later?", ja:"後でまたお話しできますか？"},
+        {en:"Have a good evening.", ja:"良い夜を。"},
+      ]
+    }
+  ],
+
+  // ---- SHADOWING (Robert Zhao's actual messages, English) ----
+  shadowing: [
+    { en:"This workshop is for participants engaged in any form of creative practice with an interest in observation, fieldwork, and a long-term perspective.",
+      ja:"このワークショップは、観察・現場調査・長期的な視点に関心を持つ、あらゆる形態の創造的活動に関わる参加者を対象としています。" },
+    { en:"Starting from a joint fieldwork in Kyoto, participants will explore how various life forms exist within landscapes shaped by human management.",
+      ja:"京都での合同フィールドワークから始まり、参加者は、人間の管理によって形作られた風景の中に多様な生命体がどのように存在するかを探究します。" },
+    { en:"Through photography, video, sound, writing, drawing, and other methods, each participant will develop their own observational project over time.",
+      ja:"写真、映像、音、文章、ドローイングなど多様な手法を通じて、参加者は時間をかけて独自の観察プロジェクトを展開していきます。" },
+    { en:"Rather than focusing on technical skills, the aim is to cultivate sustained interest in a specific place, where repeated observation shapes the work itself.",
+      ja:"技術的なスキルに焦点を当てるのではなく、特定の場所への持続的な関心を育み、繰り返される観察が作品そのものを形作ることを目指しています。" },
+    { en:"Nature is never separate from human activity, but is continually produced through management, disturbance, and adaptation.",
+      ja:"自然は決して人間の活動から切り離されておらず、管理・撹乱・適応を通じて絶えず生成されていくものです。" }
+  ],
+
+  // ---- READING ----
+  reading: [
+    {
+      title: "About the Artist",
+      bodyEn: "Robert Zhao Renhui is a Singapore-based artist whose work examines how human systems shape the way we understand, classify, and manage animals and landscapes. Through photography, video, installation, and publication, he focuses on places where ecosystems live within environments transformed by urban development, abandonment, or regulation. His long-term projects are grounded in extended field observation and research, tracing how animals inhabit landscapes shaped by human intervention — from secondary forests in Singapore to managed countryside in the UK. He proposes that nature is never separate from human activity, but is continually produced through management, disturbance, and adaptation.",
+      gloss: {
+        "Singapore-based": "シンガポールを拠点とする",
+        "examines": "考察する",
+        "shape": "形作る",
+        "classify": "分類する",
+        "manage": "管理する",
+        "publication": "出版",
+        "ecosystems": "生態系",
+        "transformed": "変容した",
+        "abandonment": "放棄",
+        "regulation": "規制",
+        "long-term": "長期の",
+        "grounded in": "〜に根ざした",
+        "extended": "長期に及ぶ",
+        "field observation": "現場観察",
+        "tracing": "追跡している",
+        "inhabit": "生息する",
+        "landscapes": "風景・景観",
+        "human intervention": "人間の介入",
+        "secondary forests": "二次林",
+        "managed countryside": "管理された田園",
+        "proposes": "提唱する",
+        "separate from": "〜から切り離された",
+        "continually": "絶えず",
+        "produced": "生成される",
+        "disturbance": "撹乱",
+        "adaptation": "適応"
+      },
+      qs: [
+        "What does the artist focus on, in one sentence?",
+        "Name three things human activity does to nature, according to him.",
+        "What kinds of places does he investigate?"
+      ]
+    },
+    {
+      title: "About this Workshop",
+      bodyEn: "This workshop is for participants engaged in any form of creative practice with an interest in observation, fieldwork, and a long-term perspective. Starting from a joint fieldwork in Kyoto, participants will explore how various life forms exist within landscapes shaped by human management. Through photography, video, sound, writing, drawing, and other methods, each participant will develop their own observational project over time. Rather than focusing on technical skills, the aim is to cultivate a sustained interest in a specific place, where repeated observation shapes the work itself.",
+      gloss: {
+        "engaged in": "〜に従事している",
+        "creative practice": "創造的実践",
+        "long-term perspective": "長期的視点",
+        "joint fieldwork": "合同フィールドワーク",
+        "various life forms": "多様な生命体",
+        "exist within": "〜の中に存在する",
+        "shaped by": "〜によって形作られた",
+        "human management": "人間の管理",
+        "develop": "展開する",
+        "observational project": "観察プロジェクト",
+        "over time": "時間をかけて",
+        "rather than": "〜よりむしろ",
+        "cultivate": "育む",
+        "sustained interest": "持続的な関心",
+        "specific place": "特定の場所",
+        "repeated observation": "繰り返される観察",
+        "shapes the work itself": "作品そのものを形作る"
+      },
+      qs: [
+        "What two attitudes are required from participants?",
+        "What is the aim, NOT?",
+        "What does \"repeated observation\" do?"
+      ]
+    }
+  ],
+
+  // ---- 6-DAY SCHEDULE ----
+  schedule: [
+    {
+      day: 0, label: "Day 0 · Today (Sun)", date: "May 10",
+      title: "Foundation: voice & vocabulary",
+      tasks: [
+        { id:"d0t1", text:"環境セットアップ・自己紹介の音声を聴く（録音1回）", min:20, route:"intro" },
+        { id:"d0t2", text:"自己紹介を5回シャドーイング", min:30, route:"intro" },
+        { id:"d0t3", text:"最重要40語を初回学習（A: 自分・実践 / B: 主題）", min:60, route:"vocab" },
+        { id:"d0t4", text:"Q1〜Q3を読んで黙読暗唱", min:30, route:"qa" },
+        { id:"d0t5", text:"Robert Zhao音源を3回（普通速→ゆっくり→普通速）", min:20, route:"practice" },
+        { id:"d0t6", text:"今日の語を寝る前に再復習", min:20, route:"vocab" }
+      ]
+    },
+    {
+      day: 1, label: "Day 1 (Mon)", date: "May 11",
+      title: "Practice articulating your work",
+      tasks: [
+        { id:"d1t1", text:"昨日の語を全復習（SRS）", min:30, route:"vocab" },
+        { id:"d1t2", text:"新規30語（C: 生態学・モア・ザン・ヒューマン）", min:45, route:"vocab" },
+        { id:"d1t3", text:"自己紹介を録音→再生→修正（3回）", min:45, route:"intro" },
+        { id:"d1t4", text:"Q1〜Q5を口頭で答える練習", min:45, route:"qa" },
+        { id:"d1t5", text:"修復フレーズ（聞き返し）を声に出して10回", min:15, route:"phrases" }
+      ]
+    },
+    {
+      day: 2, label: "Day 2 (Tue)", date: "May 12",
+      title: "Listening & reading immersion",
+      tasks: [
+        { id:"d2t1", text:"SRS復習", min:30, route:"vocab" },
+        { id:"d2t2", text:"新規30語（D: フィールドワーク／観察）", min:45, route:"vocab" },
+        { id:"d2t3", text:"Robert Zhaoのプロフィールを精読（語注タップ）", min:40, route:"practice" },
+        { id:"d2t4", text:"シャドーイング全5文を各5回", min:35, route:"practice" },
+        { id:"d2t5", text:"Q6〜Q9を口頭で答える", min:30, route:"qa" }
+      ]
+    },
+    {
+      day: 3, label: "Day 3 (Wed)", date: "May 13",
+      title: "Mock interview",
+      tasks: [
+        { id:"d3t1", text:"SRS復習（累積）", min:30, route:"vocab" },
+        { id:"d3t2", text:"新規25語（E〜H: 議論・修復・ワークショップ語彙）", min:40, route:"vocab" },
+        { id:"d3t3", text:"模擬面談15分（Q1〜Q12をランダムに録音）", min:50, route:"qa" },
+        { id:"d3t4", text:"録音を聴き返し、詰まった箇所を3つ特定→練習", min:40, route:"intro" },
+        { id:"d3t5", text:"フレーズ全カテゴリを通読・音読", min:20, route:"phrases" }
+      ]
+    },
+    {
+      day: 4, label: "Day 4 (Thu)", date: "May 14",
+      title: "Free recall & response speed",
+      tasks: [
+        { id:"d4t1", text:"SRS総復習（最終調整）", min:40, route:"vocab" },
+        { id:"d4t2", text:"自由想起：自分の制作を3回、各60秒で英語で語る（録音）", min:45, route:"intro" },
+        { id:"d4t3", text:"Q&A応答速度訓練：質問を聞いて10秒以内に話し始める", min:45, route:"qa" },
+        { id:"d4t4", text:"フィールドワーク時のフレーズを声に出して練習", min:30, route:"phrases" },
+        { id:"d4t5", text:"短い読解2本目を読む", min:20, route:"practice" }
+      ]
+    },
+    {
+      day: 5, label: "Day 5 (Fri)", date: "May 15",
+      title: "Final consolidation",
+      tasks: [
+        { id:"d5t1", text:"SRS最終ラウンド（つまずく語のみ）", min:30, route:"vocab" },
+        { id:"d5t2", text:"自己紹介を本番想定で2回（時間計測：60〜90秒）", min:30, route:"intro" },
+        { id:"d5t3", text:"フル模擬面談（15分・録音）→自己評価", min:60, route:"qa" },
+        { id:"d5t4", text:"修復フレーズを反射で出るまで反復", min:30, route:"phrases" },
+        { id:"d5t5", text:"早めに就寝。準備は十分です。", min:30, route:"home" }
+      ]
+    }
+  ]
+};
+</script>
+
+<!-- ============================================================
+     APP LOGIC
+     ============================================================ -->
+<script>
+/* ===== STATE / PERSISTENCE ===== */
+const STORAGE_KEY = "fieldnotes_v1";
+
+const State = {
+  data: null,
+  load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      this.data = raw ? JSON.parse(raw) : this._fresh();
+    } catch (e) { this.data = this._fresh(); }
+    // ensure structure migrations
+    const f = this._fresh();
+    for (const k in f) if (!(k in this.data)) this.data[k] = f[k];
+    // ensure vocab cards exist for each entry
+    DATA.vocab.forEach((v, i) => {
+      if (!this.data.cards[i]) {
+        this.data.cards[i] = { box: 0, due: 0, seen: 0, lastCorrect: false };
+      }
+    });
+  },
+  save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); } catch (e) {}
+  },
+  _fresh() {
+    return {
+      userName: "",
+      customIntro: null,           // null = use default
+      cards: {},                   // index -> { box, due, seen, lastCorrect }
+      doneTasks: {},               // task id -> true
+      qaSeen: {},                  // q index -> count
+      phrasePlayed: {},            // phrase key -> count
+      lastVisit: Date.now(),
+      ttsRate: 1.0
+    };
+  }
+};
+
+/* ===== UTILITY ===== */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+function html(strings, ...vals) {
+  let s = "";
+  strings.forEach((str, i) => { s += str + (vals[i] !== undefined ? vals[i] : ""); });
+  return s;
+}
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+function getName() {
+  return State.data.userName || "[your name]";
+}
+function applyName(text) {
+  return text.replaceAll("__NAME__", getName());
+}
+function toast(msg, ms=1600) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._tm);
+  toast._tm = setTimeout(()=>t.classList.remove("show"), ms);
+}
+
+/* ===== TTS (Speech Synthesis) ===== */
+const TTS = {
+  voice: null,
+  ready: false,
+  init() {
+    const pickVoice = () => {
+      const voices = speechSynthesis.getVoices();
+      if (!voices.length) return;
+      // prefer en-US natural voices
+      const prefs = [
+        v => v.lang === "en-US" && /Samantha|Ava|Allison|Joanna|Karen|Moira|Aaron/.test(v.name),
+        v => v.lang === "en-US" && v.localService,
+        v => v.lang === "en-US",
+        v => v.lang === "en-GB",
+        v => v.lang.startsWith("en")
+      ];
+      for (const p of prefs) { const m = voices.find(p); if (m) { this.voice = m; break; } }
+      this.ready = true;
+    };
+    pickVoice();
+    if (!this.ready) speechSynthesis.onvoiceschanged = pickVoice;
+  },
+  speak(text, opts={}) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = opts.rate || State.data.ttsRate || 1.0;
+    u.pitch = opts.pitch || 1.0;
+    if (this.voice) u.voice = this.voice;
+    if (opts.onend) u.onend = opts.onend;
+    if (opts.onstart) u.onstart = opts.onstart;
+    speechSynthesis.speak(u);
+    return u;
+  },
+  cancel() { speechSynthesis.cancel(); }
+};
+
+/* ===== ROUTING ===== */
+const Router = {
+  current: "home",
+  go(route) {
+    this.current = route;
+    location.hash = route;
+    this.render();
+    // update nav
+    $$(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.route === route));
+    window.scrollTo(0, 0);
+    TTS.cancel();
+  },
+  render() {
+    const view = Views[this.current] || Views.home;
+    $("#app").innerHTML = view();
+    if (Views[this.current + "_after"]) Views[this.current + "_after"]();
+  }
+};
+
+/* ===== DATE / DAY ===== */
+function getCurrentDay() {
+  const start = new Date(DATA.startDate + "T00:00:00");
+  const today = new Date();
+  today.setHours(0,0,0,0); start.setHours(0,0,0,0);
+  const diff = Math.floor((today - start) / (1000*60*60*24));
+  return Math.max(0, Math.min(5, diff));
+}
+
+function updateDayChip() {
+  const d = getCurrentDay();
+  const sched = DATA.schedule[d];
+  const chip = $("#dayChip");
+  if (sched) chip.textContent = "DAY " + d + " · " + sched.date.toUpperCase();
+}
+
+/* ===== SRS — Leitner-box ===== */
+const SRS = {
+  // boxes: 0 new, 1 learn (~10min), 2 (1d), 3 (3d), 4 mastered (skip)
+  intervals: [0, 1/144, 1, 3, 30], // days; box 4 effectively mastered
+  nextDue(box) { return Date.now() + this.intervals[box] * 86400000; },
+  rate(idx, quality) {
+    // quality: again=0, hard=1, good=2, easy=3
+    const c = State.data.cards[idx] = State.data.cards[idx] || { box:0, due:0, seen:0 };
+    c.seen++;
+    if (quality === 0) {
+      c.box = 1;
+    } else if (quality === 1) {
+      c.box = Math.max(1, c.box);
+    } else if (quality === 2) {
+      c.box = Math.min(4, c.box + 1);
+    } else if (quality === 3) {
+      c.box = Math.min(4, c.box + 2);
+    }
+    c.due = this.nextDue(c.box);
+    c.lastCorrect = quality > 0;
+    State.save();
+  },
+  dueToday() {
+    const now = Date.now();
+    return DATA.vocab.map((v,i) => ({i, v, c: State.data.cards[i]}))
+      .filter(o => o.c.box < 4 && o.c.due <= now);
+  },
+  newToday(limit=20) {
+    return DATA.vocab.map((v,i) => ({i, v, c: State.data.cards[i]}))
+      .filter(o => o.c.seen === 0)
+      .sort((a,b) => (a.v.pri||3) - (b.v.pri||3))
+      .slice(0, limit);
+  },
+  stats() {
+    let neww=0, learning=0, review=0, mastered=0;
+    for (let i=0; i<DATA.vocab.length; i++) {
+      const c = State.data.cards[i] || {box:0, seen:0};
+      if (c.seen === 0) neww++;
+      else if (c.box <= 1) learning++;
+      else if (c.box < 4) review++;
+      else mastered++;
+    }
+    return { neww, learning, review, mastered, total: DATA.vocab.length };
+  }
+};
+
+/* ===== VIEWS ===== */
+const Views = {
+
+  /* ----- HOME ----- */
+  home() {
+    const day = getCurrentDay();
+    const stats = SRS.stats();
+    const due = SRS.dueToday().length;
+
+    let cards = "";
+    DATA.schedule.forEach((s, i) => {
+      const isToday = i === day;
+      const isPast = i < day;
+      const tasksDone = s.tasks.filter(t => State.data.doneTasks[t.id]).length;
+      const allDone = tasksDone === s.tasks.length;
+      const cls = isToday ? "today" : (isPast ? "done" : "");
+      const status = isToday ? `<span class="day-status now">Now</span>` :
+                     allDone ? `<span class="day-status done">Done</span>` :
+                     isPast ? `<span class="day-status done">Past</span>` :
+                     `<span class="day-status future">Soon</span>`;
+      const dots = s.tasks.map(t => `<span class="dot ${State.data.doneTasks[t.id]?'fill':''}"></span>`).join("");
+      cards += `
+        <div class="day-card ${cls}" onclick="Router.go('day:${i}')">
+          <div class="day-head">
+            <span class="day-num">${s.label}</span>
+            ${status}
+          </div>
+          <div class="day-title">${s.title}</div>
+          <div class="day-meta">${s.tasks.length} tasks · ${s.tasks.reduce((a,b)=>a+b.min,0)} min · ${tasksDone}/${s.tasks.length} done</div>
+          <div class="dots">${dots}</div>
+        </div>`;
+    });
+
+    const dueLine = due > 0
+      ? `<p class="lead">今日<strong style="color:var(--crimson)">${due}語</strong>の復習が待っています。</p>`
+      : `<p class="lead">復習タスクなし。新規学習へ。</p>`;
+
+    return `
+      <div class="view">
+        <div class="kicker">A-1 Workshop · After Control: Field Notes</div>
+        <h1 class="title">${getName() && getName() !== '[your name]' ? "Hello, "+escapeHtml(getName())+"." : "6 days · 18 hours."}</h1>
+        <div class="title-rule">A six-day field plan</div>
+
+        <div class="hero">
+          <p class="hero-line">"<span class="accent italic">not technical skills</span>, but <span class="accent italic">sustained attention</span> to a place."</p>
+          <small class="note mt8">— Robert Zhao Renhui</small>
+        </div>
+
+        ${dueLine}
+
+        <div class="row mb16" style="gap:6px;flex-wrap:wrap;">
+          <span class="kbd">${stats.mastered}/${stats.total} mastered</span>
+          <span class="kbd">${stats.review} review</span>
+          <span class="kbd">${stats.learning} learning</span>
+          <span class="kbd">${stats.neww} new</span>
+        </div>
+
+        <h2>Your six days</h2>
+        ${cards}
+
+        <div class="ornament">·  ·  ·</div>
+
+        <div class="panel flat">
+          <div class="kicker">Quick start</div>
+          <div class="btn-grid mt8">
+            <button class="btn primary" onclick="Router.go('intro')">自己紹介を練習</button>
+            <button class="btn ghost" onclick="Router.go('vocab')">単語カード</button>
+            <button class="btn ghost" onclick="Router.go('qa')">面談Q&amp;A</button>
+            <button class="btn ghost" onclick="Router.go('shadow')">シャドーイング</button>
+          </div>
+          <small class="note mt12">あなたの名前を設定すると、自己紹介とQ&amp;Aに自動反映されます。</small>
+          <button class="btn small ghost mt12" onclick="setNamePrompt()">名前を設定 / 変更</button>
+        </div>
+
+        <div class="ornament">— end of plan —</div>
+      </div>`;
+  },
+
+  /* ----- DAY DETAIL (route: day:N) ----- */
+  // handled separately in render dispatch
+
+  /* ----- INTRO ----- */
+  intro() {
+    const lines = (State.data.customIntro || DATA.selfIntro.en).map(applyName);
+    const linesJa = DATA.selfIntro.ja.map(applyName);
+    return `
+      <div class="view">
+        <div class="kicker">Self-introduction · 60–90 sec</div>
+        <h1 class="title">Your introduction.</h1>
+        <div class="title-rule">memorize · shadow · recall</div>
+
+        <div class="mode-tabs" id="modeTabs">
+          <button class="mode-tab active" data-mode="study">Study</button>
+          <button class="mode-tab" data-mode="shadow">Shadow</button>
+          <button class="mode-tab" data-mode="recall">Recall</button>
+        </div>
+
+        <div class="player-bar">
+          <button class="play-btn" id="introPlayBtn">▶</button>
+          <div class="dim tiny" id="introStatus">Tap to play full intro</div>
+          <div class="speed-row">
+            <button class="speed-btn" data-rate="0.7">0.7×</button>
+            <button class="speed-btn active" data-rate="1.0">1.0×</button>
+            <button class="speed-btn" data-rate="1.2">1.2×</button>
+          </div>
+        </div>
+
+        <div class="panel" id="introPanel">
+          <div class="intro-text" id="introText">
+            ${lines.map((l,i) => l === "" ? "<br>" : `<span class="line" data-i="${i}" onclick="playIntroLine(${i})">${escapeHtml(l)}</span>`).join("")}
+          </div>
+          <div class="intro-ja" id="introJa">
+            ${linesJa.map(l => l === "" ? "<br>" : `<span class="line">${escapeHtml(l)}</span>`).join("")}
+          </div>
+        </div>
+
+        <div class="btn-grid">
+          <button class="btn ghost small" onclick="editIntro()">編集する</button>
+          <button class="btn ghost small" onclick="resetIntro()">デフォルトに戻す</button>
+        </div>
+
+        <h2>Your turn</h2>
+        <p class="dim tiny">下のボックスに、テキストを見ずに口頭で言ってからタイプ／音声入力（マイクボタン）してください。差分が表示されます。</p>
+        <textarea class="attempt-area" id="attemptIntro" placeholder="Type or dictate your version here..."></textarea>
+        <div class="btn-grid mt8">
+          <button class="btn ghost small" onclick="diffIntro()">差分を見る</button>
+          <button class="btn ghost small" onclick="$('#attemptIntro').value=''; $('#diffIntro').innerHTML=''">クリア</button>
+        </div>
+        <div id="diffIntro"></div>
+      </div>`;
+  },
+  intro_after() {
+    $$(".speed-btn").forEach(b => b.addEventListener("click", () => {
+      $$(".speed-btn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      State.data.ttsRate = parseFloat(b.dataset.rate);
+      State.save();
+    }));
+    $("#introPlayBtn").addEventListener("click", playIntroAll);
+    $$(".mode-tab").forEach(t => t.addEventListener("click", () => {
+      $$(".mode-tab").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      const m = t.dataset.mode;
+      $("#introJa").style.display = (m === "study") ? "" : "none";
+      $("#introText").style.opacity = (m === "recall") ? "0.08" : "1";
+      $("#introText").style.pointerEvents = (m === "recall") ? "none" : "auto";
+    }));
+  },
+
+  /* ----- VOCAB / SRS ----- */
+  vocab() {
+    const due = SRS.dueToday();
+    const newCards = SRS.newToday(20);
+    const queue = [...due, ...newCards];
+    if (queue.length === 0) {
+      const stats = SRS.stats();
+      return `
+        <div class="view">
+          <div class="kicker">Spaced Repetition</div>
+          <h1 class="title">No cards due.</h1>
+          <div class="title-rule">come back later</div>
+          <p class="lead">復習はあとで。間隔を空けたほうが記憶は定着します（科学的根拠：spacing effect）。</p>
+          <div class="row mb16" style="gap:6px;flex-wrap:wrap;">
+            <span class="kbd">${stats.mastered}/${stats.total} mastered</span>
+            <span class="kbd">${stats.review} review</span>
+            <span class="kbd">${stats.learning} learning</span>
+            <span class="kbd">${stats.neww} new remaining</span>
+          </div>
+          <button class="btn ghost full" onclick="Router.go('vocab_browse')">全カードを閲覧する</button>
+          <button class="btn ghost full mt12" onclick="forceLearnNew()">新規カードを強制的に学習する</button>
+        </div>`;
+    }
+    return `<div class="view" id="srsView"></div>`;
+  },
+  vocab_after() {
+    if ($("#srsView")) renderNextCard();
+  },
+
+  vocab_browse() {
+    const groups = {};
+    DATA.vocab.forEach((v, i) => {
+      const c = State.data.cards[i] || {box:0, seen:0};
+      const tag = v.tag;
+      if (!groups[tag]) groups[tag] = [];
+      groups[tag].push({v, i, c});
+    });
+    const tagNames = {
+      self:"Self & Profession", theme:"Themes", art:"Art & Medium",
+      eco:"Ecology / More-than-human", field:"Fieldwork & Observation",
+      talk:"Discussion phrases", repair:"Repair / Clarification", misc:"Workshop common"
+    };
+    let body = "";
+    for (const t of Object.keys(tagNames)) {
+      if (!groups[t]) continue;
+      body += `<h3>${tagNames[t]}</h3>`;
+      body += groups[t].map(o => {
+        const stat = o.c.seen === 0 ? "·" : (o.c.box >= 4 ? "★" : (o.c.box >= 2 ? "✓" : "○"));
+        return `<div class="phrase-row">
+          <div class="phrase-text">
+            <div class="phrase-en">${escapeHtml(o.v.en)} <span class="dim tiny">${stat}</span></div>
+            <div class="phrase-ja">${escapeHtml(o.v.ja)}</div>
+          </div>
+          <button class="phrase-play" onclick="TTS.speak('${escapeHtml(o.v.en).replace(/'/g,"\\'")}')">♪</button>
+        </div>`;
+      }).join("");
+    }
+    return `
+      <div class="view">
+        <div class="kicker">Browse all words</div>
+        <h1 class="title">Vocabulary index</h1>
+        <div class="title-rule">${DATA.vocab.length} entries</div>
+        ${body}
+        <button class="btn ghost full mt16" onclick="Router.go('vocab')">SRSに戻る</button>
+      </div>`;
+  },
+
+  /* ----- Q&A ----- */
+  qa() {
+    const cards = DATA.qa.map((q, i) => {
+      const seen = State.data.qaSeen[i] || 0;
+      const ans = applyName(q.a);
+      return `
+        <div class="qa-card" id="qa-${i}">
+          <div class="qa-q">${escapeHtml(q.q)}</div>
+          <div class="qa-q-ja">${escapeHtml(q.qja)}</div>
+          <div class="qa-actions">
+            <button class="btn ghost small" onclick="TTS.speak(${JSON.stringify(q.q).replace(/"/g,'&quot;')})">♪ Listen</button>
+            <button class="btn ghost small" onclick="toggleAnswer(${i})">Show answer</button>
+            <button class="btn ghost small" onclick="recallMode(${i})">Recall mode</button>
+            <span class="kbd">seen ${seen}×</span>
+          </div>
+          <div class="qa-answer" id="qa-ans-${i}">
+            <div class="a-label">Model answer</div>
+            <div>${escapeHtml(ans).replace(/\n/g,"<br>")}</div>
+            <div class="a-keys">key: ${q.keys.join(" · ")}</div>
+            <div class="btn-grid mt12 three">
+              <button class="btn tiny ghost" onclick="TTS.speak(${JSON.stringify(applyName(q.a)).replace(/"/g,'&quot;')})">♪ Read</button>
+              <button class="btn tiny ghost" onclick="TTS.speak(${JSON.stringify(applyName(q.a)).replace(/"/g,'&quot;')}, {rate:0.75})">Slow</button>
+              <button class="btn tiny ghost" onclick="markQaSeen(${i})">Mark practiced</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="view">
+        <div class="kicker">Mock interview · Q&A bank</div>
+        <h1 class="title">Twelve questions.</h1>
+        <div class="title-rule">listen → recall → speak → reveal</div>
+        <p class="lead">面談・対話の頻出12問。答えは短くてOK、ただし<strong>毎回同じ言葉</strong>で返せるよう「結晶化」させます。</p>
+        ${cards}
+      </div>`;
+  },
+
+  /* ----- PHRASES ----- */
+  phrases() {
+    const groups = DATA.phrases.map(g => `
+      <div class="phrase-group">
+        <h3>${g.group}</h3>
+        ${g.items.map(p => `
+          <div class="phrase-row">
+            <div class="phrase-text">
+              <div class="phrase-en">${escapeHtml(p.en)}</div>
+              <div class="phrase-ja">${escapeHtml(p.ja)}</div>
+            </div>
+            <button class="phrase-play" onclick="TTS.speak(${JSON.stringify(p.en).replace(/"/g,'&quot;')})">♪</button>
+          </div>
+        `).join("")}
+      </div>
+    `).join("");
+
+    return `
+      <div class="view">
+        <div class="kicker">Phrase library</div>
+        <h1 class="title">Field phrases.</h1>
+        <div class="title-rule">tap ♪ to hear · drill aloud</div>
+        <p class="lead">場面ごとの定型句。<strong>修復フレーズ</strong>（聞き返し・確認）は最優先。出てくる必要があるときに考えていては遅いので、反射で出るまで反復してください。</p>
+        ${groups}
+      </div>`;
+  },
+
+  /* ----- PRACTICE / SHADOW + READ ----- */
+  practice() {
+    return `
+      <div class="view">
+        <div class="kicker">Voice work</div>
+        <h1 class="title">Listen, repeat, read.</h1>
+        <div class="title-rule">shadowing · reading</div>
+
+        <div class="mode-tabs" id="practiceTabs">
+          <button class="mode-tab active" data-mode="shadow">Shadow</button>
+          <button class="mode-tab" data-mode="read">Read</button>
+        </div>
+
+        <div id="practiceBody"></div>
+      </div>`;
+  },
+  practice_after() {
+    const tabs = $$("#practiceTabs .mode-tab");
+    function renderTab(mode) {
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.mode === mode));
+      if (mode === "shadow") $("#practiceBody").innerHTML = renderShadow();
+      else $("#practiceBody").innerHTML = renderRead();
+      // attach gloss handlers
+      $$(".read-text .word").forEach(w => {
+        w.addEventListener("click", e => showGloss(e, w.dataset.gloss, w.textContent));
+      });
+    }
+    tabs.forEach(t => t.addEventListener("click", () => renderTab(t.dataset.mode)));
+    renderTab("shadow");
+  },
+
+  /* ----- DAY DETAIL view ----- */
+  dayDetail(idx) {
+    const s = DATA.schedule[idx];
+    if (!s) return Views.home();
+    const tasks = s.tasks.map(t => {
+      const done = State.data.doneTasks[t.id];
+      return `
+        <li class="${done?'done':''}">
+          ${escapeHtml(t.text)}
+          <span class="task-min">${t.min} min</span>
+          <div class="row mt8 gap-tight">
+            <button class="btn tiny ghost" onclick="Router.go('${t.route}')">Open</button>
+            <button class="btn tiny ${done?'ghost':'primary'}" onclick="toggleTask('${t.id}')">${done?'undo':'mark done'}</button>
+          </div>
+        </li>`;
+    }).join("");
+    return `
+      <div class="view">
+        <div class="kicker">${s.label} · ${s.date}</div>
+        <h1 class="title">${escapeHtml(s.title)}</h1>
+        <div class="title-rule">${s.tasks.length} tasks · ${s.tasks.reduce((a,b)=>a+b.min,0)} min</div>
+        <ul class="task-list">${tasks}</ul>
+        <div class="ornament">·  ·  ·</div>
+        <button class="btn ghost full" onclick="Router.go('home')">← Back to plan</button>
+      </div>`;
+  },
+
+  /* ----- SHADOW (subview) ----- */
+};
+
+/* ===== SUBRENDERS ===== */
+function renderShadow() {
+  const items = DATA.shadowing.map((s, i) => `
+    <div class="shadow-item">
+      <div class="shadow-en">${escapeHtml(s.en)}</div>
+      <div class="shadow-ja">${escapeHtml(s.ja)}</div>
+      <div class="shadow-actions">
+        <button class="btn tiny ghost" onclick="TTS.speak(${JSON.stringify(s.en).replace(/"/g,'&quot;')}, {rate:0.7})">♪ Slow</button>
+        <button class="btn tiny ghost" onclick="TTS.speak(${JSON.stringify(s.en).replace(/"/g,'&quot;')}, {rate:1.0})">♪ Normal</button>
+        <button class="btn tiny ghost" onclick="shadowLoop(${i}, 3)">Loop ×3</button>
+      </div>
+    </div>
+  `).join("");
+  return `
+    <p class="lead">Robert Zhaoの実際の言葉から抽出。<strong>音→真似→意味確認</strong>の順で。意味は後でOK、まず口を動かす。</p>
+    <p class="dim tiny">📌 シャドーイングの効果（門田 2007等）：①音韻ループの強化 ②自動化 ③発音矯正。1文を5回繰り返すのが目安。</p>
+    ${items}
+  `;
+}
+
+function renderRead() {
+  return DATA.reading.map((r, ri) => {
+    // tokenize and inject gloss data
+    const tokens = r.bodyEn.split(/(\s+|[.,;:—\-()\u2014\u2013])/).filter(t => t !== "");
+    const html = tokens.map(t => {
+      const clean = t.toLowerCase().replace(/[^\w-]/g, "");
+      // try multi-word matches (greedy from gloss keys)
+      // for simplicity, single-word match here; multi-word handled separately below
+      const found = Object.keys(r.gloss).find(k => {
+        const klow = k.toLowerCase();
+        return klow === clean
+            || klow.split(/[\s\-]+/)[0] === clean
+            || klow.replace(/-/g,"") === clean;
+      });
+      if (found && /\w/.test(t)) {
+        return `<span class="word" data-gloss="${escapeHtml(r.gloss[found])}">${escapeHtml(t)}</span>`;
+      }
+      return escapeHtml(t);
+    }).join("");
+
+    const qs = r.qs.map(q => `<li>${escapeHtml(q)}</li>`).join("");
+    return `
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="kicker">${escapeHtml(r.title)}</div>
+        <div class="read-text">${html}</div>
+        <button class="btn tiny ghost mt8" onclick="TTS.speak(${JSON.stringify(r.bodyEn).replace(/"/g,'&quot;')}, {rate:0.85})">♪ Read aloud</button>
+        <h3 class="mt16">Comprehension</h3>
+        <ol style="padding-left:1.2em; font-size:14px; color:var(--ink-soft);">${qs}</ol>
+      </div>
+    `;
+  }).join("") + `<p class="dim tiny mt12">単語をタップすると訳が表示されます。本文を声に出して読むのも有効です。</p>`;
+}
+
+/* gloss popup */
+function showGloss(e, gloss, word) {
+  document.querySelectorAll(".gloss-popup").forEach(x => x.remove());
+  document.querySelectorAll(".read-text .word.tapped").forEach(x => x.classList.remove("tapped"));
+  e.currentTarget.classList.add("tapped");
+  const p = document.createElement("div");
+  p.className = "gloss-popup";
+  p.innerHTML = `<div class="gloss-en">${escapeHtml(word)}</div><div>${escapeHtml(gloss)}</div>`;
+  document.body.appendChild(p);
+  const r = e.currentTarget.getBoundingClientRect();
+  let left = r.left;
+  let top = r.bottom + 6;
+  // clamp
+  if (left + 240 > window.innerWidth) left = window.innerWidth - 240 - 10;
+  if (left < 10) left = 10;
+  p.style.left = left + "px";
+  p.style.top = top + "px";
+  setTimeout(() => {
+    document.addEventListener("click", function onOff(){ p.remove(); document.removeEventListener("click", onOff); }, { once:true });
+  }, 50);
+}
+
+/* ===== INTRO PLAYER ===== */
+let introIndex = 0; let introPlaying = false;
+function playIntroAll() {
+  const lines = (State.data.customIntro || DATA.selfIntro.en).map(applyName);
+  if (introPlaying) { TTS.cancel(); introPlaying = false; $("#introPlayBtn").classList.remove("playing"); $("#introPlayBtn").textContent = "▶"; return; }
+  introPlaying = true;
+  $("#introPlayBtn").classList.add("playing"); $("#introPlayBtn").textContent = "■";
+  const queue = lines.map((l, i) => ({ l, i })).filter(o => o.l.trim() !== "");
+  let qi = 0;
+  function next() {
+    if (!introPlaying || qi >= queue.length) {
+      introPlaying = false;
+      $("#introPlayBtn").classList.remove("playing"); $("#introPlayBtn").textContent = "▶";
+      $$("#introText .line").forEach(el => el.classList.remove("playing"));
+      $("#introStatus").textContent = "Done.";
+      return;
+    }
+    const { l, i } = queue[qi];
+    $$("#introText .line").forEach(el => el.classList.remove("playing"));
+    const lineEl = document.querySelector(`#introText .line[data-i="${i}"]`);
+    if (lineEl) lineEl.classList.add("playing");
+    $("#introStatus").textContent = `${qi+1} / ${queue.length}`;
+    TTS.speak(l, { onend: () => { qi++; setTimeout(next, 250); } });
+  }
+  next();
+}
+function playIntroLine(i) {
+  const lines = (State.data.customIntro || DATA.selfIntro.en).map(applyName);
+  const l = lines[i]; if (!l) return;
+  $$("#introText .line").forEach(el => el.classList.remove("playing"));
+  document.querySelector(`#introText .line[data-i="${i}"]`).classList.add("playing");
+  TTS.speak(l, { onend: () => {
+    document.querySelector(`#introText .line[data-i="${i}"]`).classList.remove("playing");
+  }});
+}
+
+function editIntro() {
+  const current = (State.data.customIntro || DATA.selfIntro.en).join("\n");
+  const updated = prompt("自己紹介を編集（1行=1文。空行で段落区切り）", current);
+  if (updated === null) return;
+  State.data.customIntro = updated.split("\n");
+  State.save();
+  Router.render();
+  toast("Saved.");
+}
+function resetIntro() {
+  State.data.customIntro = null;
+  State.save();
+  Router.render();
+  toast("Reset.");
+}
+
+/* ===== INTRO DIFF ===== */
+function diffIntro() {
+  const target = (State.data.customIntro || DATA.selfIntro.en).map(applyName).join(" ").replace(/\s+/g," ").trim();
+  const attempt = $("#attemptIntro").value.replace(/\s+/g," ").trim();
+  if (!attempt) { toast("入力してください"); return; }
+  const tT = tokenize(target); const tA = tokenize(attempt);
+  const dp = lcs(tT, tA);
+  let html = "<div class='diff-out'>";
+  let ti=0, ai=0;
+  // produce inline diff: walk through both
+  for (const [type, tok] of dp) {
+    if (type === "match") html += `<span class="diff-match">${escapeHtml(tok)}</span> `;
+    else if (type === "extra") html += `<span class="diff-extra">${escapeHtml(tok)}</span> `;
+    else if (type === "missing") html += `<span class="diff-missing">${escapeHtml(tok)}</span> `;
+  }
+  const matched = dp.filter(d => d[0]==="match").length;
+  html += `<div class="diff-summary">match: ${matched}/${tT.length} · 緑=合っている / 黄=抜けている / 赤=余分</div></div>`;
+  $("#diffIntro").innerHTML = html;
+}
+
+function tokenize(s) {
+  return s.toLowerCase().replace(/[.,;:!?"'\u2014\u2013\-]/g," ").split(/\s+/).filter(Boolean);
+}
+function lcs(a, b) {
+  const n=a.length, m=b.length;
+  const dp = Array.from({length:n+1}, ()=>new Array(m+1).fill(0));
+  for (let i=1;i<=n;i++) for (let j=1;j<=m;j++) {
+    if (a[i-1]===b[j-1]) dp[i][j]=dp[i-1][j-1]+1;
+    else dp[i][j]=Math.max(dp[i-1][j], dp[i][j-1]);
+  }
+  // backtrace
+  const out=[]; let i=n, j=m;
+  while (i>0 && j>0) {
+    if (a[i-1]===b[j-1]) { out.unshift(["match", a[i-1]]); i--; j--; }
+    else if (dp[i-1][j] >= dp[i][j-1]) { out.unshift(["missing", a[i-1]]); i--; }
+    else { out.unshift(["extra", b[j-1]]); j--; }
+  }
+  while (i>0) { out.unshift(["missing", a[i-1]]); i--; }
+  while (j>0) { out.unshift(["extra", b[j-1]]); j--; }
+  return out;
+}
+
+/* ===== SRS RENDER ===== */
+let SRSqueue = [];
+function renderNextCard() {
+  if (!SRSqueue || SRSqueue.length === 0) {
+    SRSqueue = [...SRS.dueToday(), ...SRS.newToday(20)];
+  }
+  if (SRSqueue.length === 0) {
+    $("#srsView").innerHTML = `
+      <div class="kicker">Spaced Repetition</div>
+      <h1 class="title">All clear.</h1>
+      <div class="title-rule">good work</div>
+      <p class="lead">今のラウンドは終わりです。少し休んで、また戻ってきてください。</p>
+      <button class="btn full ghost" onclick="Router.go('home')">Home</button>`;
+    return;
+  }
+  const next = SRSqueue.shift();
+  const v = next.v; const i = next.i;
+  const stage = next.c.seen === 0 ? "NEW" : `BOX ${next.c.box}`;
+  const isPhrase = (v.en && v.en.length > 22);
+  $("#srsView").innerHTML = `
+    <div class="srs-stage">
+      <div class="srs-progress">${SRSqueue.length+1} remaining · ${stage} · ${tagLabel(v.tag)}</div>
+      <div class="srs-card" id="card-${i}">
+        <div class="pos">${escapeHtml(v.pos||"")}</div>
+        <div class="tag">★${v.pri || 3}</div>
+        <div class="srs-en ${isPhrase?'phrase':''}">${escapeHtml(v.en)}</div>
+        <button class="btn ghost tiny" onclick="TTS.speak(${JSON.stringify(v.en).replace(/"/g,'&quot;')})">♪ listen</button>
+        <div class="srs-ja">${escapeHtml(v.ja)}</div>
+        <div class="srs-ex">${escapeHtml(v.ex)}<span class="exja">${escapeHtml(v.exJa||"")}</span></div>
+      </div>
+      <div class="srs-controls" id="srsControls">
+        <button class="btn full" onclick="flipCard(${i})">Show meaning</button>
+      </div>
+    </div>`;
+}
+function tagLabel(t) {
+  return ({self:"Self", theme:"Theme", art:"Art", eco:"Ecology", field:"Field", talk:"Talk", repair:"Repair", misc:"Misc"})[t] || t;
+}
+function flipCard(idx) {
+  const card = document.querySelector(`#card-${idx}`);
+  if (!card) return;
+  card.classList.add("flipped");
+  $("#srsControls").innerHTML = `
+    <div class="rate-row">
+      <button class="rate-btn again" onclick="rateAndNext(${idx},0)">Again<span class="rate-key">忘れた</span></button>
+      <button class="rate-btn hard" onclick="rateAndNext(${idx},1)">Hard<span class="rate-key">難しい</span></button>
+      <button class="rate-btn good" onclick="rateAndNext(${idx},2)">Good<span class="rate-key">わかる</span></button>
+      <button class="rate-btn easy" onclick="rateAndNext(${idx},3)">Easy<span class="rate-key">余裕</span></button>
+    </div>`;
+}
+function rateAndNext(idx, q) {
+  SRS.rate(idx, q);
+  if (q === 0) {
+    // re-add to queue at end
+    SRSqueue.push({i:idx, v:DATA.vocab[idx], c:State.data.cards[idx]});
+  }
+  renderNextCard();
+}
+
+function forceLearnNew() {
+  // open browse to manually trigger
+  const newcards = DATA.vocab.map((v,i)=>({v,i,c:State.data.cards[i]||{seen:0,box:0}})).filter(o=>o.c.seen===0);
+  if (newcards.length === 0) { toast("新規カードはありません"); return; }
+  SRSqueue = newcards.slice(0, 20);
+  $("#app").innerHTML = `<div class="view" id="srsView"></div>`;
+  renderNextCard();
+}
+
+/* ===== Q&A actions ===== */
+function toggleAnswer(i) {
+  const el = $(`#qa-ans-${i}`);
+  el.classList.toggle("show");
+}
+function recallMode(i) {
+  const el = $(`#qa-ans-${i}`);
+  el.classList.remove("show");
+  // play question
+  TTS.speak(DATA.qa[i].q, { onend: () => {
+    setTimeout(() => {
+      // show answer after pause
+      el.classList.add("show");
+      toast("質問を聞いて口頭で答えてから、答えを確認してください");
+    }, 8000);
+  }});
+}
+function markQaSeen(i) {
+  State.data.qaSeen[i] = (State.data.qaSeen[i] || 0) + 1;
+  State.save();
+  toast("Practiced ×" + State.data.qaSeen[i]);
+  Router.render();
+}
+
+/* ===== Tasks ===== */
+function toggleTask(id) {
+  if (State.data.doneTasks[id]) delete State.data.doneTasks[id];
+  else State.data.doneTasks[id] = true;
+  State.save();
+  Router.render();
+}
+
+/* ===== Shadow loop ===== */
+let shadowLoopActive = false;
+function shadowLoop(i, n) {
+  if (shadowLoopActive) { TTS.cancel(); shadowLoopActive = false; toast("Stopped"); return; }
+  shadowLoopActive = true;
+  const s = DATA.shadowing[i].en;
+  let count = 0;
+  function go() {
+    if (!shadowLoopActive || count >= n) { shadowLoopActive = false; toast("Loop done"); return; }
+    count++;
+    TTS.speak(s, { rate: count === 1 ? 0.75 : 1.0, onend: () => setTimeout(go, 800) });
+  }
+  go();
+}
+
+/* ===== Name management ===== */
+function setNamePrompt() {
+  const cur = State.data.userName || "";
+  const v = prompt("お名前（呼ばれたい名前）をローマ字で入力してください\n例: Yuki, Haruto, Mika", cur);
+  if (v === null) return;
+  State.data.userName = v.trim();
+  State.save();
+  Router.render();
+  toast("Name saved.");
+}
+
+/* ===== Init ===== */
+function init() {
+  State.load();
+  TTS.init();
+  updateDayChip();
+
+  // navigation handlers
+  $$(".nav-item").forEach(n => {
+    n.addEventListener("click", () => Router.go(n.dataset.route));
+  });
+
+  // route from hash
+  const hash = location.hash.replace("#", "") || "home";
+  Router.go(hash);
+
+  // First-run name prompt
+  if (!State.data.userName) {
+    setTimeout(() => {
+      if (!State.data.userName) setNamePrompt();
+    }, 700);
+  }
+
+  // intercept hash route for day:N pattern
+  // (handled in Router.render via prefix check below)
+}
+
+/* override Router.render to handle day:N */
+const _origRender = Router.render.bind(Router);
+Router.render = function() {
+  const r = this.current;
+  if (r && r.startsWith("day:")) {
+    const n = parseInt(r.slice(4), 10);
+    $("#app").innerHTML = Views.dayDetail(n);
+    $$(".nav-item").forEach(x => x.classList.remove("active"));
+    $$(".nav-item[data-route='home']").forEach(x => x.classList.add("active"));
+    return;
+  }
+  if (r === "vocab_browse") {
+    $("#app").innerHTML = Views.vocab_browse();
+    return;
+  }
+  _origRender();
+};
+
+window.addEventListener("DOMContentLoaded", init);
+window.addEventListener("hashchange", () => {
+  Router.current = location.hash.replace("#","") || "home";
+  Router.render();
+});
+</script>
+
+</body>
+</html>
