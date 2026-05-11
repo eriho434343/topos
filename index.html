@@ -868,6 +868,40 @@ hr.rule.dotted { border-top-style: dotted; }
 .score-pip .pip-key { font-size: 9px; letter-spacing: 0.15em; color: var(--ink-faint); text-transform: uppercase; }
 .score-pip .pip-val { font-size: 16px; color: var(--ink); margin-top: 2px; }
 
+/* ====================== WORD LIST ====================== */
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 16px; }
+.filter-chip {
+  padding: 5px 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+  border: 1px solid var(--rule); background: var(--paper); color: var(--ink-faint);
+  border-radius: 100px; white-space: nowrap;
+}
+.filter-chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.word-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 2px; border-bottom: 1px dotted var(--rule-soft);
+}
+.word-row:last-child { border-bottom: none; }
+.word-badge {
+  flex-shrink: 0; margin-top: 3px; font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase; text-align: center;
+  padding: 2px 7px; border-radius: 2px; min-width: 60px;
+}
+.word-badge.new      { background: var(--rule-soft); color: var(--ink-faint); }
+.word-badge.learning { background: rgba(184,137,92,0.22); color: var(--ochre-deep); }
+.word-badge.review   { background: rgba(74,103,65,0.15); color: var(--forest-deep); }
+.word-badge.mastered { background: var(--ink); color: var(--paper); }
+.word-en  { font-family: var(--serif); font-size: 15px; line-height: 1.3; }
+.word-ja  { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+.word-meta { font-family: var(--mono); font-size: 10px; color: var(--rule); margin-top: 2px; }
+.section-head {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ochre-deep); font-weight: 500;
+  padding: 14px 0 5px; border-bottom: 1px solid var(--rule);
+  margin-bottom: 2px; margin-top: 8px;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.section-head .sect-count { font-size: 10px; color: var(--ink-faint); letter-spacing: 0.05em; }
+
 .backup-warn {
   background: rgba(166, 68, 58, 0.08);
   border-left: 3px solid var(--crimson);
@@ -2616,7 +2650,7 @@ const Views = {
             <span class="kbd">${stats.learning} learning</span>
             <span class="kbd">${stats.neww} new remaining</span>
           </div>
-          <button class="btn ghost full" onclick="Router.go('vocab_browse')">全カードを閲覧する</button>
+          <button class="btn ghost full" onclick="Router.go('vocab_browse')">📋 全語一覧を見る</button>
           <button class="btn ghost full mt12" onclick="forceLearnNew()">新規カードを強制的に学習する</button>
         </div>`;
     }
@@ -2624,43 +2658,122 @@ const Views = {
   },
   vocab_after() {
     if ($("#srsView")) renderNextCard();
+    // always show list link in footer after render
+    setTimeout(() => {
+      const sv = $("#srsView");
+      if (sv && !sv.querySelector(".list-link")) {
+        const lnk = document.createElement("div");
+        lnk.className = "list-link";
+        lnk.style = "text-align:center;margin-top:18px;";
+        lnk.innerHTML = `<button class="btn ghost tiny" onclick="Router.go('vocab_browse')">📋 一覧表を見る</button>`;
+        sv.appendChild(lnk);
+      }
+    }, 50);
   },
 
   vocab_browse() {
-    const groups = {};
-    DATA.vocab.forEach((v, i) => {
-      const c = State.data.cards[i] || {box:0, seen:0};
-      const tag = v.tag;
-      if (!groups[tag]) groups[tag] = [];
-      groups[tag].push({v, i, c});
-    });
-    const tagNames = {
-      self:"Self & Profession", theme:"Themes", art:"Art & Medium",
+    const TAG_NAMES = {
+      self:"Self & Profession", theme:"Themes", art:"Art Practice",
       eco:"Ecology / More-than-human", field:"Fieldwork & Observation",
-      talk:"Discussion phrases", repair:"Repair / Clarification", misc:"Workshop common"
+      land:"Landscape & Terrain", sense:"Sensory & Perception",
+      behav:"Behavior & Biology", time:"Time & Process",
+      doc:"Documentation", concept:"Art-Conceptual",
+      body:"Body & Movement", talk:"Discussion phrases",
+      repair:"Repair / Clarification", misc:"Workshop Context"
     };
+
+    const statusOf = c => {
+      if (!c || c.seen === 0) return "new";
+      if (c.box >= 4) return "mastered";
+      if (c.box >= 2) return "review";
+      return "learning";
+    };
+    const LABEL = { new:"New", learning:"Learn", review:"Review", mastered:"Done" };
+
+    // count per status
+    const counts = { all:0, new:0, learning:0, review:0, mastered:0 };
+    DATA.vocab.forEach((v,i) => {
+      const s = statusOf(State.data.cards[i]);
+      counts.all++; counts[s]++;
+    });
+
+    const f = _browseFilter || "all";
+
+    // filter chips
+    const chips = ["all","new","learning","review","mastered"].map(k => {
+      const labels = { all:"All", new:"New", learning:"Learning", review:"Review", mastered:"Mastered" };
+      return `<button class="filter-chip ${f===k?'active':''}" onclick="setBrowseFilter('${k}')">${labels[k]} <span style="font-size:10px;opacity:0.7;">${counts[k]}</span></button>`;
+    }).join("");
+
+    // build groups preserving tag order
+    const orderedTags = Object.keys(TAG_NAMES);
+    const groups = {};
+    orderedTags.forEach(t => { groups[t] = []; });
+    DATA.vocab.forEach((v,i) => {
+      const c = State.data.cards[i];
+      const s = statusOf(c);
+      if (f !== "all" && s !== f) return;
+      if (!groups[v.tag]) groups[v.tag] = [];
+      groups[v.tag].push({v, i, c, s});
+    });
+
     let body = "";
-    for (const t of Object.keys(tagNames)) {
-      if (!groups[t]) continue;
-      body += `<h3>${tagNames[t]}</h3>`;
-      body += groups[t].map(o => {
-        const stat = o.c.seen === 0 ? "·" : (o.c.box >= 4 ? "★" : (o.c.box >= 2 ? "✓" : "○"));
-        return `<div class="phrase-row">
-          <div class="phrase-text">
-            <div class="phrase-en">${escapeHtml(o.v.en)} <span class="dim tiny">${stat}</span></div>
-            <div class="phrase-ja">${escapeHtml(o.v.ja)}</div>
-          </div>
-          <button class="phrase-play" onclick="TTS.speak('${escapeHtml(o.v.en).replace(/'/g,"\\'")}')">♪</button>
-        </div>`;
+    for (const tag of orderedTags) {
+      const items = groups[tag];
+      if (!items || items.length === 0) continue;
+      // count by status in this group
+      const gc = { new:0, learning:0, review:0, mastered:0 };
+      items.forEach(o => gc[o.s]++);
+      const gcStr = [
+        gc.mastered ? `<span style="color:var(--ink)">${gc.mastered} done</span>` : "",
+        gc.review   ? `<span style="color:var(--forest-deep)">${gc.review} review</span>` : "",
+        gc.learning ? `<span style="color:var(--ochre-deep)">${gc.learning} learning</span>` : "",
+        gc.new      ? `<span style="color:var(--ink-faint)">${gc.new} new</span>` : ""
+      ].filter(Boolean).join(" · ");
+
+      body += `<div class="section-head">${TAG_NAMES[tag] || tag}<span class="sect-count">${gcStr}</span></div>`;
+      body += items.map(({v, i, s}) => {
+        const priDot = v.pri === 1 ? `<span style="color:var(--crimson);font-size:10px;">★</span>` :
+                       v.pri === 2 ? `<span style="color:var(--ochre-deep);font-size:10px;">★</span>` : "";
+        const en = escapeHtml(v.en);
+        const enSafe = v.en.replace(/'/g, "\\'");
+        return `
+          <div class="word-row">
+            <span class="word-badge ${s}">${LABEL[s]}</span>
+            <div style="flex:1;min-width:0;">
+              <div class="word-en">${en} ${priDot}</div>
+              <div class="word-ja">${escapeHtml(v.ja)}</div>
+            </div>
+            <button class="phrase-play" style="flex-shrink:0;" onclick="TTS.speak('${enSafe}')">♪</button>
+          </div>`;
       }).join("");
     }
+
+    const totalShown = Object.values(groups).flat().length;
+    if (totalShown === 0) {
+      body = `<p class="lead" style="margin-top:24px;">このフィルタに一致する語はありません。</p>`;
+    }
+
     return `
       <div class="view">
-        <div class="kicker">Browse all words</div>
-        <h1 class="title">Vocabulary index</h1>
-        <div class="title-rule">${DATA.vocab.length} entries</div>
+        <div class="kicker">Vocabulary index</div>
+        <h1 class="title">Word list</h1>
+        <div class="title-rule">${DATA.vocab.length} words total</div>
+
+        <div class="filter-chips">${chips}</div>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;">
+          <span><span class="word-badge new" style="display:inline-block;vertical-align:middle;">New</span> <span class="tiny dim">未学習</span></span>
+          <span><span class="word-badge learning" style="display:inline-block;vertical-align:middle;">Learn</span> <span class="tiny dim">学習中</span></span>
+          <span><span class="word-badge review" style="display:inline-block;vertical-align:middle;">Review</span> <span class="tiny dim">復習中</span></span>
+          <span><span class="word-badge mastered" style="display:inline-block;vertical-align:middle;">Done</span> <span class="tiny dim">習得済</span></span>
+          <span><span style="color:var(--crimson);font-size:11px;">★</span> <span class="tiny dim">優先度高</span></span>
+        </div>
+
         ${body}
-        <button class="btn ghost full mt16" onclick="Router.go('vocab')">SRSに戻る</button>
+
+        <div class="ornament mt16">·  ·  ·</div>
+        <button class="btn ghost full mt12" onclick="Router.go('vocab')">← SRSに戻る</button>
       </div>`;
   },
 
@@ -3093,6 +3206,13 @@ function rateAndNext(idx, q) {
     SRSqueue.push({i:idx, v:DATA.vocab[idx], c:State.data.cards[idx]});
   }
   renderNextCard();
+}
+
+/* ===== VOCAB BROWSE FILTER ===== */
+let _browseFilter = "all";
+function setBrowseFilter(f) {
+  _browseFilter = f;
+  Router.go("vocab_browse");
 }
 
 function forceLearnNew() {
