@@ -960,143 +960,180 @@ const DATA = {
   // ---- VOCAB CARDS ----
   // priority 1 = critical (must produce), 2 = important (must understand), 3 = bonus
   vocab: [
+
     // === A. Self & Profession ===
     {en:"electric power company", ja:"電力会社", pos:"noun", tag:"self", pri:1,
       ex:"I work at an electric power company.", exJa:"電力会社で働いています。"},
     {en:"day job", ja:"本業", pos:"noun", tag:"self", pri:1,
-      ex:"My day job is engineering.", exJa:"私の本業はエンジニアリングです。"},
-    {en:"outside of work", ja:"仕事外で", pos:"phrase", tag:"self", pri:1,
-      ex:"Outside of work, I make art.", exJa:"仕事の外では、私はアートを作ります。"},
+      ex:"My day job is engineering.", exJa:"私の本業はエンジニアです。"},
+    {en:"outside of work", ja:"仕事の外で", pos:"phrase", tag:"self", pri:1,
+      ex:"Outside of work, I make art.", exJa:"仕事の外では、アートを作ります。"},
     {en:"engineer", ja:"技術者・エンジニア", pos:"noun", tag:"self", pri:1,
-      ex:"I work as an engineer.", exJa:"私は技術者として働いています。"},
+      ex:"I work as an engineer.", exJa:"技術者として働いています。"},
     {en:"practice", ja:"制作活動・実践", pos:"noun", tag:"self", pri:1,
-      ex:"My practice is process-based.", exJa:"私の制作活動はプロセス重視です。"},
-    {en:"background", ja:"経歴・背景", pos:"noun", tag:"self", pri:1,
-      ex:"My background is in engineering.", exJa:"私の背景はエンジニアリングです。"},
+      ex:"My practice is process-based.", exJa:"私の実践はプロセス重視です。"},
+    {en:"background", ja:"経歴・背景", pos:"noun", tag:"self", pri:2,
+      ex:"My background is in engineering.", exJa:"経歴はエンジニアリングです。"},
     {en:"self-taught", ja:"独学の", pos:"adj", tag:"self", pri:2,
-      ex:"I am a self-taught artist.", exJa:"私は独学のアーティストです。"},
+      ex:"I am a self-taught artist.", exJa:"独学のアーティストです。"},
     {en:"interdisciplinary", ja:"領域横断的な", pos:"adj", tag:"self", pri:2,
-      ex:"My work is interdisciplinary.", exJa:"私の作品は領域横断的です。"},
+      ex:"My work is interdisciplinary.", exJa:"私の仕事は領域横断的です。"},
     {en:"based in", ja:"〜を拠点とする", pos:"phrase", tag:"self", pri:1,
-      ex:"I am based in Japan.", exJa:"私は日本を拠点にしています。"},
-    {en:"focus on", ja:"〜に注力する", pos:"phrase", tag:"self", pri:1,
-      ex:"I focus on perception and behavior.", exJa:"知覚と行動に注力しています。"},
+      ex:"I am based in Kyoto.", exJa:"京都を拠点にしています。"},
+    {en:"salaried worker", ja:"会社員・サラリーマン", pos:"noun", tag:"self", pri:1,
+      ex:"I work as a salaried worker.", exJa:"会社員として働いています。"},
 
-    // === B. Your Practice & Themes ===
+    // === B. Your Themes ===
     {en:"perception", ja:"知覚・物事の捉え方", pos:"noun", tag:"theme", pri:1,
-      ex:"I am interested in perception.", exJa:"私は知覚に関心があります。"},
+      ex:"I am interested in perception.", exJa:"知覚に関心があります。"},
     {en:"cognition", ja:"認知", pos:"noun", tag:"theme", pri:1,
-      ex:"I observe human cognition.", exJa:"私は人間の認知を観察します。"},
+      ex:"I observe human cognition.", exJa:"人間の認知を観察します。"},
     {en:"behavior", ja:"行動・振る舞い", pos:"noun", tag:"theme", pri:1,
-      ex:"I look at human behavior.", exJa:"私は人間の行動を見ています。"},
+      ex:"I look at human behavior.", exJa:"人間の行動を見ます。"},
     {en:"behavior change", ja:"行動変容", pos:"noun", tag:"theme", pri:1,
-      ex:"I study behavior change.", exJa:"私は行動変容を研究しています。"},
+      ex:"I study behavior change.", exJa:"行動変容を研究しています。"},
     {en:"internal factor", ja:"内的要因", pos:"noun", tag:"theme", pri:1,
-      ex:"Internal factors shape our actions.", exJa:"内的要因が私たちの行動を形作ります。"},
+      ex:"Internal factors shape our actions.", exJa:"内的要因が行動を形作ります。"},
     {en:"external factor", ja:"外的要因", pos:"noun", tag:"theme", pri:1,
       ex:"External factors also play a role.", exJa:"外的要因も役割を果たします。"},
     {en:"everyday things", ja:"身近なもの", pos:"phrase", tag:"theme", pri:1,
-      ex:"I use everyday things in my work.", exJa:"作品で身近なものを使います。"},
-    {en:"familiar object", ja:"見慣れた物", pos:"noun", tag:"theme", pri:2,
-      ex:"A familiar object can become strange.", exJa:"見慣れた物が奇妙になりうる。"},
+      ex:"I use everyday things in my work.", exJa:"作品に身近なものを使います。"},
+    {en:"familiar", ja:"見慣れた・身近な", pos:"adj", tag:"theme", pri:1,
+      ex:"A familiar object can become strange.", exJa:"見慣れたものが奇妙になりうる。"},
     {en:"mundane", ja:"日常的な・ありふれた", pos:"adj", tag:"theme", pri:2,
       ex:"I find the mundane fascinating.", exJa:"日常的なものに惹かれます。"},
-    {en:"shift", ja:"ずらす・変化", pos:"v/n", tag:"theme", pri:2,
-      ex:"My work creates a small shift in perception.", exJa:"作品は知覚に小さな変化を起こす。"},
-    {en:"reveal", ja:"明らかにする", pos:"verb", tag:"theme", pri:2,
-      ex:"The work reveals hidden patterns.", exJa:"作品は隠れたパターンを明らかにする。"},
+    {en:"shift", ja:"ずれ・変化", pos:"noun", tag:"theme", pri:1,
+      ex:"Small shifts in perception.", exJa:"知覚の小さなずれ。"},
+    {en:"visible", ja:"目に見える", pos:"adj", tag:"theme", pri:1,
+      ex:"I want to make it visible.", exJa:"目に見えるようにしたい。"},
+    {en:"invisible", ja:"目に見えない", pos:"adj", tag:"theme", pri:2,
+      ex:"Most forces are invisible.", exJa:"ほとんどの力は目に見えない。"},
     {en:"hack", ja:"ハックする・改変する", pos:"verb", tag:"theme", pri:2,
-      ex:"I hack the everyday.", exJa:"日常をハックする。"},
+      ex:"I try to hack everyday systems.", exJa:"日常のシステムをハックしようとする。"},
+    {en:"reveal", ja:"明らかにする", pos:"verb", tag:"theme", pri:2,
+      ex:"Art can reveal hidden patterns.", exJa:"アートは隠れたパターンを明らかにできる。"},
+    {en:"expose", ja:"露わにする", pos:"verb", tag:"theme", pri:2,
+      ex:"The work exposes a habit.", exJa:"その作品は習慣を露わにする。"},
 
-    // === C. Art & Medium ===
-    {en:"installation", ja:"インスタレーション", pos:"noun", tag:"art", pri:1,
-      ex:"I make installations.", exJa:"私はインスタレーションを作ります。"},
-    {en:"performance", ja:"パフォーマンス", pos:"noun", tag:"art", pri:1,
-      ex:"Performance is one of my mediums.", exJa:"パフォーマンスは私の表現媒体の一つです。"},
-    {en:"medium", ja:"メディア・媒体", pos:"noun", tag:"art", pri:1,
-      ex:"My medium is mixed.", exJa:"私の媒体は混合的です。"},
+    // === C. Art Practice (loanwords removed) ===
     {en:"material", ja:"素材", pos:"noun", tag:"art", pri:1,
       ex:"My materials are water and paper.", exJa:"素材は水と紙です。"},
-    {en:"site-specific", ja:"場所特定的な", pos:"adj", tag:"art", pri:2,
-      ex:"This is a site-specific work.", exJa:"これは場所特定的な作品です。"},
-    {en:"interactive", ja:"インタラクティブな", pos:"adj", tag:"art", pri:2,
-      ex:"The work is interactive.", exJa:"作品はインタラクティブです。"},
+    {en:"medium", ja:"表現媒体", pos:"noun", tag:"art", pri:1,
+      ex:"My medium is mixed.", exJa:"表現媒体は混合的です。"},
+    {en:"piece", ja:"作品", pos:"noun", tag:"art", pri:1,
+      ex:"This is a recent piece.", exJa:"これは最近の作品です。"},
+    {en:"body of work", ja:"作品群", pos:"phrase", tag:"art", pri:2,
+      ex:"My body of work explores cognition.", exJa:"作品群は認知を探究します。"},
+    {en:"work-in-progress", ja:"制作中の作品", pos:"noun", tag:"art", pri:2,
+      ex:"This is still a work-in-progress.", exJa:"これはまだ制作中です。"},
     {en:"participatory", ja:"参加型の", pos:"adj", tag:"art", pri:2,
       ex:"It is a participatory project.", exJa:"参加型のプロジェクトです。"},
     {en:"process-based", ja:"プロセス重視の", pos:"adj", tag:"art", pri:2,
-      ex:"My approach is process-based.", exJa:"私のアプローチはプロセス重視です。"},
-    {en:"piece", ja:"作品", pos:"noun", tag:"art", pri:1,
-      ex:"This is a recent piece of mine.", exJa:"これは私の最近の作品です。"},
-    {en:"body of work", ja:"作品群", pos:"phrase", tag:"art", pri:2,
-      ex:"My body of work explores cognition.", exJa:"私の作品群は認知を探究する。"},
-    {en:"work-in-progress", ja:"制作中の作品", pos:"noun", tag:"art", pri:2,
-      ex:"This is still a work-in-progress.", exJa:"これはまだ制作中です。"},
+      ex:"My approach is process-based.", exJa:"アプローチはプロセス重視です。"},
+    {en:"site", ja:"現場・場所", pos:"noun", tag:"art", pri:1,
+      ex:"The work responds to the site.", exJa:"作品は場所に応答します。"},
     {en:"exhibition", ja:"展覧会", pos:"noun", tag:"art", pri:2,
-      ex:"The exhibition opens in May.", exJa:"展覧会は5月に開幕します。"},
-    {en:"artist talk", ja:"アーティストトーク", pos:"noun", tag:"art", pri:2,
+      ex:"The exhibition opens in June.", exJa:"展覧会は6月に開幕します。"},
+    {en:"artist talk", ja:"アーティストトーク", pos:"noun", tag:"art", pri:1,
       ex:"There will be an artist talk.", exJa:"アーティストトークがあります。"},
+    {en:"residency", ja:"レジデンス", pos:"noun", tag:"art", pri:2,
+      ex:"I did a two-week residency.", exJa:"2週間のレジデンスをしました。"},
+    {en:"commission", ja:"依頼制作", pos:"noun", tag:"art", pri:3,
+      ex:"I received a commission.", exJa:"依頼制作を受けました。"},
 
     // === D. Ecology / More-than-human ===
+    {en:"ecology", ja:"生態学・生態", pos:"noun", tag:"eco", pri:1,
+      ex:"Urban ecology is everywhere.", exJa:"都市生態学はどこにでもあります。"},
+    {en:"ecosystem", ja:"生態系", pos:"noun", tag:"eco", pri:1,
+      ex:"An ecosystem has many layers.", exJa:"生態系には多くの層があります。"},
+    {en:"biodiversity", ja:"生物多様性", pos:"noun", tag:"eco", pri:1,
+      ex:"Biodiversity is fragile.", exJa:"生物多様性は壊れやすい。"},
+    {en:"species", ja:"種", pos:"noun", tag:"eco", pri:1,
+      ex:"This species is common here.", exJa:"この種はここでよく見られます。"},
     {en:"more-than-human", ja:"人間以上・人間中心を超えた", pos:"adj", tag:"eco", pri:1,
-      ex:"More-than-human perspectives matter.", exJa:"人間以上の視点が重要です。"},
+      ex:"More-than-human perspectives.", exJa:"人間以上の視点。"},
     {en:"non-human", ja:"人間以外の", pos:"adj", tag:"eco", pri:1,
       ex:"I want to observe non-human life.", exJa:"人間以外の生命を観察したい。"},
     {en:"life form", ja:"生命体", pos:"noun", tag:"eco", pri:1,
-      ex:"Many life forms share this place.", exJa:"多くの生命体がこの場所を共有しています。"},
-    {en:"biodiversity", ja:"生物多様性", pos:"noun", tag:"eco", pri:1,
-      ex:"Biodiversity is at the core.", exJa:"生物多様性が中心にあります。"},
-    {en:"ecosystem", ja:"生態系", pos:"noun", tag:"eco", pri:1,
-      ex:"Urban ecosystems fascinate me.", exJa:"都市の生態系に惹かれます。"},
-    {en:"ecology", ja:"生態学・生態", pos:"noun", tag:"eco", pri:1,
-      ex:"I am learning about urban ecology.", exJa:"都市生態学を学んでいます。"},
-    {en:"species", ja:"種", pos:"noun", tag:"eco", pri:1,
-      ex:"This species is common in Kyoto.", exJa:"この種は京都ではよく見られます。"},
-    {en:"multispecies", ja:"多種からなる", pos:"adj", tag:"eco", pri:2,
-      ex:"A multispecies world.", exJa:"多種からなる世界。"},
-    {en:"coexist", ja:"共生する・共に存在する", pos:"verb", tag:"eco", pri:1,
-      ex:"Many species coexist here.", exJa:"多くの種がここで共存しています。"},
-    {en:"coexistence", ja:"共生・共存", pos:"noun", tag:"eco", pri:1,
-      ex:"Coexistence is fragile.", exJa:"共存は壊れやすいものです。"},
-    {en:"landscape", ja:"風景・景観", pos:"noun", tag:"eco", pri:1,
-      ex:"A landscape shaped by people.", exJa:"人によって形作られた景観。"},
-    {en:"environment", ja:"環境", pos:"noun", tag:"eco", pri:1,
-      ex:"The environment changes constantly.", exJa:"環境は絶えず変化します。"},
-    {en:"habitat", ja:"生息地", pos:"noun", tag:"eco", pri:2,
-      ex:"This is a habitat for small birds.", exJa:"ここは小鳥の生息地です。"},
-    {en:"inhabit", ja:"生息する・住む", pos:"verb", tag:"eco", pri:1,
-      ex:"How animals inhabit human spaces.", exJa:"動物が人間の空間にどう生息するか。"},
-    {en:"dwell", ja:"住まう・棲息する", pos:"verb", tag:"eco", pri:2,
-      ex:"They dwell among us.", exJa:"彼らは私たちの中に住んでいます。"},
-    {en:"wildlife", ja:"野生生物", pos:"noun", tag:"eco", pri:1,
-      ex:"Urban wildlife is everywhere.", exJa:"都市の野生生物はどこにでもいます。"},
-    {en:"flora and fauna", ja:"動植物", pos:"phrase", tag:"eco", pri:2,
-      ex:"The local flora and fauna.", exJa:"地元の動植物。"},
+      ex:"Many life forms share this place.", exJa:"多くの生命体がここを共有しています。"},
     {en:"organism", ja:"生物・有機体", pos:"noun", tag:"eco", pri:2,
       ex:"Tiny organisms live in soil.", exJa:"土の中に小さな生物がいます。"},
-    {en:"secondary forest", ja:"二次林（人の手が入った後の森）", pos:"noun", tag:"eco", pri:1,
-      ex:"Secondary forests are not pristine.", exJa:"二次林は手付かずではありません。"},
+    {en:"wildlife", ja:"野生生物", pos:"noun", tag:"eco", pri:1,
+      ex:"Urban wildlife is everywhere.", exJa:"都市の野生生物はどこにでも。"},
+    {en:"flora", ja:"植物相", pos:"noun", tag:"eco", pri:2,
+      ex:"The local flora is rich.", exJa:"地域の植物相は豊かです。"},
+    {en:"fauna", ja:"動物相", pos:"noun", tag:"eco", pri:2,
+      ex:"What fauna lives here?", exJa:"ここにはどんな動物相が？"},
+    {en:"habitat", ja:"生息地", pos:"noun", tag:"eco", pri:1,
+      ex:"This is a habitat for birds.", exJa:"ここは鳥の生息地です。"},
+    {en:"inhabit", ja:"生息する・住む", pos:"verb", tag:"eco", pri:1,
+      ex:"Many animals inhabit this area.", exJa:"多くの動物がこの地域に生息しています。"},
+    {en:"coexist", ja:"共存する", pos:"verb", tag:"eco", pri:1,
+      ex:"Many species coexist here.", exJa:"多くの種がここで共存しています。"},
+    {en:"coexistence", ja:"共存・共生", pos:"noun", tag:"eco", pri:2,
+      ex:"Coexistence is delicate.", exJa:"共存は繊細なものです。"},
+    {en:"landscape", ja:"景観・風景", pos:"noun", tag:"eco", pri:1,
+      ex:"A landscape shaped by people.", exJa:"人によって形作られた景観。"},
+    {en:"managed landscape", ja:"管理された景観", pos:"phrase", tag:"eco", pri:1,
+      ex:"A managed landscape, like a temple garden.", exJa:"寺院庭園のような管理された景観。"},
+    {en:"secondary forest", ja:"二次林（伐採・撹乱後に再生した森）", pos:"noun", tag:"eco", pri:1,
+      ex:"Secondary forests are common near cities.", exJa:"都市近郊に二次林は多い。"},
     {en:"disturbance", ja:"撹乱（生態学用語）", pos:"noun", tag:"eco", pri:1,
-      ex:"Disturbance can create new life.", exJa:"撹乱は新しい生命を生み出すことがあります。"},
+      ex:"Disturbance can create new niches.", exJa:"撹乱は新しいニッチを作る。"},
     {en:"intervention", ja:"介入", pos:"noun", tag:"eco", pri:1,
       ex:"Human intervention shapes the land.", exJa:"人間の介入が土地を形作ります。"},
     {en:"management", ja:"管理", pos:"noun", tag:"eco", pri:1,
       ex:"Management is part of nature now.", exJa:"管理は今や自然の一部です。"},
-    {en:"managed landscape", ja:"管理された景観", pos:"phrase", tag:"eco", pri:1,
-      ex:"A managed landscape, like a garden.", exJa:"庭のような管理された景観。"},
     {en:"adaptation", ja:"適応", pos:"noun", tag:"eco", pri:1,
-      ex:"Adaptation happens slowly.", exJa:"適応はゆっくり起こります。"},
+      ex:"Adaptation takes many generations.", exJa:"適応には多くの世代がかかります。"},
     {en:"adapt", ja:"適応する", pos:"verb", tag:"eco", pri:1,
-      ex:"They adapt to the city.", exJa:"彼らは都市に適応します。"},
-    {en:"feral", ja:"野生化した", pos:"adj", tag:"eco", pri:3,
-      ex:"Feral cats live near the river.", exJa:"野生化した猫が川沿いに暮らしています。"},
-    {en:"abandoned", ja:"放棄された", pos:"adj", tag:"eco", pri:2,
-      ex:"An abandoned lot can be rich.", exJa:"放棄された土地は豊かでありえます。"},
-    {en:"urban", ja:"都市の", pos:"adj", tag:"eco", pri:1,
-      ex:"Urban ecology is my new interest.", exJa:"都市生態学が新しい関心です。"},
-    {en:"undergrowth", ja:"下草・藪", pos:"noun", tag:"eco", pri:3,
-      ex:"Insects live in the undergrowth.", exJa:"下草に虫が住んでいます。"},
+      ex:"Animals adapt to the city.", exJa:"動物は都市に適応します。"},
+    {en:"succession", ja:"遷移（植生の変化）", pos:"noun", tag:"eco", pri:2,
+      ex:"Succession takes hundreds of years.", exJa:"遷移には数百年かかります。"},
+    {en:"pioneer species", ja:"先駆種", pos:"noun", tag:"eco", pri:3,
+      ex:"A pioneer species colonizes bare ground.", exJa:"先駆種は裸地を拓く。"},
+    {en:"invasive species", ja:"外来種・侵入種", pos:"noun", tag:"eco", pri:2,
+      ex:"Invasive species change ecosystems.", exJa:"外来種は生態系を変えます。"},
+    {en:"native species", ja:"在来種", pos:"noun", tag:"eco", pri:2,
+      ex:"This is a native species.", exJa:"これは在来種です。"},
+    {en:"endemic", ja:"固有の", pos:"adj", tag:"eco", pri:3,
+      ex:"This plant is endemic to Japan.", exJa:"この植物は日本固有です。"},
+    {en:"pollinator", ja:"花粉媒介者", pos:"noun", tag:"eco", pri:2,
+      ex:"Bees are pollinators.", exJa:"ハチは花粉媒介者です。"},
+    {en:"predator", ja:"捕食者", pos:"noun", tag:"eco", pri:2,
+      ex:"The hawk is a predator.", exJa:"タカは捕食者です。"},
+    {en:"prey", ja:"獲物・被食者", pos:"noun", tag:"eco", pri:2,
+      ex:"Small birds are often prey.", exJa:"小鳥はしばしば獲物になります。"},
+    {en:"symbiosis", ja:"共生", pos:"noun", tag:"eco", pri:2,
+      ex:"Trees and fungi share a symbiosis.", exJa:"木とキノコは共生します。"},
+    {en:"decompose", ja:"分解する", pos:"verb", tag:"eco", pri:2,
+      ex:"Dead leaves decompose slowly.", exJa:"落葉はゆっくり分解します。"},
+    {en:"food web", ja:"食物網", pos:"noun", tag:"eco", pri:2,
+      ex:"Everything is part of a food web.", exJa:"すべては食物網の一部です。"},
+    {en:"niche", ja:"生態的地位・ニッチ", pos:"noun", tag:"eco", pri:2,
+      ex:"Each species has its niche.", exJa:"各種はそれぞれのニッチを持ちます。"},
+    {en:"canopy", ja:"林冠（森の天井）", pos:"noun", tag:"eco", pri:2,
+      ex:"Light filters through the canopy.", exJa:"光が林冠を通して差し込む。"},
+    {en:"understory", ja:"林床層・下層林", pos:"noun", tag:"eco", pri:2,
+      ex:"Many birds live in the understory.", exJa:"多くの鳥が林床層に住んでいます。"},
+    {en:"satoyama", ja:"里山（農村と自然の境界）", pos:"noun", tag:"eco", pri:1,
+      ex:"Satoyama is a managed rural landscape.", exJa:"里山は管理された農村景観です。"},
+    {en:"riparian", ja:"河畔の・川辺の", pos:"adj", tag:"eco", pri:2,
+      ex:"Riparian zones are rich in life.", exJa:"河畔地帯は生命に富んでいます。"},
+    {en:"wetland", ja:"湿地", pos:"noun", tag:"eco", pri:2,
+      ex:"Wetlands filter water.", exJa:"湿地は水を浄化します。"},
+    {en:"edge effect", ja:"縁辺効果", pos:"noun", tag:"eco", pri:3,
+      ex:"The edge effect brings more species.", exJa:"縁辺効果はより多くの種をもたらします。"},
+    {en:"rewilding", ja:"再野生化", pos:"noun", tag:"eco", pri:3,
+      ex:"Rewilding returns land to nature.", exJa:"再野生化は土地を自然に返す。"},
+    {en:"resilience", ja:"回復力・レジリエンス", pos:"noun", tag:"eco", pri:2,
+      ex:"Ecosystems have resilience.", exJa:"生態系は回復力を持っています。"},
+    {en:"fragmentation", ja:"断片化（生息地の）", pos:"noun", tag:"eco", pri:2,
+      ex:"Fragmentation isolates populations.", exJa:"断片化は個体群を孤立させます。"},
+    {en:"multispecies", ja:"多種の", pos:"adj", tag:"eco", pri:2,
+      ex:"A multispecies community.", exJa:"多種からなるコミュニティ。"},
 
-    // === E. Fieldwork / Observation ===
+    // === E. Fieldwork & Observation ===
     {en:"fieldwork", ja:"フィールドワーク", pos:"noun", tag:"field", pri:1,
       ex:"I am preparing for fieldwork.", exJa:"フィールドワークの準備をしています。"},
     {en:"field note", ja:"フィールドノート", pos:"noun", tag:"field", pri:1,
@@ -1106,35 +1143,301 @@ const DATA = {
     {en:"observation", ja:"観察", pos:"noun", tag:"field", pri:1,
       ex:"Observation shapes the work.", exJa:"観察が作品を形作ります。"},
     {en:"sustained attention", ja:"持続的な注意", pos:"phrase", tag:"field", pri:1,
-      ex:"Sustained attention to a place.", exJa:"特定の場所への持続的な注意。"},
+      ex:"Sustained attention to one place.", exJa:"一つの場所への持続的な注意。"},
     {en:"long-term", ja:"長期の", pos:"adj", tag:"field", pri:1,
-      ex:"This is a long-term project.", exJa:"これは長期のプロジェクトです。"},
+      ex:"This is a long-term project.", exJa:"これは長期プロジェクトです。"},
     {en:"over time", ja:"時間をかけて", pos:"phrase", tag:"field", pri:1,
-      ex:"Over time, the place changes.", exJa:"時間とともに、その場所は変化します。"},
+      ex:"Over time, patterns emerge.", exJa:"時間とともに、パターンが現れます。"},
     {en:"revisit", ja:"再訪する", pos:"verb", tag:"field", pri:2,
-      ex:"I revisit the same site.", exJa:"私は同じ現場を再訪します。"},
+      ex:"I revisit the same site.", exJa:"同じ現場を再訪します。"},
     {en:"document", ja:"記録する", pos:"verb", tag:"field", pri:1,
       ex:"I document what I see.", exJa:"見たものを記録します。"},
-    {en:"trace", ja:"痕跡・追う", pos:"n/v", tag:"field", pri:1,
+    {en:"trace (verb)", ja:"追う", pos:"verb", tag:"field", pri:1,
       ex:"I trace small changes.", exJa:"小さな変化を追います。"},
+    {en:"trace (noun)", ja:"痕跡", pos:"noun", tag:"field", pri:2,
+      ex:"There were traces of an animal.", exJa:"動物の痕跡がありました。"},
     {en:"notice", ja:"気づく", pos:"verb", tag:"field", pri:1,
       ex:"I noticed something strange.", exJa:"何か奇妙なものに気づきました。"},
     {en:"encounter", ja:"出会う・遭遇する", pos:"verb", tag:"field", pri:2,
-      ex:"I encountered a heron.", exJa:"鷺に出会いました。"},
-    {en:"presence", ja:"存在・気配", pos:"noun", tag:"field", pri:2,
+      ex:"I encountered a heron.", exJa:"サギに出会いました。"},
+    {en:"presence", ja:"存在感・気配", pos:"noun", tag:"field", pri:2,
       ex:"I feel their presence.", exJa:"彼らの気配を感じます。"},
-    {en:"trace (n.)", ja:"痕跡", pos:"noun", tag:"field", pri:2,
-      ex:"There were traces of an animal.", exJa:"動物の痕跡がありました。"},
-    {en:"site", ja:"現場・場所", pos:"noun", tag:"field", pri:1,
-      ex:"This site is full of life.", exJa:"この場所は生命に満ちています。"},
-    {en:"on-site", ja:"現場で", pos:"adv", tag:"field", pri:2,
-      ex:"I work on-site.", exJa:"現場で作業します。"},
-    {en:"survey", ja:"調査・踏査", pos:"n/v", tag:"field", pri:2,
+    {en:"survey", ja:"調査・踏査する", pos:"v/n", tag:"field", pri:2,
       ex:"We surveyed the riverbank.", exJa:"川岸を踏査しました。"},
-    {en:"specimen", ja:"標本", pos:"noun", tag:"field", pri:3,
-      ex:"I collected a small specimen.", exJa:"小さな標本を集めました。"},
+    {en:"scan", ja:"見渡す", pos:"verb", tag:"field", pri:2,
+      ex:"I scan the area slowly.", exJa:"ゆっくりその場を見渡します。"},
+    {en:"linger", ja:"留まる・長居する", pos:"verb", tag:"field", pri:2,
+      ex:"I linger in one spot.", exJa:"一箇所に留まります。"},
+    {en:"approach", ja:"近づく", pos:"verb", tag:"field", pri:2,
+      ex:"Approach slowly.", exJa:"ゆっくり近づく。"},
+    {en:"retreat", ja:"退く・引き下がる", pos:"verb", tag:"field", pri:2,
+      ex:"The bird retreated into the bush.", exJa:"鳥が茂みに退いた。"},
+    {en:"emerge", ja:"現れる・出てくる", pos:"verb", tag:"field", pri:2,
+      ex:"A fox emerged from the trees.", exJa:"キツネが木の陰から現れた。"},
+    {en:"flush", ja:"驚かして飛び立たせる", pos:"verb", tag:"field", pri:3,
+      ex:"I accidentally flushed the birds.", exJa:"誤って鳥を飛び立たせてしまった。"},
+    {en:"perch", ja:"（鳥が）止まる", pos:"verb", tag:"field", pri:2,
+      ex:"The crow perched on the wire.", exJa:"カラスが電線に止まった。"},
+    {en:"forage", ja:"採食する", pos:"verb", tag:"field", pri:2,
+      ex:"The bird is foraging.", exJa:"鳥が採食しています。"},
+    {en:"nest", ja:"巣", pos:"noun", tag:"field", pri:2,
+      ex:"I found a nest in the bush.", exJa:"茂みに巣を見つけました。"},
+    {en:"burrow", ja:"巣穴", pos:"noun", tag:"field", pri:2,
+      ex:"A small burrow near the roots.", exJa:"根元近くに小さな巣穴。"},
+    {en:"track", ja:"足跡", pos:"noun", tag:"field", pri:2,
+      ex:"Animal tracks in the mud.", exJa:"泥の中の動物の足跡。"},
+    {en:"scat", ja:"糞（野生動物の）", pos:"noun", tag:"field", pri:3,
+      ex:"I found scat near the path.", exJa:"道の近くに糞を見つけました。"},
+    {en:"dawn", ja:"夜明け", pos:"noun", tag:"field", pri:2,
+      ex:"Animals are active at dawn.", exJa:"動物は夜明けに活発です。"},
+    {en:"dusk", ja:"夕暮れ", pos:"noun", tag:"field", pri:2,
+      ex:"Bats come out at dusk.", exJa:"コウモリは夕暮れに出てきます。"},
+    {en:"still", ja:"静止した・動かない", pos:"adj", tag:"field", pri:2,
+      ex:"Stay still and wait.", exJa:"静止して待つ。"},
+    {en:"ambient", ja:"周囲の・環境的な", pos:"adj", tag:"field", pri:2,
+      ex:"Ambient sound changes constantly.", exJa:"周囲の音は絶えず変わります。"},
+    {en:"phenology", ja:"物候学・季節現象の記録", pos:"noun", tag:"field", pri:3,
+      ex:"Phenology tracks seasonal change.", exJa:"物候学は季節変化を記録します。"},
+    {en:"baseline", ja:"基準値・ベースライン", pos:"noun", tag:"field", pri:2,
+      ex:"We need a baseline first.", exJa:"まず基準値が必要です。"},
+    {en:"mark", ja:"マークする・印をつける", pos:"verb", tag:"field", pri:2,
+      ex:"Mark the spot on your map.", exJa:"地図にその地点を印してください。"},
 
-    // === F. Discussion / Interview phrases ===
+    // === F. Landscape & Terrain ===
+    {en:"terrain", ja:"地形・地勢", pos:"noun", tag:"land", pri:2,
+      ex:"The terrain is steep here.", exJa:"ここは地形が急峻です。"},
+    {en:"slope", ja:"斜面", pos:"noun", tag:"land", pri:2,
+      ex:"A gentle slope covered in moss.", exJa:"苔に覆われた緩やかな斜面。"},
+    {en:"valley", ja:"谷", pos:"noun", tag:"land", pri:2,
+      ex:"The valley holds moisture.", exJa:"谷は湿気を保ちます。"},
+    {en:"ridge", ja:"尾根", pos:"noun", tag:"land", pri:2,
+      ex:"We walked along the ridge.", exJa:"尾根沿いを歩きました。"},
+    {en:"stream", ja:"小川・流れ", pos:"noun", tag:"land", pri:1,
+      ex:"A stream runs through the forest.", exJa:"森の中に小川が流れています。"},
+    {en:"bank", ja:"河岸・土手", pos:"noun", tag:"land", pri:2,
+      ex:"Animals come to the bank to drink.", exJa:"動物たちが河岸に水を飲みに来ます。"},
+    {en:"paddy field", ja:"水田", pos:"noun", tag:"land", pri:1,
+      ex:"Rice paddies are managed landscapes.", exJa:"水田は管理された景観です。"},
+    {en:"irrigation canal", ja:"灌漑用水路", pos:"noun", tag:"land", pri:2,
+      ex:"The irrigation canal is narrow.", exJa:"灌漑用水路は細い。"},
+    {en:"ditch", ja:"水路・溝", pos:"noun", tag:"land", pri:2,
+      ex:"A ditch runs along the field.", exJa:"水路が田の脇を走っています。"},
+    {en:"clearing", ja:"開けた場所・空き地", pos:"noun", tag:"land", pri:2,
+      ex:"There is a clearing in the trees.", exJa:"木々の中に開けた場所があります。"},
+    {en:"pathway", ja:"小道", pos:"noun", tag:"land", pri:2,
+      ex:"A narrow pathway through the bamboo.", exJa:"竹林の中の細い小道。"},
+    {en:"boundary", ja:"境界", pos:"noun", tag:"land", pri:1,
+      ex:"The boundary between forest and field.", exJa:"森と田の境界。"},
+    {en:"margin", ja:"縁・余白", pos:"noun", tag:"land", pri:2,
+      ex:"Rich life at the margin.", exJa:"縁辺に豊かな生命がいます。"},
+    {en:"moss", ja:"苔・コケ", pos:"noun", tag:"land", pri:2,
+      ex:"Moss covers the old stone.", exJa:"苔が古い石を覆っています。"},
+    {en:"lichen", ja:"地衣類", pos:"noun", tag:"land", pri:2,
+      ex:"Lichen grows slowly on rock.", exJa:"地衣類は岩の上でゆっくり育ちます。"},
+    {en:"fern", ja:"シダ", pos:"noun", tag:"land", pri:2,
+      ex:"Ferns cover the forest floor.", exJa:"シダが林床を覆っています。"},
+    {en:"bamboo", ja:"竹・タケ", pos:"noun", tag:"land", pri:1,
+      ex:"Bamboo groves grow fast.", exJa:"竹林は早く育ちます。"},
+    {en:"soil", ja:"土・土壌", pos:"noun", tag:"land", pri:1,
+      ex:"The soil is dark and rich.", exJa:"土は暗くて豊かです。"},
+    {en:"substrate", ja:"基質・底面", pos:"noun", tag:"land", pri:2,
+      ex:"The substrate affects who lives here.", exJa:"基質がここに住む生き物に影響します。"},
+    {en:"fallen log", ja:"倒木", pos:"noun", tag:"land", pri:2,
+      ex:"A fallen log full of insects.", exJa:"虫だらけの倒木。"},
+
+    // === G. Sensory & Perception ===
+    {en:"sensory", ja:"感覚の", pos:"adj", tag:"sense", pri:2,
+      ex:"A sensory experience of the place.", exJa:"その場所の感覚的な体験。"},
+    {en:"tactile", ja:"触覚的な", pos:"adj", tag:"sense", pri:2,
+      ex:"The bark is tactile and rough.", exJa:"樹皮は触覚的でざらざらしています。"},
+    {en:"auditory", ja:"聴覚的な", pos:"adj", tag:"sense", pri:2,
+      ex:"Auditory cues tell a lot.", exJa:"聴覚的な手がかりが多くを語ります。"},
+    {en:"peripheral vision", ja:"周辺視野", pos:"noun", tag:"sense", pri:2,
+      ex:"Use your peripheral vision.", exJa:"周辺視野を使ってください。"},
+    {en:"gaze", ja:"視線・凝視", pos:"noun", tag:"sense", pri:1,
+      ex:"Where is your gaze?", exJa:"視線はどこにありますか？"},
+    {en:"threshold", ja:"閾値・境界", pos:"noun", tag:"sense", pri:2,
+      ex:"There is a threshold of visibility.", exJa:"視認性には閾値があります。"},
+    {en:"subtle", ja:"微妙な・繊細な", pos:"adj", tag:"sense", pri:1,
+      ex:"Subtle changes in light.", exJa:"光の微妙な変化。"},
+    {en:"texture", ja:"質感・テクスチャー", pos:"noun", tag:"sense", pri:2,
+      ex:"The texture of the bark.", exJa:"樹皮の質感。"},
+    {en:"stillness", ja:"静けさ・静止", pos:"noun", tag:"sense", pri:2,
+      ex:"I am drawn to stillness.", exJa:"静けさに惹かれます。"},
+    {en:"rhythm", ja:"リズム", pos:"noun", tag:"sense", pri:2,
+      ex:"The rhythm of waves.", exJa:"波のリズム。"},
+    {en:"pulse", ja:"脈動・鼓動", pos:"noun", tag:"sense", pri:2,
+      ex:"The pulse of a living place.", exJa:"生きた場所の脈動。"},
+    {en:"liminal", ja:"境界的な・過渡的な", pos:"adj", tag:"sense", pri:3,
+      ex:"A liminal moment between day and night.", exJa:"昼と夜の間の境界的な瞬間。"},
+    {en:"embodied", ja:"身体化された", pos:"adj", tag:"sense", pri:2,
+      ex:"Embodied knowledge of the place.", exJa:"その場所の身体化された知識。"},
+    {en:"affordance", ja:"アフォーダンス（行為の可能性）", pos:"noun", tag:"sense", pri:3,
+      ex:"The stone affords sitting.", exJa:"石は座るというアフォーダンスを持つ。"},
+    {en:"nuanced", ja:"ニュアンスに富んだ", pos:"adj", tag:"sense", pri:2,
+      ex:"A nuanced reading of the space.", exJa:"空間のニュアンスに富んだ読み。"},
+    {en:"ambiguous", ja:"曖昧な", pos:"adj", tag:"sense", pri:2,
+      ex:"The sign is ambiguous.", exJa:"そのサインは曖昧です。"},
+
+    // === H. Behavior & Biology ===
+    {en:"stimulus", ja:"刺激", pos:"noun", tag:"behav", pri:2,
+      ex:"A sudden stimulus causes a reaction.", exJa:"突然の刺激が反応を引き起こす。"},
+    {en:"response", ja:"反応", pos:"noun", tag:"behav", pri:2,
+      ex:"The response was immediate.", exJa:"反応は即座でした。"},
+    {en:"habituation", ja:"馴化（慣れ）", pos:"noun", tag:"behav", pri:2,
+      ex:"Habituation reduces response over time.", exJa:"馴化により反応が弱まります。"},
+    {en:"instinct", ja:"本能", pos:"noun", tag:"behav", pri:2,
+      ex:"Migration is driven by instinct.", exJa:"渡りは本能によって駆動されます。"},
+    {en:"territorial", ja:"縄張りの", pos:"adj", tag:"behav", pri:2,
+      ex:"Crows are very territorial.", exJa:"カラスは非常に縄張り意識が強い。"},
+    {en:"territory", ja:"縄張り", pos:"noun", tag:"behav", pri:2,
+      ex:"This is their territory.", exJa:"ここは彼らの縄張りです。"},
+    {en:"avoidance", ja:"回避", pos:"noun", tag:"behav", pri:2,
+      ex:"Avoidance is a survival strategy.", exJa:"回避は生存戦略です。"},
+    {en:"cue", ja:"手がかり・シグナル", pos:"noun", tag:"behav", pri:2,
+      ex:"Light is a cue for waking.", exJa:"光は目覚めのシグナルです。"},
+    {en:"signal", ja:"シグナル・信号", pos:"noun", tag:"behav", pri:2,
+      ex:"Animals send signals.", exJa:"動物はシグナルを送ります。"},
+    {en:"pattern", ja:"パターン・規則性", pos:"noun", tag:"behav", pri:1,
+      ex:"I look for patterns.", exJa:"パターンを探します。"},
+    {en:"routine", ja:"ルーティン・習慣的行動", pos:"noun", tag:"behav", pri:2,
+      ex:"Animals have daily routines.", exJa:"動物は日課があります。"},
+    {en:"habit", ja:"習慣", pos:"noun", tag:"behav", pri:1,
+      ex:"I notice people's habits.", exJa:"人々の習慣に気づきます。"},
+    {en:"nocturnal", ja:"夜行性の", pos:"adj", tag:"behav", pri:2,
+      ex:"Owls are nocturnal.", exJa:"フクロウは夜行性です。"},
+    {en:"diurnal", ja:"昼行性の", pos:"adj", tag:"behav", pri:2,
+      ex:"Most birds are diurnal.", exJa:"ほとんどの鳥は昼行性です。"},
+    {en:"migration", ja:"渡り・移動", pos:"noun", tag:"behav", pri:2,
+      ex:"Migration follows the seasons.", exJa:"渡りは季節に従います。"},
+    {en:"aggregation", ja:"集合・群れ", pos:"noun", tag:"behav", pri:2,
+      ex:"A large aggregation of crows.", exJa:"大きなカラスの集合。"},
+    {en:"dispersal", ja:"分散", pos:"noun", tag:"behav", pri:3,
+      ex:"Seed dispersal by birds.", exJa:"鳥による種の分散。"},
+    {en:"agency", ja:"行為主体性", pos:"noun", tag:"behav", pri:2,
+      ex:"Animals have their own agency.", exJa:"動物は自らの行為主体性を持ちます。"},
+
+    // === I. Time & Process ===
+    {en:"duration", ja:"継続時間・持続", pos:"noun", tag:"time", pri:1,
+      ex:"The duration of observation matters.", exJa:"観察の継続時間が重要です。"},
+    {en:"interval", ja:"間隔", pos:"noun", tag:"time", pri:2,
+      ex:"I note the interval between visits.", exJa:"訪問の間隔を記録します。"},
+    {en:"ongoing", ja:"進行中の", pos:"adj", tag:"time", pri:2,
+      ex:"This is an ongoing project.", exJa:"これは進行中のプロジェクトです。"},
+    {en:"repeated", ja:"繰り返された", pos:"adj", tag:"time", pri:1,
+      ex:"Repeated visits change how you see.", exJa:"繰り返しの訪問で見方が変わります。"},
+    {en:"accumulate", ja:"蓄積する", pos:"verb", tag:"time", pri:2,
+      ex:"Observations accumulate over time.", exJa:"観察は時間とともに蓄積します。"},
+    {en:"unfold", ja:"展開する", pos:"verb", tag:"time", pri:2,
+      ex:"The story unfolds slowly.", exJa:"物語はゆっくり展開します。"},
+    {en:"gradual", ja:"緩やかな・段階的な", pos:"adj", tag:"time", pri:2,
+      ex:"Gradual change is hard to see.", exJa:"緩やかな変化は見えにくい。"},
+    {en:"momentary", ja:"一瞬の・瞬間的な", pos:"adj", tag:"time", pri:2,
+      ex:"A momentary appearance.", exJa:"一瞬の出現。"},
+    {en:"seasonal", ja:"季節的な", pos:"adj", tag:"time", pri:2,
+      ex:"Seasonal changes are extreme here.", exJa:"ここでは季節変化が激しい。"},
+    {en:"cycle", ja:"サイクル・周期", pos:"noun", tag:"time", pri:2,
+      ex:"The natural cycle of the year.", exJa:"一年の自然のサイクル。"},
+    {en:"layering", ja:"層を重ねること", pos:"noun", tag:"time", pri:2,
+      ex:"Layering of time and memory.", exJa:"時間と記憶の積層。"},
+    {en:"residue", ja:"残滓・痕跡の残り", pos:"noun", tag:"time", pri:2,
+      ex:"The residue of past events.", exJa:"過去の出来事の残滓。"},
+    {en:"ephemeral", ja:"はかない・短命な", pos:"adj", tag:"time", pri:2,
+      ex:"The flower is ephemeral.", exJa:"その花ははかないです。"},
+    {en:"persistent", ja:"持続する・しつこい", pos:"adj", tag:"time", pri:2,
+      ex:"A persistent presence.", exJa:"持続的な存在。"},
+
+    // === J. Documentation & Recording ===
+    {en:"still image", ja:"静止画", pos:"noun", tag:"doc", pri:2,
+      ex:"A still image captures a moment.", exJa:"静止画は瞬間を捉えます。"},
+    {en:"time-lapse", ja:"タイムラプス", pos:"noun", tag:"doc", pri:2,
+      ex:"I shot a time-lapse of the site.", exJa:"現場のタイムラプスを撮りました。"},
+    {en:"frame", ja:"フレーム・画角", pos:"noun", tag:"doc", pri:2,
+      ex:"What is in the frame?", exJa:"フレームの中には何がありますか？"},
+    {en:"archive", ja:"記録する・アーカイブ", pos:"v/n", tag:"doc", pri:2,
+      ex:"I archive everything I find.", exJa:"見つけたものをすべてアーカイブします。"},
+    {en:"annotation", ja:"注釈・書き込み", pos:"noun", tag:"doc", pri:2,
+      ex:"I add annotations to my photos.", exJa:"写真に注釈を加えます。"},
+    {en:"caption", ja:"キャプション・説明文", pos:"noun", tag:"doc", pri:2,
+      ex:"Write a caption for each image.", exJa:"各画像にキャプションを書く。"},
+    {en:"transcript", ja:"書き起こし・記録文", pos:"noun", tag:"doc", pri:2,
+      ex:"I made a transcript of the sounds.", exJa:"音の書き起こしを作りました。"},
+    {en:"index", ja:"索引・目録", pos:"noun", tag:"doc", pri:2,
+      ex:"I made an index of species found.", exJa:"見つけた種の目録を作りました。"},
+    {en:"diagram", ja:"図・ダイアグラム", pos:"noun", tag:"doc", pri:2,
+      ex:"I draw diagrams of behavior.", exJa:"行動の図を描きます。"},
+    {en:"notation", ja:"記法・ノーテーション", pos:"noun", tag:"doc", pri:3,
+      ex:"I developed a personal notation system.", exJa:"独自の記法を開発しました。"},
+    {en:"evidence", ja:"証拠・根拠", pos:"noun", tag:"doc", pri:2,
+      ex:"The photograph is evidence.", exJa:"その写真は証拠です。"},
+    {en:"specimen", ja:"標本", pos:"noun", tag:"doc", pri:2,
+      ex:"A fallen feather as a specimen.", exJa:"落ちた羽根を標本として。"},
+    {en:"witness", ja:"目撃する・証言する", pos:"verb", tag:"doc", pri:2,
+      ex:"I witness and record.", exJa:"目撃して記録します。"},
+
+    // === K. Art-Conceptual / Critical ===
+    {en:"entanglement", ja:"もつれ・絡み合い", pos:"noun", tag:"concept", pri:2,
+      ex:"Human and non-human entanglement.", exJa:"人間と非人間のもつれ。"},
+    {en:"assemblage", ja:"異種混合体・アサンブラージュ", pos:"noun", tag:"concept", pri:3,
+      ex:"The city is an assemblage.", exJa:"都市はアサンブラージュです。"},
+    {en:"human-centered", ja:"人間中心の", pos:"adj", tag:"concept", pri:1,
+      ex:"I want to leave a human-centered view.", exJa:"人間中心の見方を離れたい。"},
+    {en:"posthuman", ja:"ポストヒューマン的な", pos:"adj", tag:"concept", pri:3,
+      ex:"A posthuman perspective.", exJa:"ポストヒューマン的な視点。"},
+    {en:"logic", ja:"論理・論理性", pos:"noun", tag:"concept", pri:1,
+      ex:"Animals have their own logic.", exJa:"動物は独自の論理を持ちます。"},
+    {en:"tension", ja:"緊張・張力", pos:"noun", tag:"concept", pri:2,
+      ex:"There is tension between wild and tame.", exJa:"野生と飼いならされたものの間に緊張がある。"},
+    {en:"contradiction", ja:"矛盾", pos:"noun", tag:"concept", pri:2,
+      ex:"I am interested in contradictions.", exJa:"矛盾に関心があります。"},
+    {en:"contingent", ja:"偶発的な・状況依存的な", pos:"adj", tag:"concept", pri:3,
+      ex:"Every encounter is contingent.", exJa:"すべての出会いは偶発的です。"},
+    {en:"situated", ja:"状況に置かれた", pos:"adj", tag:"concept", pri:3,
+      ex:"Knowledge is always situated.", exJa:"知識は常に状況に置かれています。"},
+    {en:"scale", ja:"スケール・規模", pos:"noun", tag:"concept", pri:2,
+      ex:"Change happens at different scales.", exJa:"変化は異なるスケールで起きます。"},
+    {en:"legible", ja:"読み取れる・わかりやすい", pos:"adj", tag:"concept", pri:2,
+      ex:"The landscape is legible to me now.", exJa:"景観が今は私に読み取れます。"},
+    {en:"illegible", ja:"読み取れない", pos:"adj", tag:"concept", pri:2,
+      ex:"At first, it was illegible.", exJa:"最初は読み取れませんでした。"},
+    {en:"resonance", ja:"共鳴・響き", pos:"noun", tag:"concept", pri:2,
+      ex:"I feel a resonance with this place.", exJa:"この場所との共鳴を感じます。"},
+    {en:"dissonance", ja:"不協和・ずれ", pos:"noun", tag:"concept", pri:2,
+      ex:"The dissonance between city and nature.", exJa:"都市と自然の不協和。"},
+    {en:"friction", ja:"摩擦・葛藤", pos:"noun", tag:"concept", pri:2,
+      ex:"Productive friction in a collaboration.", exJa:"協働の中の生産的な摩擦。"},
+    {en:"vitality", ja:"生命力・活力", pos:"noun", tag:"concept", pri:2,
+      ex:"I sense vitality in this place.", exJa:"この場所に生命力を感じます。"},
+    {en:"aliveness", ja:"生き生きとした状態", pos:"noun", tag:"concept", pri:2,
+      ex:"Aliveness is different from biology.", exJa:"生き生きとした状態は生物学とは違う。"},
+    {en:"agency (non-human)", ja:"行為主体性（非人間の）", pos:"noun", tag:"concept", pri:2,
+      ex:"Plants have agency too.", exJa:"植物にも行為主体性があります。"},
+    {en:"co-production", ja:"共同制作・共生産", pos:"noun", tag:"concept", pri:3,
+      ex:"The landscape is a co-production.", exJa:"景観は共同制作物です。"},
+
+    // === L. Body & Movement ===
+    {en:"posture", ja:"姿勢", pos:"noun", tag:"body", pri:2,
+      ex:"I notice the posture of animals.", exJa:"動物の姿勢に気づきます。"},
+    {en:"gesture", ja:"身振り・所作", pos:"noun", tag:"body", pri:1,
+      ex:"Every gesture tells something.", exJa:"すべての身振りが何かを語ります。"},
+    {en:"stillness", ja:"静止", pos:"noun", tag:"body", pri:2,
+      ex:"Practice stillness.", exJa:"静止を練習する。"},
+    {en:"pace", ja:"歩調・ペース", pos:"noun", tag:"body", pri:2,
+      ex:"Slow your pace.", exJa:"歩調を遅くする。"},
+    {en:"proximity", ja:"近接・近さ", pos:"noun", tag:"body", pri:2,
+      ex:"Proximity changes the relationship.", exJa:"近接が関係を変えます。"},
+    {en:"distance", ja:"距離", pos:"noun", tag:"body", pri:1,
+      ex:"What is the right distance?", exJa:"適切な距離は何ですか？"},
+    {en:"crouch", ja:"かがむ・しゃがむ", pos:"verb", tag:"body", pri:2,
+      ex:"I crouched to see it better.", exJa:"よく見るためにかがみました。"},
+    {en:"dwell", ja:"留まる・住まう", pos:"verb", tag:"body", pri:2,
+      ex:"I want to dwell in one place.", exJa:"一つの場所に留まりたい。"},
+    {en:"attentive", ja:"注意深い", pos:"adj", tag:"body", pri:1,
+      ex:"Stay attentive.", exJa:"注意深くいてください。"},
+    {en:"patient", ja:"忍耐強い", pos:"adj", tag:"body", pri:1,
+      ex:"Good observation requires patience.", exJa:"よい観察には忍耐が必要です。"},
+
+    // === M. Discussion & Interview ===
     {en:"I am drawn to", ja:"〜に惹かれる", pos:"phrase", tag:"talk", pri:1,
       ex:"I am drawn to small things.", exJa:"小さなものに惹かれます。"},
     {en:"I am interested in", ja:"〜に関心がある", pos:"phrase", tag:"talk", pri:1,
@@ -1147,58 +1450,65 @@ const DATA = {
       ex:"It reminds me of my hometown.", exJa:"故郷を思い起こさせます。"},
     {en:"From my perspective", ja:"私の視点では", pos:"phrase", tag:"talk", pri:2,
       ex:"From my perspective, this is key.", exJa:"私の視点では、これが鍵です。"},
-    {en:"I would say that", ja:"〜と言えると思います", pos:"phrase", tag:"talk", pri:1,
-      ex:"I would say that observation is patience.", exJa:"観察とは忍耐だと思います。"},
+    {en:"I would say that", ja:"〜と思います", pos:"phrase", tag:"talk", pri:1,
+      ex:"I would say observation is patience.", exJa:"観察とは忍耐だと思います。"},
     {en:"In my work", ja:"私の作品では", pos:"phrase", tag:"talk", pri:1,
       ex:"In my work, I use everyday things.", exJa:"作品では身近なものを使います。"},
     {en:"In other words", ja:"言い換えると", pos:"phrase", tag:"talk", pri:2,
-      ex:"In other words, observation is form.", exJa:"言い換えれば、観察は形です。"},
+      ex:"In other words, observation is form.", exJa:"言い換えれば、観察は形式です。"},
     {en:"For instance", ja:"例えば", pos:"phrase", tag:"talk", pri:2,
       ex:"For instance, water in a bowl.", exJa:"例えば、椀の中の水。"},
     {en:"On the other hand", ja:"一方で", pos:"phrase", tag:"talk", pri:2,
-      ex:"On the other hand, control is also part of it.", exJa:"一方で、制御もその一部です。"},
-    {en:"That being said", ja:"とはいえ", pos:"phrase", tag:"talk", pri:3,
-      ex:"That being said, I am still learning.", exJa:"とはいえ、まだ学んでいます。"},
+      ex:"On the other hand, control matters.", exJa:"一方で、制御も重要です。"},
+    {en:"I notice that", ja:"〜に気づきます", pos:"phrase", tag:"talk", pri:1,
+      ex:"I notice that the light changes.", exJa:"光が変わることに気づきます。"},
+    {en:"What I find interesting is", ja:"私が興味深いと思うのは", pos:"phrase", tag:"talk", pri:2,
+      ex:"What I find interesting is the edge.", exJa:"私が興味深いのは縁辺部です。"},
 
-    // === G. Repair / Clarification ===
+    // === N. Repair & Clarification ===
     {en:"Could you say that again?", ja:"もう一度言っていただけますか？", pos:"phrase", tag:"repair", pri:1,
       ex:"Sorry, could you say that again?", exJa:"すみません、もう一度言っていただけますか？"},
-    {en:"Could you say it more slowly?", ja:"もう少しゆっくり言っていただけますか？", pos:"phrase", tag:"repair", pri:1,
-      ex:"Could you say it more slowly, please?", exJa:"もう少しゆっくりお願いできますか？"},
+    {en:"Could you speak more slowly?", ja:"もう少しゆっくり話していただけますか？", pos:"phrase", tag:"repair", pri:1,
+      ex:"Could you speak more slowly, please?", exJa:"もう少しゆっくりお願いできますか？"},
     {en:"I didn't catch that.", ja:"聞き取れませんでした。", pos:"phrase", tag:"repair", pri:1,
-      ex:"Sorry, I didn't catch that last word.", exJa:"すみません、最後の単語が聞き取れませんでした。"},
+      ex:"Sorry, I didn't catch that.", exJa:"すみません、聞き取れませんでした。"},
     {en:"Did you mean...?", ja:"つまり〜という意味ですか？", pos:"phrase", tag:"repair", pri:1,
       ex:"Did you mean the secondary forest?", exJa:"つまり二次林のことですか？"},
     {en:"Let me think for a moment.", ja:"少し考えさせてください。", pos:"phrase", tag:"repair", pri:1,
       ex:"Let me think for a moment, please.", exJa:"少し考えさせてください。"},
-    {en:"How do you say [X] in English?", ja:"[X]は英語で何と言いますか？", pos:"phrase", tag:"repair", pri:1,
-      ex:"How do you say 'kanrei' in English?", exJa:"「環礼」は英語で何と言いますか？"},
+    {en:"How do you say this in English?", ja:"これは英語でどう言いますか？", pos:"phrase", tag:"repair", pri:1,
+      ex:"How do you say 'satoyama' in English?", exJa:"「里山」は英語でどう言いますか？"},
     {en:"I'm not sure how to say this.", ja:"うまく言えないのですが", pos:"phrase", tag:"repair", pri:1,
       ex:"I'm not sure how to say this in English.", exJa:"これを英語でうまく言えません。"},
-    {en:"Let me say it differently.", ja:"別の言い方で言ってみます", pos:"phrase", tag:"repair", pri:2,
+    {en:"Let me say it differently.", ja:"別の言い方をしてみます", pos:"phrase", tag:"repair", pri:2,
       ex:"Let me say it differently.", exJa:"別の言い方をしてみます。"},
     {en:"If I understand correctly", ja:"私の理解が正しければ", pos:"phrase", tag:"repair", pri:2,
-      ex:"If I understand correctly, you mean...", exJa:"私の理解が正しければ、〜という意味ですね。"},
-    {en:"Just to make sure", ja:"念のため確認ですが", pos:"phrase", tag:"repair", pri:2,
-      ex:"Just to make sure, you said two days?", exJa:"念のため、2日間ですよね？"},
+      ex:"If I understand correctly, you mean...", exJa:"私の理解が正しければ〜ですね。"},
+    {en:"Could you give me an example?", ja:"例を挙げていただけますか？", pos:"phrase", tag:"repair", pri:2,
+      ex:"Could you give me an example?", exJa:"例を挙げていただけますか？"},
+    {en:"Give me a second.", ja:"少し待ってください。", pos:"phrase", tag:"repair", pri:1,
+      ex:"Give me a second to find the words.", exJa:"言葉を探す時間をください。"},
 
-    // === H. Workshop common ===
-    {en:"workshop", ja:"ワークショップ", pos:"noun", tag:"misc", pri:1,
-      ex:"I'm looking forward to the workshop.", exJa:"ワークショップを楽しみにしています。"},
-    {en:"lecture", ja:"レクチャー", pos:"noun", tag:"misc", pri:1,
-      ex:"The lecture is on Tuesday.", exJa:"レクチャーは火曜日です。"},
-    {en:"critique / crit", ja:"合評・批評", pos:"noun", tag:"misc", pri:1,
-      ex:"There will be a final critique.", exJa:"最後に合評があります。"},
+    // === O. Common Workshop Context ===
+    {en:"critique / crit", ja:"合評・批評会", pos:"noun", tag:"misc", pri:1,
+      ex:"There will be a final critique.", exJa:"最後に合評会があります。"},
     {en:"studio visit", ja:"スタジオ訪問", pos:"noun", tag:"misc", pri:1,
-      ex:"He will do a studio visit.", exJa:"彼がスタジオ訪問をします。"},
-    {en:"presentation", ja:"発表", pos:"noun", tag:"misc", pri:1,
-      ex:"The presentation is in June.", exJa:"発表は6月です。"},
-    {en:"feedback", ja:"フィードバック", pos:"noun", tag:"misc", pri:2,
-      ex:"I would love your feedback.", exJa:"フィードバックをいただきたいです。"},
-    {en:"thought", ja:"考え・思考", pos:"noun", tag:"misc", pri:2,
-      ex:"That is an interesting thought.", exJa:"それは興味深い考えです。"},
-    {en:"sketch", ja:"スケッチ", pos:"n/v", tag:"misc", pri:2,
-      ex:"I made a quick sketch.", exJa:"簡単なスケッチをしました。"}
+      ex:"He will do a studio visit.", exJa:"スタジオ訪問があります。"},
+    {en:"session", ja:"セッション・回", pos:"noun", tag:"misc", pri:1,
+      ex:"The next session is online.", exJa:"次のセッションはオンラインです。"},
+    {en:"participant", ja:"参加者", pos:"noun", tag:"misc", pri:1,
+      ex:"All participants will present.", exJa:"全参加者が発表します。"},
+    {en:"instructor", ja:"講師", pos:"noun", tag:"misc", pri:1,
+      ex:"The instructor gave feedback.", exJa:"講師がフィードバックをくれました。"},
+    {en:"prompt", ja:"問いかけ・課題", pos:"noun", tag:"misc", pri:2,
+      ex:"The prompt was about water.", exJa:"問いかけは水についてでした。"},
+    {en:"proposal", ja:"プロポーザル・提案", pos:"noun", tag:"misc", pri:2,
+      ex:"I wrote a short proposal.", exJa:"短いプロポーザルを書きました。"},
+    {en:"outcome", ja:"成果・結果", pos:"noun", tag:"misc", pri:2,
+      ex:"What is the desired outcome?", exJa:"期待される成果は何ですか？"},
+    {en:"open-ended", ja:"答えが開かれた・未決の", pos:"adj", tag:"misc", pri:2,
+      ex:"The question is open-ended.", exJa:"その問いは開かれています。"}
+
   ],
 
   // ---- Q&A BANK ----
@@ -1206,68 +1516,68 @@ const DATA = {
     {
       q: "Tell me about yourself.",
       qja: "自己紹介をお願いします。",
-      a: "Hi, I'm __NAME__. I work at an electric power company in Japan. Outside of work, I make art. My main mediums are programming, performance, and installation, with everyday materials like water, paper, and electronics.",
-      keys: ["work at", "electric power company", "outside of work", "medium", "everyday"]
+      a: "Hello, I'm __NAME__. I work at an electric power company in Japan. I also make art. I use programming, performance, and installation. My materials are everyday things — water, paper, electronics.",
+      keys: ["electric power company", "make art", "everyday", "programming"]
     },
     {
       q: "What is your art practice about?",
       qja: "あなたの制作実践は何についてのものですか？",
-      a: "I'm interested in how people perceive things, and how human behavior changes through internal and external factors. I often use everyday objects to make these small shifts visible.",
-      keys: ["interested in", "perceive", "behavior", "internal/external factors", "shift"]
+      a: "I am interested in perception. How do people see things? I am also interested in behavior change. Why does behavior change? I use everyday objects. I want to make small shifts visible.",
+      keys: ["perception", "behavior change", "everyday objects", "shifts", "visible"]
     },
     {
       q: "What materials and methods do you use?",
       qja: "どのような素材と手法を使いますか？",
-      a: "I work mainly with programming, performance, and installation. My materials are everyday things — water, paper, electronics. I prefer materials that are familiar but can become strange.",
-      keys: ["work with", "everyday things", "familiar", "strange"]
+      a: "I use programming, performance, and installation. My materials are water, paper, and electronics. They feel familiar. But they can become strange. That is what interests me.",
+      keys: ["programming", "familiar", "strange", "everyday"]
     },
     {
       q: "Why did you join this workshop?",
       qja: "なぜこのワークショップに参加しましたか？",
-      a: "Until now, I have observed human cognition and behavior. But I have never spent a long time observing non-human life or human-managed landscapes. I want to learn that here.",
-      keys: ["until now", "observed", "non-human", "managed landscape"]
+      a: "Until now, I have observed human cognition and behavior. But I have never observed non-human life for a long time. I have never watched a human-shaped landscape, slowly. I want that experience here.",
+      keys: ["observed", "human cognition", "non-human life", "long time", "landscape"]
     },
     {
       q: "What part of the workshop description resonated with you?",
       qja: "ワークショップ説明のどの部分があなたに響きましたか？",
-      a: "I was struck by your message — \"not technical skills, but sustained attention to a place, where repeated observation shapes the work.\" That is exactly what I feel I need next.",
-      keys: ["struck by", "sustained attention", "repeated observation", "shapes the work"]
+      a: "Your words moved me. 'Not technical skills, but sustained attention to a place.' I want that. I want to develop that kind of attention.",
+      keys: ["sustained attention", "not technical skills", "develop", "place"]
     },
     {
       q: "Have you done fieldwork before?",
       qja: "これまでフィールドワークの経験はありますか？",
-      a: "Not in this sense. I have observed people in everyday situations, but not non-human life or landscapes. This will be my first time doing fieldwork in this way.",
-      keys: ["not in this sense", "everyday situations", "first time"]
+      a: "Not in this sense. I have observed people — in stations, parks, everyday spaces. But I have never stayed in one place and watched non-human life. This is my first time.",
+      keys: ["first time", "observed people", "non-human life", "one place", "stayed"]
     },
     {
       q: "What kind of place are you drawn to?",
       qja: "どのような場所に惹かれますか？",
-      a: "I am drawn to places that look ordinary, but where something surprising is happening — small ecologies inside everyday spaces. I hope to find this in Kyoto too.",
-      keys: ["drawn to", "ordinary", "small ecologies", "everyday"]
+      a: "I am drawn to ordinary places. But something surprising is always inside them. Small ecologies in everyday spaces. I want to find this in Kyoto.",
+      keys: ["ordinary", "surprising", "small ecologies", "everyday spaces", "Kyoto"]
     },
     {
       q: "What does \"more-than-human\" mean to you?",
       qja: "あなたにとって「人間以上（モア・ザン・ヒューマン）」とは何ですか？",
-      a: "For me, it means stepping outside a human-centered view. It is noticing that landscapes, animals, and even materials have their own time and life, separate from us.",
-      keys: ["stepping outside", "human-centered", "their own time"]
+      a: "For me, it means leaving a human-centered view. Animals, landscapes, materials — they have their own time. Their own logic. They exist without us in mind. I want to notice that.",
+      keys: ["human-centered", "their own time", "their own logic", "without us", "notice"]
     },
     {
       q: "What do you hope to gain from this workshop?",
       qja: "このワークショップから何を得たいですか？",
-      a: "Two things. First, the experience of sustained observation in one place. Second, conversations with you and other participants that change how I see my own work.",
-      keys: ["two things", "sustained observation", "change how I see"]
+      a: "Two things. First — sustained observation. I want to stay in one place and really watch. Second — a new perspective. I hope this workshop changes how I see my own work.",
+      keys: ["sustained observation", "one place", "really watch", "new perspective", "changes"]
     },
     {
       q: "How do you usually start a project?",
       qja: "通常、プロジェクトはどのように始めますか？",
-      a: "I start by noticing something small — a habit, a movement, a familiar object behaving strangely. Then I keep watching it, and slowly the work takes shape.",
-      keys: ["start by noticing", "familiar object", "keep watching", "takes shape"]
+      a: "I start by noticing something small. A habit. A movement. A familiar thing, behaving strangely. Then I keep watching. Slowly, the work takes shape.",
+      keys: ["noticing", "small", "habit", "familiar", "keep watching", "takes shape"]
     },
     {
       q: "How do you balance your day job and your art?",
       qja: "本業とアートの両立はどうしていますか？",
-      a: "It is not always easy, but my day job gives me a different way of seeing systems. I think the two feed each other.",
-      keys: ["not always easy", "different way of seeing", "feed each other"]
+      a: "It is not easy. But they feed each other. My day job gives me a way of seeing systems. And that affects my art.",
+      keys: ["not easy", "feed each other", "way of seeing", "systems", "affects"]
     },
     {
       q: "What is one recent project you have made?",
@@ -1614,7 +1924,8 @@ const SpeechRec = {
   available: false,
   _stopped: false,
   _delivered: false,
-  _accumulated: "",   // text confirmed across sessions
+  _accumulated: "",   // confirmed finals across restarts
+  _lastInterim: "",   // last interim (fallback if iOS never fires isFinal)
   _opts: null,
   _restartTimer: null,
 
@@ -1625,10 +1936,11 @@ const SpeechRec = {
 
   start(opts = {}) {
     if (!this.available) { opts.onFallback?.(); return; }
-    this._opts = opts;
-    this._stopped = false;
+    this._opts      = opts;
+    this._stopped   = false;
     this._delivered = false;
-    this._accumulated = "";
+    this._accumulated  = "";
+    this._lastInterim  = "";
     this._session();
   },
 
@@ -1638,56 +1950,60 @@ const SpeechRec = {
 
     const rec = new this.SRClass();
     rec.lang = "en-US";
-    rec.continuous = true;   // iOS ignores this, but set it anyway
+    rec.continuous = false;       // iOS compatible; restart is handled in onend
     rec.interimResults = true;
     rec.maxAlternatives = 1;
 
     rec.onresult = e => {
-      // Accumulate finals; collect interim separately
+      let newFinals = "";
+      let currentInterim = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
         if (e.results[i].isFinal) {
-          this._accumulated += e.results[i][0].transcript + " ";
+          newFinals += e.results[i][0].transcript + " ";
+        } else {
+          currentInterim = e.results[i][0].transcript;  // latest interim
         }
       }
-      // interim = last non-final result if present
-      let interim = "";
-      const last = e.results[e.results.length - 1];
-      if (!last.isFinal) interim = last[0].transcript;
+      if (newFinals)     this._accumulated += newFinals;
+      if (currentInterim) this._lastInterim = currentInterim;
 
-      const display = (this._accumulated + interim).trim();
-      this._opts?.onInterim?.(display);
+      const display = (this._accumulated + currentInterim).trim();
+      if (display) this._opts?.onInterim?.(display);
     };
 
     rec.onerror = e => {
-      if (e.error === "aborted" || e.error === "no-speech") return; // expected; onend will fire
+      // "aborted" = we called abort() intentionally; "no-speech" = silence timeout
+      // Both are expected; onend will fire after these and handle restart/deliver
+      if (e.error === "aborted" || e.error === "no-speech") return;
       this._opts?.onError?.(e.error);
     };
 
     rec.onend = () => {
       if (this._stopped) {
-        // Manual stop: deliver result
         this._deliver();
         return;
       }
-      // Auto-cutoff (iOS silence timeout) — restart silently after brief pause
+      // Auto-cutoff by iOS → silent restart after short pause
       this._restartTimer = setTimeout(() => {
         if (!this._stopped) this._session();
-      }, 150);
+      }, 180);
     };
 
     try {
       rec.start();
       this.rec = rec;
     } catch(e) {
-      this._opts?.onError?.(e.message);
+      this._opts?.onError?.("start: " + e.message);
     }
   },
 
   _deliver() {
     if (this._delivered) return;
     this._delivered = true;
-    const final = this._accumulated.trim();
+    // Priority: confirmed finals → last interim (iOS often never fires isFinal)
+    const final = this._accumulated.trim() || this._lastInterim.trim();
     if (final) this._opts?.onResult?.(final);
+    else this._opts?.onError?.("no-result");  // truly nothing recognised
     this._opts?.onEnd?.();
   },
 
@@ -1695,8 +2011,8 @@ const SpeechRec = {
     this._stopped = true;
     clearTimeout(this._restartTimer);
     try { this.rec?.abort(); } catch(e) {}
-    // deliver immediately in case onend is delayed
-    setTimeout(() => this._deliver(), 100);
+    // Safety net: deliver after abort (onend can be delayed on iOS)
+    setTimeout(() => this._deliver(), 250);
   }
 };
 
