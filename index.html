@@ -2982,6 +2982,8 @@ const Views = {
         $$(".qa-answer-en .qa-word.tapped").forEach(x => x.classList.remove("tapped"));
         w.classList.add("tapped");
         showGloss(e, w.dataset.gloss, w.textContent);
+        TTS.cancel();
+        TTS.speak(w.textContent);
       });
     });
   },
