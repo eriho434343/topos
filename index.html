@@ -893,6 +893,32 @@ hr.rule.dotted { border-top-style: dotted; }
 .word-en  { font-family: var(--serif); font-size: 15px; line-height: 1.3; }
 .word-ja  { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
 .word-meta { font-family: var(--mono); font-size: 10px; color: var(--rule); margin-top: 2px; }
+
+/* tappable words (shared by reading and Q&A) */
+.qa-word, .read-text .word {
+  cursor: pointer;
+  border-bottom: 1px dashed var(--rule);
+  transition: background 0.12s ease, border-color 0.12s ease;
+  padding: 0 1px;
+}
+.qa-word:hover, .qa-word.tapped,
+.read-text .word:hover, .read-text .word.tapped {
+  background: rgba(184,137,92,0.18);
+  border-bottom-color: var(--ochre);
+}
+
+.qa-answer-ja {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--paper);
+  border-left: 3px solid var(--ochre);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  display: none;
+}
+.qa-answer-ja.show { display: block; }
 .section-head {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--ochre-deep); font-weight: 500;
@@ -1552,72 +1578,84 @@ const DATA = {
       q: "Walk me through your tea ceremony work.",
       qja: "茶会の作品について教えてください。",
       a: "I made a participatory work. Participants compared three teas. Each tea was made with a different power source. Solar power. Virtual renewable energy. And regular electricity. I wanted to see if information changes how things taste. For some people — it did. Not all.",
+      aJa: "参加型の作品を作りました。参加者は3種類のお茶を比べました。それぞれのお茶は、異なる電源で作られました。太陽光発電。実質再生可能エネルギー。そして通常の電気。情報が味の感じ方を変えるかどうか知りたかった。一部の人には変化がありました。全員ではありません。",
       keys: ["three", "power source", "information changes", "not all"]
     },
     {
       q: "What surprised you? What happened that you didn't expect?",
       qja: "予想外の出来事は何でしたか？",
       a: "Most participants did not know what 'virtual renewable energy' means. So we started with explaining that. I found that interesting. The word 'renewable' sounds clean. People trust it. But they have not really thought about what it is. The work became a conversation about that.",
+      aJa: "ほとんどの参加者は「実質再生可能エネルギー」の意味を知りませんでした。だから説明することから始めました。それが面白いと思いました。「再生可能」という言葉は清潔に聞こえます。人々はそれを信じます。でも、実際に何なのかを本当に考えたことはない。作品はその会話になりました。",
       keys: ["did not know", "explaining", "renewable sounds clean", "trust it", "conversation"]
     },
     {
       q: "Your work is always about people — perception, brain waves. Why do you want to shift to landscapes and non-human life?",
       qja: "あなたの作品はいつも人間についてです。なぜ景観や非人間的な生命へ転換したいのですか？",
       a: "I work at an electric power company. Every day, I hear about solar farms, power plants, batteries. I hear how my company shapes land. But I don't see it. I don't understand it directly. I want to look at that. Not the system — the actual place. What is living there.",
+      aJa: "私は電力会社に勤めています。毎日、太陽光発電所、発電所、蓄電池の話を聞きます。会社がどのように土地を形作るかを聞きます。でも見ていません。直接理解していません。それを見たいのです。システムではなく——実際の場所を。そこに何が生きているかを。",
       keys: ["electric power company", "shapes land", "don't see it", "actual place", "living there"]
     },
     {
       q: "Have you ever observed something — a place, an animal, a plant — over a long time?",
       qja: "何か一つのもの（場所・動物・植物）を長い時間観察したことはありますか？",
       a: "People, yes. I observe people in stations, in parks, in everyday spaces. I notice how they move and stop. But not animals. Not landscapes. Never for a long time. That is honest. This workshop is my first time doing this.",
+      aJa: "人間はそうです。駅、公園、日常の場所で人々を観察します。どのように動いて止まるかに気づきます。でも動物は違います。景観も違います。長い時間は一度もありません。それが正直なところです。このワークショップが初めてです。",
       keys: ["people", "stations", "not animals", "not landscapes", "honest", "first time"]
     },
     {
       q: "Tell me about 'Flow.' What were you trying to find out?",
       qja: "「Flow」について教えてください。何を調べようとしていましたか？",
       a: "I started with a personal problem. I could not concentrate. So I made a work about that. Participants wear a brainwave device. They do their own work — reading, making things. They see their concentration as particles. When concentration and relaxation are both high, the particles form the word 'FLOW.' It is an observation of oneself.",
+      aJa: "個人的な問題から始めました。集中できなかった。だからそれについての作品を作りました。参加者は脳波計を装着します。自分の作業をします——読書、ものづくり。集中状態をパーティクルとして見ます。集中とリラックスの両方が高いとき、パーティクルは「FLOW」という文字になります。自分自身の観察です。",
       keys: ["personal problem", "could not concentrate", "brainwave device", "own work", "observation of oneself"]
     },
     {
       q: "I looked at your portfolio. Your works involve a lot of specialists — a neuroscientist, researchers. Why?",
       qja: "ポートフォリオを見ると、神経科学者や研究者との協働が多いですね。なぜですか？",
       a: "I know what I want to ask. But I don't know how to answer it alone. So I find people who know the science. For the tea ceremony — electricity specialists. For Flow — a brain researcher. I build the experience with them. That process is also interesting to me.",
+      aJa: "何を問いたいかは知っています。でも一人で答える方法を知りません。だから科学を知っている人を見つけます。茶会では——電力の専門家。Flowでは——脳の研究者。彼らと一緒に体験を作ります。そのプロセス自体も私には興味深い。",
       keys: ["what I want to ask", "find people who know", "electricity specialists", "brain researcher", "build with them"]
     },
     {
       q: "I've seen you've looked at some of my work online. What did you notice?",
       qja: "私の作品をオンラインで見てくれたようですね。何に気づきましたか？",
       a: "I saw animals in very ordinary places. Near buildings, near roads. And the way you document — careful, patient. Like a scientist, but also like a poet. The animal is in a place humans made. But the animal does not know that. That gap is interesting to me.",
+      aJa: "ごく普通の場所にいる動物を見ました。建物の近く、道路の近く。そしてあなたの記録の仕方——丁寧で、忍耐強い。科学者のように、でも詩人のようにも。動物は人間が作った場所にいます。でも動物はそれを知りません。そのギャップが興味深い。",
       keys: ["ordinary places", "careful patient", "scientist and poet", "humans made", "does not know", "gap"]
     },
     {
       q: "Is there a specific place in Kyoto you're curious about?",
       qja: "京都で気になっている特定の場所はありますか？",
       a: "Not yet. I am honest — I don't have a specific place. But I am sensitive to infrastructure. Power lines. Water canals. Substations. Places where human systems touch something living. I think I will start there — but I need to be in Kyoto first.",
+      aJa: "まだありません。正直なところ——具体的な場所がない。でもインフラに敏感です。電線。用水路。変電設備。人間のシステムが生きているものに触れる場所。そこから始めると思います——でも、まず京都にいる必要があります。",
       keys: ["not yet", "honest", "infrastructure", "power lines", "human systems touch something living", "be in Kyoto first"]
     },
     {
       q: "What does 'managed landscape' mean to you?",
       qja: "「管理された景観」とはあなたにとって何を意味しますか？",
       a: "A landscape that looks natural. But there is a human decision behind it. The shape of a riverbank. The spacing of street trees. A rice paddy. Someone decided that. And something else — animals, plants, water — lives inside that decision. Without knowing.",
+      aJa: "自然に見える景観。でもその背後に人間の決定があります。河岸の形。街路樹の間隔。水田。誰かがそれを決めました。そして別の何か——動物、植物、水——がその決定の中で生きています。知ることなく。",
       keys: ["looks natural", "human decision", "riverbank", "rice paddy", "lives inside that decision", "without knowing"]
     },
     {
       q: "What does 'after control' mean to you personally?",
       qja: "「アフター・コントロール」はあなた個人にとって何を意味しますか？",
       a: "Honestly, I am not sure. Maybe it means what is left when control stops. Or what exists that was never fully controlled. I think my understanding of this will change after the fieldwork.",
+      aJa: "正直、よくわかりません。コントロールが止まったときに残るものかもしれない。または完全にはコントロールされていないものかもしれない。これについての理解は、フィールドワーク後に変わると思います。",
       keys: ["not sure", "what is left", "never fully controlled", "will change after fieldwork"]
     },
     {
       q: "What does your day job have to do with your art?",
       qja: "本業とアートはどう関係していますか？",
       a: "On the surface — nothing. I do digital service planning. Not power plants, not nature. But I hear the language of energy and land every day. I don't understand the real thing. Only the business side. That distance is uncomfortable. And that discomfort is where my art begins.",
+      aJa: "表面上は——何もない。デジタルサービスの企画をしています。発電所でも自然でもない。でも毎日、エネルギーと土地の言語を聞きます。実際のことは理解していません。ビジネスの側面だけ。その距離は不快です。そしてその不快さが私のアートの始まりです。",
       keys: ["digital service planning", "language of energy and land", "only business side", "uncomfortable", "discomfort is where art begins"]
     },
     {
       q: "What do you want to take back from this workshop — to your own practice?",
       qja: "このワークショップから自分の実践に持ち帰りたいことは何ですか？",
       a: "A new way of starting. My work always begins with a question. But the question comes from thinking. I want to learn to start from watching. From staying in one place and really seeing. I hope that changes how I work.",
+      aJa: "新しい始め方を。私の作品はいつも問いから始まります。でも問いは考えることから来ます。見ることから始めることを学びたい。一つの場所に留まって、本当に見ることから。それが私の仕事の仕方を変えてくれることを願います。",
       keys: ["new way of starting", "begins with a question", "from thinking", "start from watching", "one place", "changes how I work"]
     }
   ],
@@ -2293,7 +2331,118 @@ function speakForPhrase(phraseEn, pid) {
   }, 320);
 }
 
-/* ===== MODAL HELPER ===== */
+/* ===== WORD GLOSS DICTIONARY =====
+   Built lazily from vocab array + common English words.
+   Used by Q&A answer glossification and reading module.
+*/
+let _wordDict = null;
+function getWordDict() {
+  if (_wordDict) return _wordDict;
+  _wordDict = {};
+
+  // From vocab array: tokenize English entries → ja meaning
+  DATA.vocab.forEach(v => {
+    const tokens = v.en.toLowerCase()
+      .replace(/[^\w\s'-]/g, "")
+      .split(/\s+/)
+      .filter(t => t.length > 1);
+    tokens.forEach(t => {
+      const clean = t.replace(/'/g, "");
+      if (!_wordDict[clean]) _wordDict[clean] = v.ja;
+    });
+  });
+
+  // Common English words (grammar, verbs, adjectives, prepositions)
+  const common = {
+    i:"私", me:"私を/に", my:"私の", we:"私たち", our:"私たちの",
+    you:"あなた", your:"あなたの", they:"彼ら", their:"彼らの",
+    he:"彼", she:"彼女", it:"それ", its:"その",
+    is:"〜です", am:"〜です", are:"〜です",
+    was:"〜でした", were:"〜でした",
+    have:"持っている/してきた", has:"持っている", had:"持っていた",
+    do:"する", does:"する", did:"した", done:"した",
+    be:"〜である", been:"〜であった", being:"〜である",
+    not:"〜ではない", never:"一度も〜ない", no:"いいえ",
+    the:"（定冠詞）", a:"（不定冠詞）", an:"（不定冠詞）",
+    in:"〜の中に", on:"〜の上に", at:"〜で", of:"〜の",
+    to:"〜へ/〜するために", for:"〜のために", with:"〜と",
+    by:"〜によって", from:"〜から", about:"〜について",
+    into:"〜の中へ", through:"〜を通して", without:"〜なしに",
+    and:"そして", but:"でも", or:"または", so:"だから",
+    that:"それ/あの", this:"これ/この", those:"それらの",
+    what:"何", how:"どのように", why:"なぜ", where:"どこ",
+    when:"いつ", who:"誰", which:"どちら",
+    all:"すべて", some:"いくつかの", most:"ほとんどの",
+    each:"それぞれ", every:"すべての", both:"両方",
+    very:"とても", also:"また", just:"ただ", only:"〜だけ",
+    even:"〜さえ", still:"まだ", really:"本当に", always:"いつも",
+    can:"〜できる", could:"〜できた", will:"〜するだろう",
+    would:"〜するだろう", should:"〜すべき", may:"〜かもしれない",
+    want:"〜したい", know:"知る", see:"見る", think:"思う",
+    say:"言う", said:"言った", tell:"話す",
+    make:"作る", made:"作った", start:"始める",
+    find:"見つける", found:"見つけた", feel:"感じる", felt:"感じた",
+    hear:"聞く", heard:"聞こえた", understand:"理解する",
+    become:"なる", became:"なった", becomes:"なる",
+    change:"変える/変化", look:"見る/見える", move:"動く",
+    work:"仕事/働く/機能する", use:"使う", build:"作る/築く",
+    go:"行く", come:"来る", stop:"止まる", stay:"留まる",
+    get:"得る", put:"置く", keep:"保つ", give:"与える",
+    like:"〜のような/好き", as:"〜として/〜のように",
+    if:"もし", then:"それから/では", now:"今",
+    here:"ここ", there:"そこ/ある", up:"上に", out:"外に",
+    more:"もっと", less:"より少ない", same:"同じ", different:"異なる",
+    new:"新しい", old:"古い", long:"長い", good:"良い", real:"本物の",
+    first:"最初の", last:"最後の/続く", next:"次の",
+    own:"自分の", other:"他の", such:"そのような",
+    kind:"種類/親切な", side:"側面", way:"方法/道",
+    thing:"もの", things:"もの（複数）", word:"言葉",
+    people:"人々", person:"人", place:"場所", time:"時間",
+    day:"日", year:"年", life:"人生/生命",
+    yes:"はい", maybe:"もしかしたら", probably:"おそらく",
+    surface:"表面", process:"プロセス", part:"部分",
+    direct:"直接の", directly:"直接に", honestly:"正直に",
+    interesting:"興味深い", important:"重要な",
+    specific:"特定の", personal:"個人的な", certain:"ある",
+    three:"3つの", two:"2つの", one:"1つの",
+    solar:"太陽光の", digital:"デジタルの", regular:"通常の",
+    virtual:"実質的な/仮想の", renewable:"再生可能な", clean:"清潔な",
+    careful:"丁寧な", patient:"忍耐強い",
+    near:"近くに", behind:"背後に", inside:"中に", left:"左/残る",
+    hot:"熱い", warm:"温かい", natural:"自然な",
+    living:"生きている", human:"人間（の）", scientific:"科学的な"
+  };
+  Object.assign(_wordDict, common);
+  return _wordDict;
+}
+
+/* Tokenize and wrap each English word with a tappable gloss span */
+function glossifyAnswer(text) {
+  const dict = getWordDict();
+  // Split on word / non-word boundaries; odd indices are words
+  const parts = text.split(/\b/);
+  return parts.map(part => {
+    if (/^[a-zA-Z']+$/.test(part)) {
+      const key = part.toLowerCase().replace(/'/g, "");
+      const gloss = dict[key];
+      if (gloss) {
+        return `<span class="qa-word" data-gloss="${escapeHtml(gloss)}">${escapeHtml(part)}</span>`;
+      }
+      return escapeHtml(part);
+    }
+    return escapeHtml(part);
+  }).join("");
+}
+
+function toggleQaJa(i) {
+  const el = document.querySelector(`#qa-ja-${i}`);
+  if (!el) return;
+  el.classList.toggle("show");
+  const btn = document.querySelector(`#qa-ja-btn-${i}`);
+  if (btn) btn.textContent = el.classList.contains("show") ? "🇯🇵 日本語訳を隠す" : "🇯🇵 日本語訳";
+}
+
+
 function openModal(htmlContent) {
   document.querySelectorAll(".modal-overlay").forEach(x => x.remove());
   const m = document.createElement("div");
@@ -2800,13 +2949,17 @@ const Views = {
           </div>
           <div id="qa-score-${i}" class="diff-out" style="display:none;margin-top:10px;"></div>
           <div class="qa-answer" id="qa-ans-${i}">
-            <div class="a-label">Model answer</div>
-            <div>${escapeHtml(ans).replace(/\n/g,"<br>")}</div>
+            <div class="a-label">Model answer
+              <span style="font-weight:400;font-style:normal;margin-left:6px;font-size:10px;color:var(--ink-faint);">単語タップで訳が出ます</span>
+            </div>
+            <div class="qa-answer-en">${glossifyAnswer(ans)}</div>
+            <div class="qa-answer-ja" id="qa-ja-${i}">${escapeHtml(q.aJa || "")}</div>
             <div class="a-keys">key: ${q.keys.join(" · ")}</div>
-            <div class="btn-grid mt12 three">
+            <div class="btn-grid mt12" style="grid-template-columns:1fr 1fr 1fr 1fr;">
               <button class="btn tiny ghost" onclick="TTS.speak(${JSON.stringify(applyName(q.a)).replace(/"/g,'&quot;')})">♪ Read</button>
               <button class="btn tiny ghost" onclick="TTS.speak(${JSON.stringify(applyName(q.a)).replace(/"/g,'&quot;')}, {rate:0.75})">Slow</button>
-              <button class="btn tiny ghost" onclick="markQaSeen(${i})">Mark practiced</button>
+              <button class="btn tiny ghost" id="qa-ja-btn-${i}" onclick="toggleQaJa(${i})">🇯🇵 日本語訳</button>
+              <button class="btn tiny ghost" onclick="markQaSeen(${i})">Practiced</button>
             </div>
           </div>
         </div>
@@ -2815,12 +2968,22 @@ const Views = {
 
     return `
       <div class="view">
-        <div class="kicker">Mock interview · Q&A bank</div>
+        <div class="kicker">Studio visit · Q&A bank · ⓪-2</div>
         <h1 class="title">Twelve questions.</h1>
         <div class="title-rule">listen → speak → score → reveal</div>
-        <p class="lead">面談・対話の頻出12問。<strong>🎤 Speak</strong>で答えを吹き込むと、モデル解答との一致率をスコアで表示します。</p>
+        <p class="lead"><strong>🎤 Speak</strong>で答えを吹き込むと採点。<strong>🇯🇵</strong>で日本語訳。<strong>単語タップ</strong>でその場で訳が出ます。</p>
         ${cards}
       </div>`;
+  },
+
+  qa_after() {
+    $$(".qa-answer-en .qa-word").forEach(w => {
+      w.addEventListener("click", e => {
+        $$(".qa-answer-en .qa-word.tapped").forEach(x => x.classList.remove("tapped"));
+        w.classList.add("tapped");
+        showGloss(e, w.dataset.gloss, w.textContent);
+      });
+    });
   },
 
   /* ----- PHRASES ----- */
